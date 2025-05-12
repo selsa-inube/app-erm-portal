@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MdOutlineInfo } from "react-icons/md";
 import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
 
-import { InfoModal } from "@components/modals/InfoModal";
+import { ActionModal } from "@components/modals/ActionModal";
 import { spacing } from "@design/tokens/spacing";
 
 import {
@@ -256,7 +256,12 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
           )}
         </StyledTbody>
       </StyledTable>
-      {isModalOpen && <InfoModal onCloseModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <ActionModal
+          onClose={() => setIsModalOpen(false)}
+          disableDeleteAction={true}
+        />
+      )}
     </StyledContainer>
   );
 };
