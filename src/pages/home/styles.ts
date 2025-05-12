@@ -62,6 +62,7 @@ const StyledQuickAccessContainer = styled.div<StyledMainProps>`
   gap: ${spacing.s200};
   flex-wrap: wrap;
   border-radius: ${spacing.s100};
+  justify-content: ${({ $isTablet }) => ($isTablet ? "center" : "flex-start")};
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`

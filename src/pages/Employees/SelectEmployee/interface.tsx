@@ -137,7 +137,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
           "selectedEmployee",
           JSON.stringify(selectedEmployeeOption),
         );
-        navigate("/home");
+        navigate("/");
       } else {
         console.error("Empleado no encontrado");
       }

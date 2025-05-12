@@ -39,7 +39,7 @@ interface InfoItemProps {
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status, redirectUrl, infoItems, expandedWidth } = props;
+  const { name, status, redirectUrl, infoItems, expandedWidth = false } = props;
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);

@@ -2,7 +2,7 @@ import {
   MdLogout,
   MdOutlinePersonOff,
   MdOutlineFilePresent,
-  MdBeachAccess,
+  MdOutlineBeachAccess,
   MdOutlinePersonalInjury,
   MdOutlineHistoryEdu,
   MdOutlineBadge,
@@ -15,7 +15,7 @@ const baseNavLinks = [
   {
     id: "holidays",
     label: "Vacaciones",
-    icon: <MdBeachAccess />,
+    icon: <MdOutlineBeachAccess />,
     path: "/holidays",
   },
   {
