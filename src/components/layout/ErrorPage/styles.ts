@@ -22,6 +22,7 @@ interface VerticalDividerProps {
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-height: 98vh;
 `;
 
@@ -78,6 +79,7 @@ const StyledMainContent = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 40px 20px 0px 20px;
+  width: 1064px;
 `;
 
 const StyledDiv = styled.div`
