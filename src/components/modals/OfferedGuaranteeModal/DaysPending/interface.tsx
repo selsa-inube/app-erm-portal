@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { IPendingUsedDaysTable } from "../PendingUsedDaysTable/types";
+
 import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
+
+import { IPendingUsedDaysTable } from "../PendingUsedDaysTable/types";
 
 export const usePendingData = () => {
   const [contractData, setContractData] = useState<IPendingUsedDaysTable[]>([]);
