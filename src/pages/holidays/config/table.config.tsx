@@ -7,6 +7,9 @@ import {
   IVacationGeneralInformationEntry,
 } from "@ptypes/humanResourcesRequest.types";
 import { formatDate } from "@utils/date";
+import { IDaysUsedTable } from "../components/DaysUsedTable/types";
+
+import { VacationType } from "./enums";
 
 function isVacationData(
   data: unknown,
@@ -33,7 +36,11 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       requestId: holiday.humanResourceRequestId,
       requestNumber: holiday.humanResourceRequestNumber,
       description: {
-        value: holiday.humanResourceRequestDescription,
+        value: vacationData
+          ? VacationType[
+              vacationData.typeOfRequest as keyof typeof VacationType
+            ]
+          : "",
       },
       date: {
         value: formatDate(holiday.humanResourceRequestDate),
@@ -73,3 +80,21 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       },
     };
   });
+
+export const daysUsedMock: IDaysUsedTable[] = [
+  {
+    startDate: { value: "22/Mar/2025" },
+    usageMode: { value: "Pagadas" },
+    days: { value: 15 },
+  },
+  {
+    startDate: { value: "03/Jun/2023" },
+    usageMode: { value: "Disfrutadas" },
+    days: { value: 15 },
+  },
+  {
+    startDate: { value: "28/Dic/2021" },
+    usageMode: { value: "Disfrutadas" },
+    days: { value: 15 },
+  },
+];

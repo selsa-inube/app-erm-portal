@@ -37,6 +37,7 @@ export interface IVacationGeneralInformationEntry {
   startDate: string;
   contract: string;
   observations: string;
+  typeOfRequest?: string;
 }
 
 export interface IVacationPaymentGeneralInformationEntry {
