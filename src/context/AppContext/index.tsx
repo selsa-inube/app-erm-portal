@@ -6,14 +6,12 @@ import {
   ReactNode,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-
 import { IAppContextType, IPreferences, IClient } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -48,6 +46,7 @@ function AppProvider(props: AppProviderProps) {
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
+
   const [preferences, setPreferences] = useState<IPreferences>({
     boardOrientation:
       (localStorage.getItem("boardOrientation") as "vertical" | "horizontal") ??

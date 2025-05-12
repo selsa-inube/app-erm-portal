@@ -137,7 +137,10 @@ function VinculationBanner(props: VinculationBannerProps) {
                       icon={item.icon}
                       value={item.value}
                       label={item.label}
-                      onClick={item.onClick}
+                      onClick={() => {
+                        if (item.onClick) item.onClick();
+                        setIsExpanded(false);
+                      }}
                     />
                   ))}
                 </Stack>
