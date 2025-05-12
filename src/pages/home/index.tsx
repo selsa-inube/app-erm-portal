@@ -66,6 +66,12 @@ function Home() {
   };
 
   useEffect(() => {
+    if (!selectedClient) {
+      navigate("/login", { replace: true });
+    }
+  }, [selectedClient, navigate]);
+
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
