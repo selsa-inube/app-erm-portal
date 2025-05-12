@@ -110,6 +110,42 @@ function CertificationsTable({
       ? columns.slice(0, 3)
       : columns;
 
+  const getHeaderAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "requestNumber":
+      case "type":
+      case "date":
+      case "status":
+      case "actions":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
+  const getCellAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "requestNumber":
+        return "right";
+      case "type":
+      case "date":
+      case "status":
+        return "left";
+      case "actions":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
   const handleOpenModal = (requestId: string) => {
     setSelectedRequestId(requestId);
     {
@@ -274,12 +310,14 @@ function CertificationsTable({
         ? "custom"
         : "text";
 
+    const cellAlign = getCellAlignment(headerKey);
+
     return (
       <StyledTd
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
         type={cellType}
-        align="center"
+        align={cellAlign}
         style={{ padding: "16px 2px" }}
       >
         {renderCellContent(headerKey, cellData, rowIndex)}
@@ -296,7 +334,7 @@ function CertificationsTable({
       return (
         <Tr border="bottom">
           {headerSlice.map((header, index) => (
-            <StyledTh key={index} align="center" style={header.style}>
+            <StyledTh key={index} align={getHeaderAlignment(header.key)}>
               <b>{header.label}</b>
             </StyledTh>
           ))}
