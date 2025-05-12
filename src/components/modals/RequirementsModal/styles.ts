@@ -52,9 +52,10 @@ export const StyledContainerTitle = styled.div`
 `;
 
 export const StyledTableContainer = styled.div<IStyledTableContainer>`
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  max-height: 622px;
   border: 2px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   padding: ${({ $smallScreen }) =>
