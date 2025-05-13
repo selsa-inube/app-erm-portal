@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { inube } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
 
 interface IStyledComplementContainer {
@@ -72,4 +71,23 @@ const StyledComplementContainer = styled.div<IStyledComplementContainer>`
   }
 `;
 
-export { StyledAppCard, StyledComplementContainer };
+const StyledDescription = styled.div<IStyledAppCard>`
+  max-height: 48px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 8px;
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
+    border-radius: 8px;
+  }
+`;
+
+export { StyledAppCard, StyledComplementContainer, StyledDescription };

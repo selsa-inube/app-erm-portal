@@ -1,9 +1,12 @@
 import { MdOutlineInfo } from "react-icons/md";
 import { Stack, Text, Icon, Divider } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
 
-import { StyledAppCard, StyledComplementContainer } from "./styles";
+import {
+  StyledAppCard,
+  StyledComplementContainer,
+  StyledDescription,
+} from "./styles";
 
 interface AppCardProps {
   title: string;
@@ -25,11 +28,16 @@ function AppCard(props: AppCardProps) {
         </Text>
         <Icon icon={icon} appearance="dark" size="22px" cursorHover />
       </Stack>
+
       <Stack padding={`${spacing.s150} ${spacing.s0}`}>
         <Divider dashed />
       </Stack>
+
       <Stack direction="column" gap={spacing.s200}>
-        <Text size="small">{description}</Text>
+        <StyledDescription>
+          <Text size="small">{description}</Text>
+        </StyledDescription>
+
         {showComplement && complement && complement.length > 0 && (
           <StyledComplementContainer>
             {complement.map((text, index) => (
