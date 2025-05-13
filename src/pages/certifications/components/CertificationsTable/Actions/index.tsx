@@ -30,7 +30,6 @@ export function ActionModal(props: ActionModalProps) {
 
   const actionsList = Actions(disableEnjoyment, onRequestEnjoyment);
 
-  // Asegurarse de que los props actualicen correctamente la acción
   const updatedAction = actionsList[0];
   updatedAction.onClick = onRequestEnjoyment;
   updatedAction.isDisabled = disableEnjoyment ?? !onRequestEnjoyment;
