@@ -58,14 +58,14 @@ function ErrorPage(props: ErrorPageProps) {
   const matches = useMediaQueries(mediaQueries);
   const isMobile = matches["(max-width: 600px)"];
 
-  const errorDetail = errorCodes[errorCode] || {
+  const errorDetail = errorCodes[errorCode] ?? {
     whatWentWrong: ["No se proporcionó información sobre el error."],
     howToFix: ["Intenta nuevamente más tarde."],
   };
 
   return (
     <StyledContainer>
-      <StyledMainContent>
+      <StyledMainContent $isMobile={isMobile}>
         <Stack justifyContent="center">
           <Stack
             gap={spacing.s800}
