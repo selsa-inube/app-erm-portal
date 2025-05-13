@@ -137,7 +137,7 @@ function NewCertificationUI(
 
       {isModalOpen && (
         <RequirementsModal
-          title="Requisitos para certificación"
+          title="Requisitos"
           buttonLabel="Cerrar"
           requirements={mockRequirements}
           handleClose={handleCloseModal}
