@@ -10,15 +10,15 @@ import {
 import {
   MdClear,
   MdAdd,
-  MdAddCircleOutline,
+  MdOutlineVisibility,
   MdOutlineCheckCircle,
-  MdCheck,
-  MdClose,
-  MdRemove,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 import React from "react";
 
+import CheckIcon from "@assets/images/CheckIcon.svg";
+import CloseIcon from "@assets/images/CloseIcon.svg";
+import HelpIcon from "@assets/images/HelpIcon.svg";
 import { spacing } from "@design/tokens/spacing";
 import { TableBoard } from "@components/data/TableBoard";
 import {
@@ -65,12 +65,12 @@ function RequirementsModal(props: RequirementsModalProps) {
     return (
       <Stack justifyContent="center">
         <Icon
-          icon={<MdAddCircleOutline />}
-          appearance="primary"
+          icon={<MdOutlineVisibility />}
+          appearance="dark"
           onClick={() => console.log("Add clicked", entry)}
           spacing="compact"
           variant="empty"
-          size="26px"
+          size="20px"
           cursorHover
         />
       </Stack>
@@ -82,13 +82,13 @@ function RequirementsModal(props: RequirementsModalProps) {
       React.isValidElement(entry.tag) && entry.tag.props.label === "No Cumple";
 
     return (
-      <Stack justifyContent="center">
+      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
         <Icon
           icon={<MdOutlineCheckCircle />}
           appearance="primary"
           spacing="compact"
           cursorHover
-          size="26px"
+          size="20px"
           onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
         />
@@ -102,36 +102,43 @@ function RequirementsModal(props: RequirementsModalProps) {
   ];
 
   const getIconByTagStatus = (tagElement: React.ReactElement) => {
-    if (tagElement.props.label === "Cumple") {
-      return <MdCheck />;
-    } else if (tagElement.props.label === "Sin Evaluar") {
-      return <MdRemove />;
+    const label = tagElement.props.children;
+
+    if (label === "Cumple") {
+      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
+    } else if (label === "Sin Evaluar") {
+      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
+    } else if (label === "No Cumple") {
+      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
     } else {
-      return <MdClose />;
+      return null;
     }
   };
 
-  const getActionsMobile = () => {
+  const getActionsMobileIcon = () => {
     return [
       {
-        id: "tags",
+        id: "estado",
         actionName: "",
         content: (entry: IEntries) => {
           const tagElement = entry.tag as React.ReactElement;
           return (
-            <Stack alignItems="center" padding="4px">
+            <Stack>
               <Icon
                 icon={getIconByTagStatus(tagElement)}
                 appearance={tagElement.props.appearance}
                 cursorHover
-                variant="filled"
-                shape="circle"
                 size="20px"
               />
             </Stack>
           );
         },
       },
+    ];
+  };
+
+  const getActionsMobile = () => {
+    return [
       {
         id: "agregar",
         content: (entry: IEntries) => renderAddIcon(entry),
@@ -144,7 +151,7 @@ function RequirementsModal(props: RequirementsModalProps) {
   };
 
   const infoItems = [
-    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
     {
       icon: <MdOutlineCheckCircle />,
       text: "Forzar Aprobación",
@@ -190,8 +197,9 @@ function RequirementsModal(props: RequirementsModalProps) {
                   entries={requirement.entries}
                   actions={actionsRequirements}
                   actionMobile={getActionsMobile()}
+                  actionMobileIcon={getActionsMobileIcon()}
                   appearanceTable={{
-                    widthTd: "75%",
+                    widthTd: "82%",
                     efectzebra: true,
                     title: "primary",
                     isStyleMobile: true,
