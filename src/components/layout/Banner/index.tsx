@@ -28,6 +28,7 @@ export interface VinculationBannerProps {
   redirectUrl?: string;
   pendingDays?: number;
   infoItems: InfoItemProps[];
+  expandedWidth?: boolean;
 }
 
 interface InfoItemProps {
@@ -38,7 +39,7 @@ interface InfoItemProps {
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status, redirectUrl, infoItems } = props;
+  const { name, status, redirectUrl, infoItems, expandedWidth = false } = props;
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -66,7 +67,7 @@ function VinculationBanner(props: VinculationBannerProps) {
   }, [isExpanded, isMobile]);
 
   return (
-    <StyledRadioClient>
+    <StyledRadioClient expandedWidth={expandedWidth}>
       <Stack
         gap={spacing.s150}
         alignItems="center"
