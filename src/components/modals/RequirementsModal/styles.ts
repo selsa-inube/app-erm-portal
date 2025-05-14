@@ -60,4 +60,16 @@ export const StyledTableContainer = styled.div<IStyledTableContainer>`
   padding: ${({ $smallScreen }) =>
     $smallScreen ? `${spacing.s050} ${spacing.s0}` : `${spacing.s050}`};
   border-radius: 8px;
+  height: ${({ $smallScreen }) => ($smallScreen ? "408px" : "384px")};
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
+    border-radius: 8px;
+  }
 `;

@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Icon,
   Text,
@@ -10,15 +11,15 @@ import {
 import {
   MdClear,
   MdAdd,
-  MdAddCircleOutline,
+  MdOutlineVisibility,
   MdOutlineCheckCircle,
-  MdCheck,
-  MdClose,
-  MdRemove,
+  MdOutlineInfo,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
-import React from "react";
 
+import CheckIcon from "@assets/images/CheckIcon.svg";
+import CloseIcon from "@assets/images/CloseIcon.svg";
+import HelpIcon from "@assets/images/HelpIcon.svg";
 import { spacing } from "@design/tokens/spacing";
 import { TableBoard } from "@components/data/TableBoard";
 import {
@@ -26,6 +27,7 @@ import {
   IAction,
   Requirement,
 } from "@components/data/TableBoard/types";
+import { InfoModal } from "@components/modals/InfoModal";
 
 import {
   StyledContainerClose,
@@ -41,6 +43,8 @@ export interface RequirementsModalProps {
   portalId?: string;
   requirements: Requirement[];
   handleClose: () => void;
+  hasPrivilege?: boolean;
+  onOpenInfoModal?: (title: string, description: string) => void;
 }
 
 function RequirementsModal(props: RequirementsModalProps) {
@@ -50,7 +54,14 @@ function RequirementsModal(props: RequirementsModalProps) {
     portalId = "portal",
     requirements,
     handleClose,
+    hasPrivilege = true,
   } = props;
+
+  const [infoModal, setInfoModal] = useState({
+    open: false,
+    title: "",
+    description: "",
+  });
 
   const node = document.getElementById(portalId);
   if (!node) {
@@ -65,12 +76,12 @@ function RequirementsModal(props: RequirementsModalProps) {
     return (
       <Stack justifyContent="center">
         <Icon
-          icon={<MdAddCircleOutline />}
-          appearance="primary"
+          icon={<MdOutlineVisibility />}
+          appearance="dark"
           onClick={() => console.log("Add clicked", entry)}
           spacing="compact"
           variant="empty"
-          size="26px"
+          size="20px"
           cursorHover
         />
       </Stack>
@@ -82,13 +93,13 @@ function RequirementsModal(props: RequirementsModalProps) {
       React.isValidElement(entry.tag) && entry.tag.props.label === "No Cumple";
 
     return (
-      <Stack justifyContent="center">
+      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
         <Icon
           icon={<MdOutlineCheckCircle />}
           appearance="primary"
           spacing="compact"
           cursorHover
-          size="26px"
+          size="20px"
           onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
         />
@@ -102,36 +113,43 @@ function RequirementsModal(props: RequirementsModalProps) {
   ];
 
   const getIconByTagStatus = (tagElement: React.ReactElement) => {
-    if (tagElement.props.label === "Cumple") {
-      return <MdCheck />;
-    } else if (tagElement.props.label === "Sin Evaluar") {
-      return <MdRemove />;
+    const label = tagElement.props.children;
+
+    if (label === "Cumple") {
+      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
+    } else if (label === "Sin Evaluar") {
+      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
+    } else if (label === "No Cumple") {
+      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
     } else {
-      return <MdClose />;
+      return null;
     }
   };
 
-  const getActionsMobile = () => {
+  const getActionsMobileIcon = () => {
     return [
       {
-        id: "tags",
+        id: "estado",
         actionName: "",
         content: (entry: IEntries) => {
           const tagElement = entry.tag as React.ReactElement;
           return (
-            <Stack alignItems="center" padding="4px">
+            <Stack>
               <Icon
                 icon={getIconByTagStatus(tagElement)}
                 appearance={tagElement.props.appearance}
                 cursorHover
-                variant="filled"
-                shape="circle"
                 size="20px"
               />
             </Stack>
           );
         },
       },
+    ];
+  };
+
+  const getActionsMobile = () => {
+    return [
       {
         id: "agregar",
         content: (entry: IEntries) => renderAddIcon(entry),
@@ -144,7 +162,7 @@ function RequirementsModal(props: RequirementsModalProps) {
   };
 
   const infoItems = [
-    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
     {
       icon: <MdOutlineCheckCircle />,
       text: "Forzar Aprobación",
@@ -153,61 +171,104 @@ function RequirementsModal(props: RequirementsModalProps) {
   ];
 
   return createPortal(
-    <Blanket>
-      <StyledModal $smallScreen={isMobile}>
-        <StyledContainerTitle>
-          <Text type="headline" size="small">
-            {title}
-          </Text>
-          <StyledContainerClose onClick={handleClose}>
-            <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
-              <Icon
-                icon={<MdClear />}
-                size="24px"
-                cursorHover
-                appearance="dark"
-              />
-            </Stack>
-          </StyledContainerClose>
-        </StyledContainerTitle>
-
-        <Divider />
-        <StyledContainerContent $smallScreen={isMobile}>
-          <Stack direction="column" gap={spacing.s100}>
-            <Stack width="100%" justifyContent="flex-end">
-              <Button spacing="compact" iconBefore={<MdAdd />}>
-                Agregar Requisito
-              </Button>
-            </Stack>
-
-            <StyledTableContainer $smallScreen={isMobile}>
-              {requirements.map((requirement, index) => (
-                <TableBoard
-                  key={requirement.id}
-                  id={requirement.id}
-                  titles={requirement.titles}
-                  entries={requirement.entries}
-                  actions={actionsRequirements}
-                  actionMobile={getActionsMobile()}
-                  appearanceTable={{
-                    widthTd: "75%",
-                    efectzebra: true,
-                    title: "primary",
-                    isStyleMobile: true,
-                  }}
-                  isFirstTable={index === 0}
-                  infoItems={infoItems}
+    <>
+      <Blanket>
+        <StyledModal $smallScreen={isMobile}>
+          <StyledContainerTitle>
+            <Text type="headline" size="small">
+              {title}
+            </Text>
+            <StyledContainerClose onClick={handleClose}>
+              <Stack alignItems="center" gap={spacing.s100}>
+                <Text>Cerrar</Text>
+                <Icon
+                  icon={<MdClear />}
+                  size="24px"
+                  cursorHover
+                  appearance="dark"
                 />
-              ))}
-            </StyledTableContainer>
-          </Stack>
-          <Stack justifyContent="flex-end" gap={spacing.s100}>
-            <Button onClick={handleClose}>{buttonLabel}</Button>
-          </Stack>
-        </StyledContainerContent>
-      </StyledModal>
-    </Blanket>,
+              </Stack>
+            </StyledContainerClose>
+          </StyledContainerTitle>
+
+          <Divider />
+          <StyledContainerContent $smallScreen={isMobile}>
+            <Stack direction="column" gap={spacing.s100}>
+              <Stack
+                width="100%"
+                justifyContent="flex-end"
+                alignItems="center"
+                gap={spacing.s050}
+              >
+                <Button
+                  spacing="compact"
+                  iconBefore={<MdAdd />}
+                  disabled={!hasPrivilege}
+                  onClick={
+                    hasPrivilege
+                      ? () => console.log("Agregar Requisito")
+                      : undefined
+                  }
+                >
+                  Agregar Requisito
+                </Button>
+                {!hasPrivilege && (
+                  <Icon
+                    icon={<MdOutlineInfo />}
+                    appearance="primary"
+                    size="16px"
+                    cursorHover
+                    onClick={() =>
+                      setInfoModal({
+                        open: true,
+                        title: "Agregar Requisito",
+                        description:
+                          "No tienes permisos para agregar un requisito en este momento.",
+                      })
+                    }
+                  />
+                )}
+              </Stack>
+
+              <StyledTableContainer $smallScreen={isMobile}>
+                {requirements.map((requirement, index) => (
+                  <TableBoard
+                    key={requirement.id}
+                    id={requirement.id}
+                    titles={requirement.titles}
+                    entries={requirement.entries}
+                    actions={actionsRequirements}
+                    actionMobile={getActionsMobile()}
+                    actionMobileIcon={getActionsMobileIcon()}
+                    appearanceTable={{
+                      widthTd: "82%",
+                      efectzebra: true,
+                      title: "primary",
+                      isStyleMobile: true,
+                    }}
+                    isFirstTable={index === 0}
+                    infoItems={infoItems}
+                  />
+                ))}
+              </StyledTableContainer>
+            </Stack>
+            <Stack justifyContent="flex-end" gap={spacing.s100}>
+              <Button onClick={handleClose}>{buttonLabel}</Button>
+            </Stack>
+          </StyledContainerContent>
+        </StyledModal>
+      </Blanket>
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
+        />
+      )}
+    </>,
     node,
   );
 }
