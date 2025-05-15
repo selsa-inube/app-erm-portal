@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+
 import { getAllEmployees } from "@services/employeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useHeaders } from "@hooks/useHeaders";
 
 interface UseAllEmployeesResult {
   employees: Employee[];
@@ -19,6 +21,7 @@ export const useAllEmployees = (
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState<number>(initialPage);
   const [perPage, setPerPage] = useState<number>(initialPerPage);
+  const { getHeaders } = useHeaders();
 
   useErrorFlag(!!error, error ?? undefined);
 
@@ -28,7 +31,8 @@ export const useAllEmployees = (
       setError(null);
 
       try {
-        const data = await getAllEmployees(fetchPage, fetchPerPage);
+        const headers = await getHeaders();
+        const data = await getAllEmployees(fetchPage, fetchPerPage, headers);
         setEmployees(data);
       } catch (err) {
         const errorMessage =
