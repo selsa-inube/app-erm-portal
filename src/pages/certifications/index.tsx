@@ -5,6 +5,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useHeaders } from "@hooks/useHeaders";
 
 import { CertificationsOptionsUI } from "./interface";
 import { certificationsNavConfig } from "./config/nav.config";
@@ -17,13 +18,19 @@ function CertificationsOptions() {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { getHeaders } = useHeaders();
 
   useEffect(() => {
     const fetchHumanResourceRequests = async () => {
       setIsLoading(true);
 
       try {
-        const requests = await getHumanResourceRequests("certification", "");
+        const headers = await getHeaders();
+        const requests = await getHumanResourceRequests(
+          "certification",
+          "",
+          headers,
+        );
         const formattedData = formatHumanResourceData(requests ?? []);
         setTableData(formattedData);
       } catch (error) {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
+import { useHeaders } from "@hooks/useHeaders";
 
 import { useErrorFlag } from "./useErrorFlag";
 
@@ -18,6 +20,7 @@ export const useBusinessUnits = (
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
+  const { getHeaders } = useHeaders();
 
   useErrorFlag(flagShown);
 
@@ -37,9 +40,12 @@ export const useBusinessUnits = (
       setIsFetching(true);
 
       try {
+        const headers = await getHeaders();
+
         const fetchedBusinessUnits = await getBusinessUnitsForOfficer(
           userAccount,
           portalPublicCode,
+          headers,
         );
 
         if (isMounted) {

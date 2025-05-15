@@ -8,7 +8,11 @@ import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 import { mapEmployeeApiToEntity } from "./mappers";
 
-const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
+const getAllEmployees = async (
+  page = 1,
+  perPage = 50,
+  headers: Record<string, string>,
+): Promise<Employee[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -27,9 +31,8 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchAllEmployee",
-          "X-Business-Unit": environment.BUSINESS_UNIT ?? "",
-          "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };

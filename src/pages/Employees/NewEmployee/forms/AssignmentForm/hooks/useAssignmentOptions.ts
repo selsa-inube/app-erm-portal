@@ -3,6 +3,7 @@ import { IOption } from "@inubekit/inubekit";
 
 import { getRemunerationProfiles } from "@services/catalogs/getRemunerationProfiles";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useHeaders } from "@hooks/useHeaders";
 
 import { mapProfilesToOptions } from "../utils/mappers";
 
@@ -11,6 +12,7 @@ export const useAssignmentOptions = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState<number | null>(null);
   const [flagShown, setFlagShown] = useState(false);
+  const { getHeaders } = useHeaders();
 
   useErrorFlag(flagShown, "Error obteniendo las opciones de asignación");
 
@@ -21,7 +23,8 @@ export const useAssignmentOptions = () => {
       setFlagShown(false);
 
       try {
-        const remunerationProfiles = await getRemunerationProfiles();
+        const headers = await getHeaders();
+        const remunerationProfiles = await getRemunerationProfiles(headers);
         setAssignmentOptions(mapProfilesToOptions(remunerationProfiles));
       } catch (err) {
         setHasError(500);
