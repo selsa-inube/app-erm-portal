@@ -23,4 +23,10 @@ const StyledContainer = styled.div<StyledContainerProps>`
   }
 `;
 
-export { StyledContainer };
+const StyledAddMobile = styled.div`
+  position: fixed;
+  right: ${spacing.s400};
+  bottom: ${spacing.s1400};
+`;
+
+export { StyledContainer, StyledAddMobile };

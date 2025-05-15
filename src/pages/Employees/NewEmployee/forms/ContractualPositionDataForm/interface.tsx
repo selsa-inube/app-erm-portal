@@ -40,7 +40,12 @@ function ContractualPositionDataFormUI(
 
   return (
     <form>
-      <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
+      <Stack
+        direction="column"
+        gap={isMobile ? spacing.s300 : spacing.s400}
+        height="60vh"
+        justifyContent="space-between"
+      >
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s250}>
             <Grid
@@ -116,7 +121,7 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Empresa"
+                label="Empresa contratante"
                 placeholder="Selecciona de la lista"
                 name="company"
                 id="company"
@@ -204,7 +209,7 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Modalidad"
+                label="Sitio de trabajo"
                 placeholder="Selecciona de la lista"
                 name="jobMode"
                 id="jobMode"

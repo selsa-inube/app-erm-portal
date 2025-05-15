@@ -17,7 +17,6 @@ export const StyledButton = styled.div<IStyledButton>`
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N90 || inube.palette.neutral.N300};
   cursor: pointer;
-  height: 20px;
 
   &::before {
     content: "${({ $data }) => $data}";

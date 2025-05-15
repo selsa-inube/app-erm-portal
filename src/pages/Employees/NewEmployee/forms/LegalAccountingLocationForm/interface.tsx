@@ -33,7 +33,12 @@ function LegalAccountingLocationFormUI(
 
   return (
     <form>
-      <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
+      <Stack
+        direction="column"
+        gap={isMobile ? spacing.s300 : spacing.s400}
+        height="60vh"
+        justifyContent="space-between"
+      >
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s250}>
             <Grid

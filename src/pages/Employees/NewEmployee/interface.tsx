@@ -3,16 +3,16 @@ import {
   Assisted,
   IAssistedStep,
   Stack,
-  useMediaQuery,
   Text,
-  Button,
+  useMediaQueries,
 } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
-import { MdCheckCircleOutline } from "react-icons/md";
+import { MdRule } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
 import { mockAlertCards } from "@mocks/requirements/requirements.mock";
 import { AlertCardProps } from "@components/data/AlertCard";
+import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { PersonalDataForm } from "./forms/PersonalDataForm";
 import { ContractualPositionDataForm } from "./forms/ContractualPositionDataForm";
@@ -71,7 +71,13 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
     setIsCurrentFormValid,
   } = props;
 
-  const isTablet = useMediaQuery("(max-width: 1100px)");
+  const mediaQueries = useMediaQueries([
+    "(max-width: 1100px)",
+    "(max-width: 700px)",
+  ]);
+
+  const isTablet = mediaQueries["(max-width: 1100px)"];
+  const isMobile = mediaQueries["(max-width: 700px)"];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -87,16 +93,25 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
     <>
       <Stack
         direction="column"
-        gap={isTablet ? spacing.s300 : spacing.s500}
+        gap={spacing.s300}
         margin={
-          isTablet
-            ? `${spacing.s300} ${spacing.s200}`
-            : `${spacing.s400} ${spacing.s800}`
+          isTablet ? `${spacing.s200}` : `${spacing.s400} ${spacing.s800}`
         }
       >
-        <Text type="title" as="h1" size={isTablet ? "medium" : "large"}>
-          Vinculación de un empleado nuevo
-        </Text>
+        <Stack justifyContent="space-between" alignItems="center">
+          <Text type="title" as="h1" size={isTablet ? "medium" : "large"}>
+            Vincular nuevo empleado
+          </Text>
+          <Stack direction="column" alignItems="flex-end" margin={spacing.s075}>
+            <ButtonRequirements
+              counter={mockAlertCards.length}
+              buttonIcon={<MdRule />}
+              buttonText="Requisitos"
+              onClick={handleOpenModal}
+              isMobile={isMobile}
+            />
+          </Stack>
+        </Stack>
         <Assisted
           step={steps[currentStep - 1]}
           totalSteps={steps.length}
@@ -113,18 +128,6 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
         />
 
         <Stack direction="column">
-          <Stack direction="column" alignItems="flex-end" margin={spacing.s075}>
-            <Button
-              appearance="gray"
-              variant="outlined"
-              spacing="compact"
-              iconBefore={<MdCheckCircleOutline />}
-              onClick={handleOpenModal}
-            >
-              Requisitos
-            </Button>
-          </Stack>
-
           {currentStep === 1 && (
             <PersonalDataForm
               ref={personalDataRef}
