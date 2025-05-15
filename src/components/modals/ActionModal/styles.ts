@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 interface Theme {
   palette: {
     neutral: {
@@ -10,37 +12,37 @@ interface Theme {
   };
 }
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div<{ offsetTop?: number }>`
   position: absolute;
+  right: 175px;
+  top: ${({ offsetTop }) => (offsetTop ? `${offsetTop + 2}px` : "30px")};
 
   figure {
-    margin-right: 5px;
+    margin-right: ${spacing.s050};
   }
 
   div > figure {
     position: absolute;
     right: 2%;
+    top: ${spacing.s200};
   }
 `;
 
 const StyledUl = styled.ul`
-  margin: 0px 30px 0px 0px;
-  padding: 0px;
+  margin: ${spacing.s0} ${spacing.s300} ${spacing.s0} ${spacing.s0};
+  padding: ${spacing.s0};
 `;
 
 const StyledLi = styled.li`
   list-style: none;
   display: flex;
   align-items: center;
-  padding: 6px 0px;
-  cursor: pointer;
+  padding: ${spacing.s075} ${spacing.s0};
 `;
 
 const StyledActions = styled.div<{ theme?: Theme }>`
-  border-radius: 4px;
+  border-radius: ${spacing.s100};
   position: absolute;
-  right: -8px;
-  top: -2px;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   box-shadow: 8px 2px 6px

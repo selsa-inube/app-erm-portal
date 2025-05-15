@@ -1,4 +1,3 @@
-// components/GeneralInformationForm.tsx
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
 import { forwardRef, useEffect, useImperativeHandle } from "react";

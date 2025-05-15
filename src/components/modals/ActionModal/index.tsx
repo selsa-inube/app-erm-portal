@@ -1,6 +1,8 @@
 import { MdClose } from "react-icons/md";
 import { Stack, Text, Icon } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 import { StyledContainer, StyledLi, StyledUl, StyledActions } from "./styles";
 import { Actions } from "./config";
 
@@ -21,29 +23,29 @@ export function ActionModal(props: ActionModalProps) {
     disableDeleteAction,
   } = props;
 
-  const actionsLi = Actions(onClickDetails, onClickEdit);
+  const actionsLi = Actions(onClickDetails, onClickEliminate, onClickEdit);
 
-  const deleteActionIndex = actionsLi.findIndex(
-    (item) => item.label === "Eliminar",
+  const noCumpleIndex = actionsLi.findIndex(
+    (item) => item.label === "No cumple",
   );
-  if (deleteActionIndex !== -1) {
+  if (noCumpleIndex !== -1) {
     if (disableDeleteAction) {
-      actionsLi[deleteActionIndex].onClick = undefined;
-      actionsLi[deleteActionIndex].appearance = "gray";
+      actionsLi[noCumpleIndex].onClick = undefined;
+      actionsLi[noCumpleIndex].appearance = "gray";
     } else if (onClickEliminate) {
-      actionsLi[deleteActionIndex].onClick = onClickEliminate;
-      actionsLi[deleteActionIndex].appearance = "danger";
+      actionsLi[noCumpleIndex].onClick = onClickEliminate;
+      actionsLi[noCumpleIndex].appearance = "danger";
     }
   }
 
   return (
     <StyledContainer>
       <StyledActions>
-        <Stack padding="10px 15px" width="132px">
+        <Stack padding={`${spacing.s100} ${spacing.s150} `} width="132px">
           <Icon
             icon={<MdClose />}
             appearance="dark"
-            size="24px"
+            size="18px"
             onClick={onClose}
             cursorHover
           />

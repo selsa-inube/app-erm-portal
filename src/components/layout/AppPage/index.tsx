@@ -21,6 +21,8 @@ import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
+import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
+import { usePendingData } from "@components/modals/OfferedGuaranteeModal/DaysPending/interface";
 
 import {
   StyledAppPage,
@@ -65,8 +67,11 @@ function AppPage(props: AppPageProps) {
   const configHeader = useConfigHeader();
 
   const [collapse, setCollapse] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const { totalPendingDays } = usePendingData();
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -96,6 +101,10 @@ function AppPage(props: AppPageProps) {
 
     setCollapse(false);
     navigate("/employees/select-employee");
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -179,9 +188,17 @@ function AppPage(props: AppPageProps) {
                       redirectUrl="/employees/select-employee"
                       infoItems={[
                         {
-                          icon: <MdOutlineBeachAccess />,
-                          value: 10,
+                          icon: (
+                            <Icon
+                              icon={<MdOutlineBeachAccess />}
+                              appearance="primary"
+                              size="24px"
+                              cursorHover
+                            />
+                          ),
+                          value: totalPendingDays,
                           label: "Días pendientes",
+                          onClick: toggleModal,
                         },
                       ]}
                     />
@@ -195,6 +212,10 @@ function AppPage(props: AppPageProps) {
           </Grid>
         </StyledContainer>
       </Grid>
+
+      {isModalOpen && (
+        <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
+      )}
     </StyledAppPage>
   );
 }

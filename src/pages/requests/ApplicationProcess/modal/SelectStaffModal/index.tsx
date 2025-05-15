@@ -81,7 +81,7 @@ export function SelectStaffModal(props: SelectStaffModalProps) {
 
     formik.setFieldValue(
       "selection",
-      isActive ? selectedEmployee?.id || "" : "",
+      isActive ? (selectedEmployee?.id ?? "") : "",
     );
   };
 
