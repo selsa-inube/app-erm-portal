@@ -18,14 +18,13 @@ function AssignmentForm(props: AssignmentFormProps) {
     handleNextStep,
     handlePreviousStep,
   } = props;
-  const { assignmentOptions, isLoading, hasError } = useAssignmentOptions();
+  const { assignmentOptions, isLoading } = useAssignmentOptions();
 
   return (
     <AssignmentFormUI
       withNextButton={withNextButton}
       assignmentOptions={assignmentOptions}
       isLoading={isLoading}
-      hasError={hasError}
       assignments={assignments}
       onAssignmentsChange={onAssignmentsChange}
       handleNextStep={handleNextStep}

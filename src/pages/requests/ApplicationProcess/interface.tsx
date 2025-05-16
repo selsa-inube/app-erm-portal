@@ -60,7 +60,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
     } else {
       setStaffInfo({
         id: selectedStaffId,
-        name: user?.username || "",
+        name: user?.username ?? "",
       });
     }
 
@@ -109,7 +109,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
             portalId="portal"
             loading={false}
             selectionOptions={mockStaffMembers}
-            selectedEmployee={user || undefined}
+            selectedEmployee={user ?? undefined}
             initialSelection={staffInfo.id}
             onCloseModal={handleCloseModal}
             onSubmit={onSubmit("staffSelect")}

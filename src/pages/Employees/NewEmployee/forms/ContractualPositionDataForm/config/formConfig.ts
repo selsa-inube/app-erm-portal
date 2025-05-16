@@ -1,7 +1,7 @@
 const contractualPositionDataRequiredFields = {
   normativeFramework: false,
   contractType: false,
-  startDate: false,
+  startDate: true,
   endDate: false,
   company: false,
   workingShift: false,
@@ -11,5 +11,4 @@ const contractualPositionDataRequiredFields = {
   jobMode: false,
 };
 
-// Temporary change to bypass required field validation and proceed to the next steps
 export { contractualPositionDataRequiredFields };

@@ -48,7 +48,6 @@ const staffUserAccountById = async (
           data,
         };
       }
-      console.log("Data from API:", mapStaffUserAccountApiToEntity(data[0]));
       return mapStaffUserAccountApiToEntity(data[0]);
     } catch (error) {
       console.error(`Attempt ${attempt} failed:`, error);

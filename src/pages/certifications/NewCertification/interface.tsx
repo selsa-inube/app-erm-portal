@@ -9,8 +9,8 @@ import {
 import { MdRule } from "react-icons/md";
 
 import { RequirementsModal } from "@components/modals/RequirementsModal";
-import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";

@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import { Home } from "@pages/home";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
@@ -84,7 +85,8 @@ const router = createBrowserRouter(
         element={<FirstPage />}
         errorElement={<ErrorPage />}
       />
-      <Route path="login/*" element={<LoginRoutes />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/login/*" element={<LoginRoutes />} />
       <Route path="/*" element={<ProtectedAppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />

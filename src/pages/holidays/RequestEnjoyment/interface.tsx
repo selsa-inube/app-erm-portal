@@ -5,15 +5,16 @@ import {
   Assisted,
   IAssistedStep,
   useMediaQuery,
-  Button,
 } from "@inubekit/inubekit";
-import { MdCheckCircleOutline } from "react-icons/md";
+import { MdRule } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
-import { RequirementsModal } from "@pages/Employees/NewEmployee/modals/RequirementsModal";
-import { mockAlertCards } from "@mocks/requirements/requirements.mock";
+import { RequirementsModal } from "@components/modals/RequirementsModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
@@ -72,6 +73,15 @@ function RequestEnjoymentUI({
         appName={appName}
         appRoute={appRoute}
         navigatePage={navigatePage}
+        actionButton={
+          <ButtonRequirements
+            counter={mockAlertCards.length}
+            buttonIcon={<MdRule />}
+            buttonText="Solicitar Pago"
+            isMobile={isTablet}
+            onClick={handleOpenModal}
+          />
+        }
       >
         <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
           <Assisted
@@ -89,24 +99,6 @@ function RequestEnjoymentUI({
             onSubmitClick={handleFinishAssisted}
           />
           <Stack direction="column">
-            {currentStep !== 3 && (
-              <Stack
-                direction="column"
-                alignItems="flex-end"
-                margin={spacing.s075}
-              >
-                <Button
-                  appearance="gray"
-                  variant="outlined"
-                  spacing="compact"
-                  iconBefore={<MdCheckCircleOutline />}
-                  onClick={handleOpenModal}
-                >
-                  Requisitos
-                </Button>
-              </Stack>
-            )}
-
             {currentStep === 1 && (
               <AlertCardContainer handleNextStep={handleNextStep} />
             )}
@@ -138,8 +130,10 @@ function RequestEnjoymentUI({
       </AppMenu>
       {isModalOpen && (
         <RequirementsModal
-          alertCards={mockAlertCards}
-          onCloseModal={handleCloseModal}
+          title="Requisitos"
+          buttonLabel="Cerrar"
+          requirements={mockRequirements}
+          handleClose={handleCloseModal}
         />
       )}
     </>

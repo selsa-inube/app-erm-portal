@@ -33,7 +33,12 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
 
   return (
     <form>
-      <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
+      <Stack
+        direction="column"
+        gap={isMobile ? spacing.s300 : spacing.s400}
+        height="60vh"
+        justifyContent="space-between"
+      >
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s250}>
             <Grid
@@ -51,6 +56,8 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 status={getFieldState(formik, "names")}
                 message={formik.errors.names}
                 disabled={loading}
+                maxLength={40}
+                counter
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
@@ -66,6 +73,8 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 status={getFieldState(formik, "lastNames")}
                 message={formik.errors.lastNames}
                 disabled={loading}
+                maxLength={40}
+                counter
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
@@ -101,7 +110,6 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
         {withNextButton && (
           <Stack justifyContent="flex-end">
             <Button
-              fullwidth={isMobile}
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >

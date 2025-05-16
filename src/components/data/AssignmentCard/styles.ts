@@ -12,7 +12,7 @@ const StyledAssignmentCard = styled.div<IStyledContainer>`
   height: 138px;
   border-radius: 8px;
   padding: ${spacing.s150};
-  width: ${({ $isMobile }) => ($isMobile ? "100%" : "220px")};
+  width: 212px;
   box-shadow: 0px 2px 6px
     ${({ theme }) => theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
   user-select: none;

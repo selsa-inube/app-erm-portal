@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Icon,
   Text,
@@ -12,9 +13,9 @@ import {
   MdAdd,
   MdOutlineVisibility,
   MdOutlineCheckCircle,
+  MdOutlineInfo,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
-import React from "react";
 
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
@@ -26,6 +27,7 @@ import {
   IAction,
   Requirement,
 } from "@components/data/TableBoard/types";
+import { InfoModal } from "@components/modals/InfoModal";
 
 import {
   StyledContainerClose,
@@ -41,6 +43,8 @@ export interface RequirementsModalProps {
   portalId?: string;
   requirements: Requirement[];
   handleClose: () => void;
+  hasPrivilege?: boolean;
+  onOpenInfoModal?: (title: string, description: string) => void;
 }
 
 function RequirementsModal(props: RequirementsModalProps) {
@@ -50,7 +54,14 @@ function RequirementsModal(props: RequirementsModalProps) {
     portalId = "portal",
     requirements,
     handleClose,
+    hasPrivilege = true,
   } = props;
+
+  const [infoModal, setInfoModal] = useState({
+    open: false,
+    title: "",
+    description: "",
+  });
 
   const node = document.getElementById(portalId);
   if (!node) {
@@ -160,62 +171,104 @@ function RequirementsModal(props: RequirementsModalProps) {
   ];
 
   return createPortal(
-    <Blanket>
-      <StyledModal $smallScreen={isMobile}>
-        <StyledContainerTitle>
-          <Text type="headline" size="small">
-            {title}
-          </Text>
-          <StyledContainerClose onClick={handleClose}>
-            <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
-              <Icon
-                icon={<MdClear />}
-                size="24px"
-                cursorHover
-                appearance="dark"
-              />
-            </Stack>
-          </StyledContainerClose>
-        </StyledContainerTitle>
-
-        <Divider />
-        <StyledContainerContent $smallScreen={isMobile}>
-          <Stack direction="column" gap={spacing.s100}>
-            <Stack width="100%" justifyContent="flex-end">
-              <Button spacing="compact" iconBefore={<MdAdd />}>
-                Agregar Requisito
-              </Button>
-            </Stack>
-
-            <StyledTableContainer $smallScreen={isMobile}>
-              {requirements.map((requirement, index) => (
-                <TableBoard
-                  key={requirement.id}
-                  id={requirement.id}
-                  titles={requirement.titles}
-                  entries={requirement.entries}
-                  actions={actionsRequirements}
-                  actionMobile={getActionsMobile()}
-                  actionMobileIcon={getActionsMobileIcon()}
-                  appearanceTable={{
-                    widthTd: "82%",
-                    efectzebra: true,
-                    title: "primary",
-                    isStyleMobile: true,
-                  }}
-                  isFirstTable={index === 0}
-                  infoItems={infoItems}
+    <>
+      <Blanket>
+        <StyledModal $smallScreen={isMobile}>
+          <StyledContainerTitle>
+            <Text type="headline" size="small">
+              {title}
+            </Text>
+            <StyledContainerClose onClick={handleClose}>
+              <Stack alignItems="center" gap={spacing.s100}>
+                <Text>Cerrar</Text>
+                <Icon
+                  icon={<MdClear />}
+                  size="24px"
+                  cursorHover
+                  appearance="dark"
                 />
-              ))}
-            </StyledTableContainer>
-          </Stack>
-          <Stack justifyContent="flex-end" gap={spacing.s100}>
-            <Button onClick={handleClose}>{buttonLabel}</Button>
-          </Stack>
-        </StyledContainerContent>
-      </StyledModal>
-    </Blanket>,
+              </Stack>
+            </StyledContainerClose>
+          </StyledContainerTitle>
+
+          <Divider />
+          <StyledContainerContent $smallScreen={isMobile}>
+            <Stack direction="column" gap={spacing.s100}>
+              <Stack
+                width="100%"
+                justifyContent="flex-end"
+                alignItems="center"
+                gap={spacing.s050}
+              >
+                <Button
+                  spacing="compact"
+                  iconBefore={<MdAdd />}
+                  disabled={!hasPrivilege}
+                  onClick={
+                    hasPrivilege
+                      ? () => console.log("Agregar Requisito")
+                      : undefined
+                  }
+                >
+                  Agregar Requisito
+                </Button>
+                {!hasPrivilege && (
+                  <Icon
+                    icon={<MdOutlineInfo />}
+                    appearance="primary"
+                    size="16px"
+                    cursorHover
+                    onClick={() =>
+                      setInfoModal({
+                        open: true,
+                        title: "Agregar Requisito",
+                        description:
+                          "No tienes permisos para agregar un requisito en este momento.",
+                      })
+                    }
+                  />
+                )}
+              </Stack>
+
+              <StyledTableContainer $smallScreen={isMobile}>
+                {requirements.map((requirement, index) => (
+                  <TableBoard
+                    key={requirement.id}
+                    id={requirement.id}
+                    titles={requirement.titles}
+                    entries={requirement.entries}
+                    actions={actionsRequirements}
+                    actionMobile={getActionsMobile()}
+                    actionMobileIcon={getActionsMobileIcon()}
+                    appearanceTable={{
+                      widthTd: "82%",
+                      efectzebra: true,
+                      title: "primary",
+                      isStyleMobile: true,
+                    }}
+                    isFirstTable={index === 0}
+                    infoItems={infoItems}
+                  />
+                ))}
+              </StyledTableContainer>
+            </Stack>
+            <Stack justifyContent="flex-end" gap={spacing.s100}>
+              <Button onClick={handleClose}>{buttonLabel}</Button>
+            </Stack>
+          </StyledContainerContent>
+        </StyledModal>
+      </Blanket>
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
+        />
+      )}
+    </>,
     node,
   );
 }

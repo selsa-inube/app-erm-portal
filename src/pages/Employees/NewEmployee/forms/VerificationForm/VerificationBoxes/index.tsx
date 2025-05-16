@@ -69,7 +69,11 @@ const renderContractualPositionVerification = (
       value={values.endDate}
       direction="column"
     />
-    <BoxAttribute label="Empresa" value={values.company} direction="column" />
+    <BoxAttribute
+      label="Empresa contratante"
+      value={values.company}
+      direction="column"
+    />
     <BoxAttribute
       label="Jornada laboral"
       value={values.workingShift}
@@ -86,7 +90,11 @@ const renderContractualPositionVerification = (
       value={values.salaryProfile}
       direction="column"
     />
-    <BoxAttribute label="Modalidad" value={values.jobMode} direction="column" />
+    <BoxAttribute
+      label="Sitio de trabajo"
+      value={values.jobMode}
+      direction="column"
+    />
   </Grid>
 );
 

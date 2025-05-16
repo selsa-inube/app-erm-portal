@@ -8,6 +8,8 @@ const validationMessages = {
   onlyLetters: "Este campo debe contener solo letras",
   onlyNumbers: "Este campo debe contener solo números",
   notPastDate: "La fecha no puede ser anterior o igual al día actual",
+  errorNodo:
+    "El nodo del portal no está definido. Esto puede ocurrir cuando el nodo para representar el portal no se ha definido correctamente.",
 };
 
 export { validationMessages };

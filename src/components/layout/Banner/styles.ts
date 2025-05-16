@@ -4,6 +4,7 @@ import { spacing } from "@design/tokens/spacing";
 
 interface IStyledRadioClient {
   theme: typeof inube;
+  expandedWidth?: boolean;
 }
 
 interface IStyledBannerImage {
@@ -26,7 +27,9 @@ interface IMobileDropdown {
   theme: typeof inube;
 }
 
-const StyledRadioClient = styled.div<IStyledRadioClient>`
+const StyledRadioClient = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "expandedWidth",
+})<IStyledRadioClient>`
   position: relative;
   display: flex;
   align-items: center;
@@ -34,7 +37,7 @@ const StyledRadioClient = styled.div<IStyledRadioClient>`
   padding: ${spacing.s200} ${spacing.s075};
   box-sizing: border-box;
   width: 100%;
-  max-width: 1064px;
+  max-width: ${({ expandedWidth }) => (expandedWidth ? "1312px" : "1064px")};
   box-shadow: 0px 1px 3px 1px
     ${({ theme }) =>
       theme?.palette?.neutralAlpha?.N40A || inube.palette.neutralAlpha.N40A};

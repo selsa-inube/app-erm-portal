@@ -44,7 +44,7 @@ export function AddAssignmentModal(props: AddAssignmentModalProps) {
   const portalNode = document.getElementById(portalId);
 
   const validationSchema = Yup.object({
-    assignment: Yup.string().required(validationMessages.required),
+    assignment: Yup.string(),
     value: Yup.number()
       .required(validationMessages.required)
       .min(1, "El valor debe ser mayor a 0"),
@@ -58,7 +58,11 @@ export function AddAssignmentModal(props: AddAssignmentModalProps) {
     validationSchema,
     onSubmit: (values) => {
       if (onSubmit) {
-        onSubmit(values);
+        const submittedValues = {
+          ...values,
+          assignment: values.assignment || "Sin especificación",
+        };
+        onSubmit(submittedValues);
       }
     },
   });
@@ -69,8 +73,7 @@ export function AddAssignmentModal(props: AddAssignmentModalProps) {
   };
 
   const isButtonDisabled = () => {
-    const hasEmptyFields =
-      !formik.values.assignment || formik.values.value <= 0;
+    const hasEmptyFields = formik.values.value <= 0;
     const hasErrors = Object.keys(formik.errors).length > 0;
     return hasEmptyFields || hasErrors || loading;
   };
@@ -118,7 +121,6 @@ export function AddAssignmentModal(props: AddAssignmentModalProps) {
               }
               size="compact"
               fullwidth
-              required={isRequired(validationSchema, "assignment")}
               onChange={(name, value) => void formik.setFieldValue(name, value)}
               onBlur={formik.handleBlur}
               options={assignmentOptions}
