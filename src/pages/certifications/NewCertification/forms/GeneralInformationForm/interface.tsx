@@ -94,6 +94,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               id="addressee"
               required
               label="Destinatario"
+              maxLength={60}
               name="addressee"
               placeholder="Ej: A quien interese"
               value={formik.values.addressee}

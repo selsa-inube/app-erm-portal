@@ -201,9 +201,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
         </StyledContainerContent>
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
-          <Button onClick={handleClose} fullwidth={isMobile}>
-            {buttonLabel}
-          </Button>
+          <Button onClick={handleClose}>{buttonLabel}</Button>
         </Stack>
       </StyledModal>
     </Blanket>,
