@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
 import { useErrorFlag } from "./useErrorFlag";
-import { businessUnitStaff } from "@src/mocks/staff/staff.mock";
-import { mapBusinessUnitsApiToEntity } from "@src/services/businessUnits/getBusinessUnits/mappers";
+import { businessUnitStaff } from "@mocks/staff/staff.mock";
+import { mapBusinessUnitsApiToEntity } from "@services/businessUnits/getBusinessUnits/mappers";
 
 const ERROR_CODE_EMPTY_DATA = 1006;
 const ERROR_CODE_FETCH_FAILED = 1008;
@@ -47,7 +47,6 @@ export const useBusinessUnits = (
           headers,
         ); */
 
-        // Simulación de datos obtenidos
         const fetchedBusinessUnits = businessUnitStaff.map(
           mapBusinessUnitsApiToEntity,
         );
