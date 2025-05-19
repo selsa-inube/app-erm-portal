@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Icon,
   Text,
@@ -14,9 +15,12 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import CheckIcon from "@assets/images/CheckIcon.svg";
+import CloseIcon from "@assets/images/CloseIcon.svg";
+import HelpIcon from "@assets/images/HelpIcon.svg";
 import { spacing } from "@design/tokens/spacing";
 import { TableBoard } from "@components/data/TableBoard";
-import { Requirement } from "@components/data/TableBoard/types";
+import { Requirement, IEntries } from "@components/data/TableBoard/types";
 
 import {
   StyledContainerClose,
@@ -61,6 +65,42 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
       appearance: "help",
     },
   ];
+
+  const getIconByTagStatus = (tagElement: React.ReactElement) => {
+    const label = tagElement.props.children;
+
+    if (label === "Cumple") {
+      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
+    } else if (label === "Sin Evaluar") {
+      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
+    } else if (label === "No Cumple") {
+      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
+    } else {
+      return null;
+    }
+  };
+
+  const getActionsMobileIcon = () => {
+    return [
+      {
+        id: "estado",
+        actionName: "",
+        content: (entry: IEntries) => {
+          const tagElement = entry.tag as React.ReactElement;
+          return (
+            <Stack>
+              <Icon
+                icon={getIconByTagStatus(tagElement)}
+                appearance={tagElement.props.appearance}
+                cursorHover
+                size="20px"
+              />
+            </Stack>
+          );
+        },
+      },
+    ];
+  };
 
   const node = document.getElementById(portalId);
   if (!node) {
@@ -145,15 +185,17 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
                     id={requirement.id}
                     titles={requirement.titles}
                     entries={requirement.entries}
+                    actions={[]}
+                    actionMobile={[]}
+                    actionMobileIcon={getActionsMobileIcon()}
                     appearanceTable={{
-                      widthTd: isMobile ? "70%" : "80%",
+                      widthTd: "75%",
                       efectzebra: true,
                       title: "primary",
                       isStyleMobile: true,
                     }}
                     isFirstTable={index === 0}
                     infoItems={infoItems}
-                    showTagsInMobile
                   />
                 ))}
               </StyledTableContainer>
@@ -162,9 +204,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
         </StyledContainerContent>
 
         <Stack justifyContent="flex-end" gap={spacing.s100}>
-          <Button onClick={handleClose} fullwidth={isMobile}>
-            {buttonLabel}
-          </Button>
+          <Button onClick={handleClose}>{buttonLabel}</Button>
         </Stack>
       </StyledModal>
     </Blanket>,

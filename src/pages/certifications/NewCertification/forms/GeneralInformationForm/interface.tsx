@@ -94,6 +94,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               id="addressee"
               required
               label="Destinatario"
+              maxLength={60}
               name="addressee"
               placeholder="Ej: A quien interese"
               value={formik.values.addressee}
@@ -134,7 +135,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               name="observations"
               id="observations"
               value={formik.values.observations}
-              maxLength={120}
+              maxLength={1000}
               disabled={loading}
               status={getFieldState(formik, "observations")}
               message={formik.errors.observations}
@@ -159,7 +160,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               Anterior
             </Button>
             <Button
-              fullwidth={isMobile}
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >

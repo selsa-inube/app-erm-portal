@@ -15,6 +15,7 @@ import {
   Tfoot,
   Thead,
   Tr,
+  Stack,
 } from "@inubekit/inubekit";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
@@ -22,12 +23,12 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
+import { spacing } from "@design/tokens/spacing";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
-import { Detail } from "./Detail";
 
 interface CertificationsTableProps {
   data: ICertificationsTable[];
@@ -66,6 +67,9 @@ function CertificationsTable({
     "(max-width: 542px)",
   ]);
 
+  const isMobile = mediaQueries["(max-width: 542px)"];
+  const iconSize = isMobile ? "20px" : "16px";
+
   const {
     totalRecords,
     handleStartPage,
@@ -76,6 +80,8 @@ function CertificationsTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
+
+  const displayData = isMobile ? data : currentData;
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -110,6 +116,44 @@ function CertificationsTable({
       ? columns.slice(0, 3)
       : columns;
 
+  const getHeaderAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "requestNumber":
+      case "type":
+      case "date":
+      case "status":
+      case "actions":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
+  const getCellAlignment = (key: string) => {
+    if (mediaQueries["(max-width: 1024px)"]) {
+      return "center";
+    }
+
+    switch (key) {
+      case "requestNumber":
+        return "right";
+      case "type":
+      case "date":
+      case "status":
+        return "left";
+      case "details":
+      case "actions":
+      case "delete":
+        return "center";
+      default:
+        return "left";
+    }
+  };
+
   const handleOpenModal = (requestId: string) => {
     setSelectedRequestId(requestId);
     {
@@ -140,6 +184,48 @@ function CertificationsTable({
       description,
     });
     setIsInfoModalOpen(true);
+  };
+
+  const renderDetailsIcon = (rowIndex: number) => {
+    const iconProps: IIcon = {
+      appearance: "dark",
+      size: iconSize,
+      cursorHover: true,
+      onClick: () => handleOpenDetailsModal(rowIndex),
+      icon: <MdOutlineVisibility />,
+    };
+    return (
+      <TooltipWrapper>
+        <Icon {...iconProps} />
+        <Tooltip
+          text={
+            hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
+          }
+        />
+      </TooltipWrapper>
+    );
+  };
+
+  const renderDeleteIcon = (requestId: string) => {
+    const iconProps: IIcon = {
+      appearance: "danger",
+      size: iconSize,
+      onClick: () => handleOpenModal(requestId),
+      cursorHover: true,
+      icon: <MdOutlineHighlightOff />,
+    };
+    return (
+      <TooltipWrapper>
+        <Icon {...iconProps} />
+        <Tooltip
+          text={
+            !disableDeleteAction && hasDeletePrivilege
+              ? "Descartar solicitud"
+              : "Sin privilegios"
+          }
+        />
+      </TooltipWrapper>
+    );
   };
 
   const handleOpenDetailsModal = (rowIndex: number) => {
@@ -254,16 +340,10 @@ function CertificationsTable({
           {loading ? (
             <SkeletonLine width="100%" animated={true} />
           ) : (
-            <Detail
-              onClickDetails={() => handleOpenDetailsModal(rowIndex)}
-              onClickEdit={cellData?.onClick}
-              onClickEliminate={
-                !disableDeleteAction
-                  ? () => handleOpenModal(currentData[rowIndex].requestId!)
-                  : undefined
-              }
-              disableDeleteAction={disableDeleteAction}
-            />
+            <Stack justifyContent="center" gap={spacing.s200}>
+              {renderDetailsIcon(rowIndex)}
+              {renderDeleteIcon(displayData[rowIndex].requestId!)}
+            </Stack>
           )}
         </Td>
       );
@@ -274,12 +354,14 @@ function CertificationsTable({
         ? "custom"
         : "text";
 
+    const cellAlign = getCellAlignment(headerKey);
+
     return (
       <StyledTd
         key={headerKey}
         appearance={rowIndex % 2 === 1 ? "dark" : "light"}
         type={cellType}
-        align="center"
+        align={cellAlign}
         style={{ padding: "16px 2px" }}
       >
         {renderCellContent(headerKey, cellData, rowIndex)}
@@ -296,7 +378,7 @@ function CertificationsTable({
       return (
         <Tr border="bottom">
           {headerSlice.map((header, index) => (
-            <StyledTh key={index} align="center" style={header.style}>
+            <StyledTh key={index} align={getHeaderAlignment(header.key)}>
               <b>{header.label}</b>
             </StyledTh>
           ))}
