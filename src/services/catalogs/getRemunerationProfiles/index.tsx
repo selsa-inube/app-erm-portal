@@ -11,7 +11,9 @@ export interface IRemunerationProfile {
   regulatoryFrameworkCode: string;
 }
 
-const getRemunerationProfiles = async (): Promise<IRemunerationProfile[]> => {
+const getRemunerationProfiles = async (
+  headers: Record<string, string>,
+): Promise<IRemunerationProfile[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -25,7 +27,7 @@ const getRemunerationProfiles = async (): Promise<IRemunerationProfile[]> => {
         {
           method: "GET",
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
+            ...headers,
           },
           signal: controller.signal,
         },

@@ -22,6 +22,7 @@ class BusinessUnitsError extends Error {
 const getBusinessUnitsForOfficer = async (
   userAccount: string,
   portalPublicCode: string,
+  headers: Record<string, string>,
 ): Promise<IBusinessUnit[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -34,8 +35,8 @@ const getBusinessUnitsForOfficer = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchBusinessUnitsForAnOfficerLinpar",
-          "Content-Type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };

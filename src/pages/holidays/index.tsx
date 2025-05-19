@@ -5,6 +5,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useHeaders } from "@hooks/useHeaders";
 
 import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
@@ -15,6 +16,7 @@ function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { getHeaders } = useHeaders();
 
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
@@ -28,7 +30,8 @@ function HolidaysOptions() {
   const fetchHolidaysData = async () => {
     setIsLoading(true);
     try {
-      const requests = await getHumanResourceRequests("vacations", "");
+      const headers = await getHeaders();
+      const requests = await getHumanResourceRequests("vacations", "", headers);
       setTableData(formatHolidaysData(requests ?? []));
 
       if (location.state?.showFlag) {
