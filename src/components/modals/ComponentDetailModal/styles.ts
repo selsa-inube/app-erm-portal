@@ -27,7 +27,7 @@ export const StyledModal = styled.div<IStyledModal>`
   border-radius: ${spacing.s100};
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
     border-radius: 8px;
   }
   ::-webkit-scrollbar-track {
