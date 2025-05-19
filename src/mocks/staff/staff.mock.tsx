@@ -28,4 +28,39 @@ const mockStaffMembers: IOption[] = [
   },
 ];
 
-export { mockStaffMembers };
+const businessUnitStaff = [
+  {
+    businessUnitPublicCode: "860514047",
+    languageId: "1111",
+    abbreviatedName: "SistemasEnLinea",
+    descriptionUse: "SistemasEnLinea",
+    firstMonthOfFiscalYear: "JAN",
+    urlLogo: "http://www.sistemasenlinea.com.co/images/logos/selsalogo2.png",
+  },
+  {
+    businessUnitPublicCode: "cooptraisspru",
+    languageId: "1111",
+    abbreviatedName: "cooptraisspru",
+    descriptionUse: "cooptraisspru",
+    firstMonthOfFiscalYear: "JAN",
+    urlLogo: "http://www.sistemasenlinea.com.co/images/nuevo-logo-linix.png",
+  },
+  {
+    businessUnitPublicCode: "test",
+    languageId: "1111",
+    abbreviatedName: "test",
+    descriptionUse: "test ",
+    firstMonthOfFiscalYear: "JAN",
+    urlLogo: "http://logo.png",
+  },
+  {
+    businessUnitPublicCode: "test2",
+    languageId: "1111",
+    abbreviatedName: "test2",
+    descriptionUse: "test2",
+    firstMonthOfFiscalYear: "JAN",
+    urlLogo: "http://logo.png",
+  },
+];
+
+export { mockStaffMembers, businessUnitStaff };
