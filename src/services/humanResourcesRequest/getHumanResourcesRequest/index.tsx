@@ -28,6 +28,7 @@ const getHumanResourceRequests = async (
         {
           method: "GET",
           headers: {
+            "X-Action": "SearchAllHumanResourcesRequest",
             ...headers,
           },
           signal: controller.signal,
