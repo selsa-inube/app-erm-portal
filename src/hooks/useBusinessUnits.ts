@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
+import { useHeaders } from "@hooks/useHeaders";
 
 import { useErrorFlag } from "./useErrorFlag";
-import { businessUnitStaff } from "@mocks/staff/staff.mock";
-import { mapBusinessUnitsApiToEntity } from "@services/businessUnits/getBusinessUnits/mappers";
 
 const ERROR_CODE_EMPTY_DATA = 1006;
 const ERROR_CODE_FETCH_FAILED = 1008;
@@ -20,6 +20,7 @@ export const useBusinessUnits = (
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
+  const { getHeaders } = useHeaders();
 
   useErrorFlag(flagShown);
 
@@ -35,20 +36,16 @@ export const useBusinessUnits = (
       return;
     }
 
-    const fetchBusinessUnits = () => {
+    const fetchBusinessUnits = async () => {
       setIsFetching(true);
 
       try {
-        /*const headers = await getHeaders();
+        const headers = await getHeaders();
 
-         const fetchedBusinessUnits = await getBusinessUnitsForOfficer(
+        const fetchedBusinessUnits = await getBusinessUnitsForOfficer(
           userAccount,
           portalPublicCode,
           headers,
-        ); */
-
-        const fetchedBusinessUnits = businessUnitStaff.map(
-          mapBusinessUnitsApiToEntity,
         );
 
         if (isMounted) {
