@@ -5,10 +5,12 @@ import { spacing } from "@design/tokens/spacing";
 interface IStyledRadioClient {
   theme: typeof inube;
   expandedWidth?: boolean;
+  isMobile?: boolean;
 }
 
 interface IStyledBannerImage {
   theme: typeof inube;
+  isMobile?: boolean;
 }
 
 interface IStyledBannerImage {
@@ -28,12 +30,12 @@ interface IMobileDropdown {
 }
 
 const StyledRadioClient = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "expandedWidth",
+  shouldForwardProp: (prop) => prop !== "expandedWidth" && prop !== "isMobile",
 })<IStyledRadioClient>`
   position: relative;
   display: flex;
   align-items: center;
-  height: 60px;
+  height: ${({ isMobile }) => (isMobile ? "46px" : "60px")};
   padding: ${spacing.s200} ${spacing.s075};
   box-sizing: border-box;
   width: 100%;
@@ -48,9 +50,11 @@ const StyledRadioClient = styled.div.withConfig({
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
-const StyledBannerImage = styled.img<IStyledBannerImage>`
-  width: 44px;
-  height: 44px;
+const StyledBannerImage = styled.img.withConfig({
+  shouldForwardProp: (prop) => prop !== "isMobile",
+})<IStyledBannerImage>`
+  width: ${({ isMobile }) => (isMobile ? "34px" : "44px")};
+  height: ${({ isMobile }) => (isMobile ? "34px" : "44px")};
   object-fit: contain;
   border: 0.5px solid
     ${({ theme }) => theme?.palette?.blue?.B400 || inube.palette?.blue?.B400};
