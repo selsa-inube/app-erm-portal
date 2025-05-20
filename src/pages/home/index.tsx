@@ -17,6 +17,8 @@ import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { VinculationBanner } from "@components/layout/Banner";
+import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
+import { usePendingData } from "@components/modals/OfferedGuaranteeModal/DaysPending/interface";
 
 import {
   StyledAppPage,
@@ -51,8 +53,11 @@ function Home() {
   const navigate = useNavigate();
 
   const [collapse, setCollapse] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const { totalPendingDays } = usePendingData();
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -88,6 +93,10 @@ function Home() {
 
     setCollapse(false);
     navigate("/employees/select-employee");
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -151,9 +160,17 @@ function Home() {
               redirectUrl="/employees/select-employee"
               infoItems={[
                 {
-                  icon: <MdOutlineBeachAccess />,
-                  value: 10,
+                  icon: (
+                    <Icon
+                      icon={<MdOutlineBeachAccess />}
+                      appearance="primary"
+                      size="24px"
+                      cursorHover
+                    />
+                  ),
+                  value: totalPendingDays,
                   label: "Días pendientes",
+                  onClick: toggleModal,
                 },
               ]}
               expandedWidth
@@ -192,6 +209,9 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
+      {isModalOpen && (
+        <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
+      )}
     </StyledAppPage>
   );
 }
