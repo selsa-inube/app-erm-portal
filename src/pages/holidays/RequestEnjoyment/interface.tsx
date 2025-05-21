@@ -83,7 +83,7 @@ function RequestEnjoymentUI({
           />
         }
       >
-        <Stack direction="column" gap={isTablet ? spacing.s300 : spacing.s500}>
+        <Stack direction="column" gap={isTablet ? spacing.s200 : spacing.s500}>
           <Assisted
             step={steps[currentStep - 1]}
             totalSteps={steps.length}

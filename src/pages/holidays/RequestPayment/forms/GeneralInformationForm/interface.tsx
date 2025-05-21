@@ -71,7 +71,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     <form>
       <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
         <StyledContainer $isMobile={isMobile}>
-          <Stack direction="column" width="100%" gap={spacing.s250}>
+          <Stack direction="column" width="100%" gap={spacing.s200}>
             <Stack direction={isMobile ? "column" : "row"} gap={spacing.s250}>
               <Textfield
                 label="Días hábiles a pagar"
