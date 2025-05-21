@@ -67,7 +67,7 @@ function VinculationBanner(props: VinculationBannerProps) {
   }, [isExpanded, isMobile]);
 
   return (
-    <StyledRadioClient expandedWidth={expandedWidth}>
+    <StyledRadioClient expandedWidth={expandedWidth} isMobile={isMobile}>
       <Stack
         gap={spacing.s150}
         alignItems="center"
@@ -75,7 +75,7 @@ function VinculationBanner(props: VinculationBannerProps) {
         width="100%"
       >
         <Stack gap={spacing.s150} alignItems="center">
-          <StyledBannerImage src={bannerImage} alt={name} />
+          <StyledBannerImage src={bannerImage} alt={name} isMobile={isMobile} />
           <Stack direction="column">
             <Text type="label" weight="bold" size="medium">
               {name}

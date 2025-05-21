@@ -10,7 +10,6 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
-import { isRequired } from "@utils/forms/forms";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
@@ -37,7 +36,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     formik,
     loading,
     withNextButton,
-    validationSchema,
     handleNextStep,
     handlePreviousStep,
   } = props;
@@ -74,13 +72,15 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
     <form onSubmit={formik.handleSubmit}>
       <Stack direction="column" gap={spacing.s300}>
         <StyledContainer $isMobile={isMobile}>
-          <Stack direction={isMobile ? "column" : "row"} gap={spacing.s300}>
+          <Stack
+            direction={isMobile ? "column" : "row"}
+            gap={isMobile ? spacing.s200 : spacing.s300}
+          >
             <Select
               name="certification"
               size="compact"
               label="Tipo de certificación"
               fullwidth={true}
-              required
               options={certificationOptions}
               placeholder="Selecciona de la lista"
               value={formik.values.certification}
@@ -91,6 +91,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
             <Input
               size="compact"
               fullwidth={true}
+              counter
               id="addressee"
               required
               label="Destinatario"
@@ -120,11 +121,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
                 fullwidth
                 onBlur={formik.handleBlur}
                 onChange={handleContractChange}
-                required={
-                  validationSchema
-                    ? isRequired(validationSchema, "contract")
-                    : false
-                }
               />
             </Stack>
           )}
@@ -140,11 +136,6 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               status={getFieldState(formik, "observations")}
               message={formik.errors.observations}
               fullwidth
-              required={
-                validationSchema
-                  ? isRequired(validationSchema, "observations")
-                  : false
-              }
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             />
