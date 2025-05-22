@@ -12,6 +12,7 @@ export async function postHumanResourceRequest(
       method: "POST",
       headers: {
         ...headers,
+        "X-Action": "SaveHumanResourcesRequest",
       },
       body: JSON.stringify(requestBody),
     },
