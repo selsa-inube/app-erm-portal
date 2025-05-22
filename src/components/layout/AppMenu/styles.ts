@@ -11,7 +11,7 @@ const StyledAppMenu = styled.div`
   gap: ${spacing.s200};
 
   @media (max-width: 490px) {
-    padding: ${spacing.s200};
+    padding: ${spacing.s100} ${spacing.s200};
   }
 `;
 

@@ -74,7 +74,7 @@ function BoxAttribute(props: BoxAttributeProps) {
               value && (
                 <Text
                   type="body"
-                  size={isMobile || downloadable ? "small" : "medium"}
+                  size="medium"
                   appearance="gray"
                   textAlign={
                     direction === "column" || iconAfter ? "start" : "end"
