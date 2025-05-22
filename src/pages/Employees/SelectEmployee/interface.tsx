@@ -89,19 +89,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   const validationSchema = Yup.object({
     keyword: Yup.string()
       .trim()
-      .required("Para continuar, primero debes seleccionar un empleado.")
-      .test(
-        "is-valid-employee",
-        "Debes seleccionar un empleado de la lista.",
-        (value) => {
-          if (!value) return false;
-          return employees.some(
-            (emp) =>
-              `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}` ===
-              value,
-          );
-        },
-      ),
+      .required("Para continuar, primero debes seleccionar un empleado."),
   });
 
   const handleEmployeeSelection = (
