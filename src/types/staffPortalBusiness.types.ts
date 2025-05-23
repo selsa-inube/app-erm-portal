@@ -36,4 +36,27 @@ interface IStaffUserAccount {
   userAccount: string;
 }
 
-export type { IStaffPortalByBusinessManager, IStaffUserAccount };
+interface ISubOption {
+  abbreviatedName: string;
+  descriptionUse: string;
+  optionStaffId: string;
+  publicCode: string;
+  subOption: string[];
+  useCaseName: string;
+}
+
+interface IOptionWithSubOptions {
+  abbreviatedName: string;
+  descriptionUse: string;
+  optionStaffId: string;
+  parentOptionId: string;
+  publicCode: string;
+  subOption?: ISubOption[];
+  useCaseName: string;
+}
+
+export type {
+  IStaffPortalByBusinessManager,
+  IStaffUserAccount,
+  IOptionWithSubOptions,
+};

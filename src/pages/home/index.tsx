@@ -47,6 +47,7 @@ function Home() {
     businessUnits,
     setSelectedClient,
     selectedEmployee,
+    optionForCustomerPortal,
   } = useAppContext();
   const configHeader = useConfigHeader();
   const isTablet = useMediaQuery("(max-width: 944px)");
@@ -56,6 +57,16 @@ function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+  const [dataOptions, setDataOptions] = useState<
+    {
+      isEnabled: boolean;
+      id: string;
+      label: string;
+      icon: React.ReactElement;
+      path: string;
+      description: string;
+    }[]
+  >();
 
   const { totalPendingDays } = usePendingData();
 
@@ -75,6 +86,23 @@ function Home() {
       navigate("/login", { replace: true });
     }
   }, [selectedClient, navigate]);
+
+  useEffect(() => {
+    if (optionForCustomerPortal) {
+      setDataOptions(
+        baseNavLinks.map((link) => {
+          const option = optionForCustomerPortal.find(
+            (option) => option.publicCode === link.id,
+          );
+          return {
+            ...link,
+            label: option?.abbreviatedName ?? link.label,
+            isEnabled: !!option,
+          };
+        }),
+      );
+    }
+  }, [optionForCustomerPortal]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -193,15 +221,18 @@ function Home() {
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
                 <StyledQuickAccessContainer $isTablet={isTablet}>
-                  {baseNavLinks.map((link, index) => (
-                    <AppCard
-                      key={index}
-                      title={link.label}
-                      description={"Descripción"}
-                      icon={link.icon}
-                      url={link.path}
-                    />
-                  ))}
+                  {dataOptions?.map(
+                    (link, index) =>
+                      link.isEnabled && (
+                        <AppCard
+                          key={index}
+                          title={link.label}
+                          description={link.description}
+                          icon={link.icon}
+                          url={link.path}
+                        />
+                      ),
+                  )}
                 </StyledQuickAccessContainer>
               </Stack>
             </Grid>
