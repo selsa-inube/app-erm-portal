@@ -19,6 +19,8 @@ const getHumanResourceRequests = async (
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
       const queryParameters = new URLSearchParams({
+        page: "1",
+        perPage: "500",
         employeeId,
         humanResourceRequestType: typeRequest,
         sort: "desc.humanResourceRequestDate",
