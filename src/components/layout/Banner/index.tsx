@@ -11,6 +11,7 @@ import {
 import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/cards/WidgetBanner";
 import { spacing } from "@design/tokens/spacing";
+import { capitalizeWords, truncateText } from "@utils/text";
 
 import { getStatusConfig } from "./config";
 import {
@@ -77,8 +78,14 @@ function VinculationBanner(props: VinculationBannerProps) {
         <Stack gap={spacing.s150} alignItems="center">
           <StyledBannerImage src={bannerImage} alt={name} isMobile={isMobile} />
           <Stack direction="column">
-            <Text type="label" weight="bold" size="medium">
-              {name}
+            <Text
+              type="label"
+              weight="bold"
+              size={isMobile ? "small" : "medium"}
+            >
+              {isMobile
+                ? truncateText(capitalizeWords(name), 27)
+                : capitalizeWords(name)}
             </Text>
             <Stack gap={spacing.s075} alignItems="center">
               <Text size="small" appearance="gray">
