@@ -14,7 +14,7 @@ import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
-import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
+import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { VinculationBanner } from "@components/layout/Banner";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
@@ -49,7 +49,7 @@ function Home() {
     selectedEmployee,
     optionForCustomerPortal,
   } = useAppContext();
-  const configHeader = useConfigHeader();
+  const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
@@ -89,18 +89,7 @@ function Home() {
 
   useEffect(() => {
     if (optionForCustomerPortal) {
-      setDataOptions(
-        baseNavLinks.map((link) => {
-          const option = optionForCustomerPortal.find(
-            (option) => option.publicCode === link.id,
-          );
-          return {
-            ...link,
-            label: option?.abbreviatedName ?? link.label,
-            isEnabled: !!option,
-          };
-        }),
-      );
+      setDataOptions(navConfig(optionForCustomerPortal));
     }
   }, [optionForCustomerPortal]);
 

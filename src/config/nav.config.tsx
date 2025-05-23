@@ -10,6 +10,7 @@ import {
 } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
+import { IOptionWithSubOptions } from "@src/types/staffPortalBusiness.types";
 
 const baseNavLinks = [
   {
@@ -83,16 +84,16 @@ const actions = [
   },
 ];
 
-const useNavConfig = () => {
+const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const location = useLocation();
-
+  const baseNav = navConfig(optionForCustomerPortal);
   const nav = {
     reactPortalId: "portals",
     title: "MENU",
     sections: {
       administrate: {
         name: "",
-        links: baseNavLinks.reduce(
+        links: baseNav.reduce(
           (acc, link) => {
             acc[link.id] = {
               ...link,
@@ -110,7 +111,20 @@ const useNavConfig = () => {
   return nav;
 };
 
-const useConfigHeader = () => {
+const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
+  return baseNavLinks.map((link) => {
+    const option = optionForCustomerPortal.find(
+      (option) => option.publicCode === link.id,
+    );
+    return {
+      ...link,
+      label: option?.abbreviatedName ?? link.label,
+      isEnabled: !!option,
+    };
+  });
+};
+
+const useConfigHeader = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const nav = {
     reactPortalId: "portal",
     title: "MENU",
@@ -120,7 +134,7 @@ const useConfigHeader = () => {
         onClose: noop,
         onToggle: noop,
         subtitle: "Administrate",
-        links: baseNavLinks,
+        links: navConfig(optionForCustomerPortal),
       },
     ],
     actions,
@@ -145,4 +159,11 @@ const userMenu = [
   },
 ];
 
-export { useNavConfig, useConfigHeader, baseNavLinks, userMenu, actions };
+export {
+  useNavConfig,
+  useConfigHeader,
+  baseNavLinks,
+  userMenu,
+  actions,
+  navConfig,
+};
