@@ -1,7 +1,7 @@
 import {
-  EStatus,
+  ERequestStatus,
+  ERequestType,
   ETaskStatus,
-  EType,
   HumanResourceRequest,
   HumanResourceRequestTraceability,
   TaskToManageHumanResourceRequest,
@@ -16,11 +16,11 @@ const mapHumanResourceRequestApiToEntity = (
     item.humanResourceRequestDescription ?? "",
   ),
   humanResourceRequestDate: String(item.humanResourceRequestDate ?? ""),
-  humanResourceRequestStatus: item.humanResourceRequestStatus as EStatus,
+  humanResourceRequestStatus: item.humanResourceRequestStatus as ERequestStatus,
   humanResourceRequestData:
     item.humanResourceRequestData ??
     ({} as HumanResourceRequest["humanResourceRequestData"]),
-  humanResourceRequestType: item.humanResourceRequestType as EType,
+  humanResourceRequestType: item.humanResourceRequestType as ERequestType,
   employeeId: String(item.employeeId ?? ""),
   userCodeInCharge: String(item.userCodeInCharge ?? ""),
   userNameInCharge: String(item.userNameInCharge ?? ""),
