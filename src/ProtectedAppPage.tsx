@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AppPage } from "@components/layout/AppPage";
 
-import { useAppContext } from "./context/AppContext/useAppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { useOptionsMenu } from "@hooks/useOptionsMenu";
 
 interface ProtectedAppPageProps {

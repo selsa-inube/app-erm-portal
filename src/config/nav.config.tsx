@@ -10,7 +10,7 @@ import {
 } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
-import { IOptionWithSubOptions } from "@src/types/staffPortalBusiness.types";
+import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 
 const baseNavLinks = [
   {

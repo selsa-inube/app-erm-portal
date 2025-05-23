@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { getOptionForCustomerPortal } from "@src/services/staffPortal/getOptionForCustomerPortal";
-import { IOptionWithSubOptions } from "@src/types/staffPortalBusiness.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { getOptionForCustomerPortal } from "@services/staffPortal/getOptionForCustomerPortal";
+import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 import { useErrorFlag } from "./useErrorFlag";
 
 export function useOptionsMenu(
