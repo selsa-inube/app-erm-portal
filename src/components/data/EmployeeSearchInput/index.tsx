@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input, Icon, Text } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import { MdOutlineCancel } from "react-icons/md";
@@ -8,6 +8,8 @@ import {
   StyledDropdownMenu,
   StyledDropdownItem,
 } from "./styles";
+
+import { useSearchInput } from "./interface";
 
 interface SearchInputProps<T> {
   value: string;
@@ -31,35 +33,35 @@ export const SearchInput = <T extends object>({
   renderItemLabel,
   placeholder = "Buscar...",
 }: SearchInputProps<T>) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (filteredItems.length === 0) return;
-
-    if (e.key === "ArrowDown") {
-      setSelectedIndex((prev) =>
-        prev === null || prev === filteredItems.length - 1 ? 0 : prev + 1,
-      );
-    } else if (e.key === "ArrowUp") {
-      setSelectedIndex((prev) =>
-        prev === null || prev === 0 ? filteredItems.length - 1 : prev - 1,
-      );
-    } else if (e.key === "Enter" && selectedIndex !== null) {
-      handleItemSelection(filteredItems[selectedIndex], formik);
-    }
-  };
-
-  const handleMouseEnter = (index: number) => {
-    setSelectedIndex(index);
-  };
+  const { selectedIndex, containerRef, handleKeyDown, handleMouseEnter } =
+    useSearchInput(filteredItems, (item) => handleItemSelection(item, formik));
 
   const handleClearValue = () => {
     formik.setFieldValue("keyword", "");
     setValue("");
   };
 
+  const handleBlurContainer = (e: React.FocusEvent<HTMLDivElement>) => {
+    const related = e.relatedTarget as HTMLElement | null;
+
+    if (
+      containerRef.current &&
+      related &&
+      containerRef.current.contains(related)
+    ) {
+      return;
+    }
+    formik.handleBlur({
+      target: { name: "keyword" },
+    } as React.FocusEvent<HTMLInputElement>);
+  };
+
   return (
-    <StyledTextfieldContainer>
+    <StyledTextfieldContainer
+      ref={containerRef}
+      tabIndex={-1}
+      onBlur={handleBlurContainer}
+    >
       <Input
         id="search-input"
         placeholder={placeholder}
@@ -71,7 +73,6 @@ export const SearchInput = <T extends object>({
           setValue(e.target.value);
         }}
         fullwidth
-        onBlur={formik.handleBlur}
         onKeyUp={handleKeyDown}
         status={
           formik.touched.keyword && formik.errors.keyword
@@ -95,10 +96,11 @@ export const SearchInput = <T extends object>({
         }
       />
       {filteredItems.length > 0 && (
-        <StyledDropdownMenu>
+        <StyledDropdownMenu tabIndex={-1}>
           {filteredItems.map((item, index) => (
             <StyledDropdownItem
               key={index}
+              tabIndex={-1}
               onClick={() => handleItemSelection(item, formik)}
               onMouseEnter={() => handleMouseEnter(index)}
               $isselected={selectedIndex === index}

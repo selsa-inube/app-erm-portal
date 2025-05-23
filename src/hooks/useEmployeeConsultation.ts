@@ -14,7 +14,7 @@ interface UseAllEmployeesResult {
 
 export const useAllEmployees = (
   initialPage = 1,
-  initialPerPage = 50,
+  initialPerPage = 500,
 ): UseAllEmployeesResult => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
