@@ -10,10 +10,11 @@ import {
 } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
+import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 
 const baseNavLinks = [
   {
-    id: "holidays",
+    id: "vacacionesPortalErm",
     label: "Vacaciones",
     icon: <MdOutlineBeachAccess />,
     path: "/holidays",
@@ -21,7 +22,7 @@ const baseNavLinks = [
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
   },
   {
-    id: "disability",
+    id: "incapacidadesPortalErm",
     label: "Incapacidades",
     icon: <MdOutlinePersonalInjury />,
     path: "/disability",
@@ -29,7 +30,7 @@ const baseNavLinks = [
       "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
   },
   {
-    id: "absences",
+    id: "ausenciasPortalErm",
     label: "Ausencias",
     icon: <MdOutlinePersonOff />,
     path: "/absences",
@@ -37,7 +38,7 @@ const baseNavLinks = [
       "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
   },
   {
-    id: "certifications",
+    id: "certificacionPortalErm",
     label: "Certificaciones",
     icon: <MdOutlineFilePresent />,
     path: "/certifications",
@@ -45,7 +46,7 @@ const baseNavLinks = [
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
   },
   {
-    id: "contracts",
+    id: "contratoPortalErm",
     label: "Contratos",
     icon: <MdOutlineHistoryEdu />,
     path: "/contracts",
@@ -53,7 +54,7 @@ const baseNavLinks = [
       "Son acuerdos legales entre el empleador y el empleado que establecen los términos de trabajo.",
   },
   {
-    id: "charges",
+    id: "cargoPortalErm",
     label: "Cargos",
     icon: <MdOutlineBadge />,
     path: "/charges",
@@ -61,7 +62,7 @@ const baseNavLinks = [
       "Se refiere a las posiciones o roles que ocupan los empleados dentro de la estructura organizacional de la empresa.",
   },
   {
-    id: "requests",
+    id: "solTramitePortalErm",
     label: "Solicitudes en tramite",
     icon: <MdPendingActions />,
     path: "/requests",
@@ -83,16 +84,16 @@ const actions = [
   },
 ];
 
-const useNavConfig = () => {
+const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const location = useLocation();
-
+  const baseNav = navConfig(optionForCustomerPortal);
   const nav = {
     reactPortalId: "portals",
     title: "MENU",
     sections: {
       administrate: {
         name: "",
-        links: baseNavLinks.reduce(
+        links: baseNav.reduce(
           (acc, link) => {
             acc[link.id] = {
               ...link,
@@ -110,7 +111,20 @@ const useNavConfig = () => {
   return nav;
 };
 
-const useConfigHeader = () => {
+const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
+  return baseNavLinks.map((link) => {
+    const option = optionForCustomerPortal.find(
+      (option) => option.publicCode === link.id,
+    );
+    return {
+      ...link,
+      label: option?.abbreviatedName ?? link.label,
+      isEnabled: !!option,
+    };
+  });
+};
+
+const useConfigHeader = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const nav = {
     reactPortalId: "portal",
     title: "MENU",
@@ -120,7 +134,7 @@ const useConfigHeader = () => {
         onClose: noop,
         onToggle: noop,
         subtitle: "Administrate",
-        links: baseNavLinks,
+        links: navConfig(optionForCustomerPortal),
       },
     ],
     actions,
@@ -145,4 +159,11 @@ const userMenu = [
   },
 ];
 
-export { useNavConfig, useConfigHeader, baseNavLinks, userMenu, actions };
+export {
+  useNavConfig,
+  useConfigHeader,
+  baseNavLinks,
+  userMenu,
+  actions,
+  navConfig,
+};

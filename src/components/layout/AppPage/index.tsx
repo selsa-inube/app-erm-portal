@@ -59,12 +59,13 @@ function AppPage(props: AppPageProps) {
     businessUnits,
     setSelectedClient,
     selectedEmployee,
+    optionForCustomerPortal,
   } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
-  const navConfig = useNavConfig();
-  const configHeader = useConfigHeader();
+  const navConfig = useNavConfig(optionForCustomerPortal ?? []);
+  const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
 
   const [collapse, setCollapse] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

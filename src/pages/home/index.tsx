@@ -14,7 +14,7 @@ import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
-import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
+import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { VinculationBanner } from "@components/layout/Banner";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
@@ -47,8 +47,9 @@ function Home() {
     businessUnits,
     setSelectedClient,
     selectedEmployee,
+    optionForCustomerPortal,
   } = useAppContext();
-  const configHeader = useConfigHeader();
+  const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
@@ -56,6 +57,16 @@ function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+  const [dataOptions, setDataOptions] = useState<
+    {
+      isEnabled: boolean;
+      id: string;
+      label: string;
+      icon: React.ReactElement;
+      path: string;
+      description: string;
+    }[]
+  >();
 
   const { totalPendingDays } = usePendingData();
 
@@ -75,6 +86,12 @@ function Home() {
       navigate("/login", { replace: true });
     }
   }, [selectedClient, navigate]);
+
+  useEffect(() => {
+    if (optionForCustomerPortal) {
+      setDataOptions(navConfig(optionForCustomerPortal));
+    }
+  }, [optionForCustomerPortal]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -193,15 +210,18 @@ function Home() {
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
                 <StyledQuickAccessContainer $isTablet={isTablet}>
-                  {baseNavLinks.map((link, index) => (
-                    <AppCard
-                      key={index}
-                      title={link.label}
-                      description={link.description}
-                      icon={link.icon}
-                      url={link.path}
-                    />
-                  ))}
+                  {dataOptions?.map(
+                    (link, index) =>
+                      link.isEnabled && (
+                        <AppCard
+                          key={index}
+                          title={link.label}
+                          description={link.description}
+                          icon={link.icon}
+                          url={link.path}
+                        />
+                      ),
+                  )}
                 </StyledQuickAccessContainer>
               </Stack>
             </Grid>
