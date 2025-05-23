@@ -188,10 +188,19 @@ function HolidaysTable(props: HolidaysTableProps) {
       ?.value as unknown as HolidayTableDataDetails;
     const dataDeta = [
       { label: "Días de disfrute", value: dataDe.daysOff },
-      { label: "Fecha de inicio", value: dataDe.startDate },
+      { label: "Días hábiles a pagar", value: dataDe.daysToPay },
+      { label: "Fecha de inicio o pago", value: dataDe.startDate },
       { label: "Contrato", value: dataDe.contract },
       { label: "Observaciones", value: dataDe.description },
-    ];
+    ].filter(
+      (item) =>
+        item.value !== undefined &&
+        item.value !== null &&
+        !(typeof item.value === "string" && item.value.trim() === ""),
+    );
+
+    if (dataDeta.length === 0) return;
+
     setSelectedRecord(dataDeta);
     setIsModalOpen(true);
   };
