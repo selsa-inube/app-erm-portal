@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
-import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
+import {
+  HumanResourceRequest,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
 
 import { useErrorFlag } from "./useErrorFlag";
 
+type RequestType = keyof typeof ERequestType;
+
 export const useHumanResourceRequests = <T>(
-  typeRequest: string,
+  typeRequest: RequestType,
   formatData: (data: HumanResourceRequest[]) => T[],
 ) => {
   const [data, setData] = useState<T[]>([]);
@@ -22,7 +27,7 @@ export const useHumanResourceRequests = <T>(
 
   useErrorFlag(
     flagShown,
-    `Error al obtener solicitudes de tipo "${typeRequest}"`,
+    `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`,
     "Error en la solicitud",
     false,
   );
