@@ -86,10 +86,21 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     return results;
   }, [debouncedSearchTerm, employees]);
 
-  const validationSchema = Yup.object({
+  const validationSchema: Yup.ObjectSchema<{ keyword: string }> = Yup.object({
     keyword: Yup.string()
-      .trim()
-      .required("Para continuar, primero debes seleccionar un empleado."),
+      .required("Para continuar, primero debes seleccionar un empleado.")
+      .test(
+        "is-valid-employee",
+        "Debes seleccionar un empleado de la lista.",
+        function (value) {
+          const isValid = employees.some(
+            (emp) =>
+              `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}` ===
+              value,
+          );
+          return isValid;
+        },
+      ),
   });
 
   const handleEmployeeSelection = (
