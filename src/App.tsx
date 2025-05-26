@@ -40,7 +40,8 @@ function FirstPage() {
   const { user, setStaffUser } = useAppContext();
   const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
-
+  console.log("Current origin:", window.location.origin);
+  console.log("Environment:", environment.REDIRECT_URI);
   const {
     userAccount,
     hasError: userAccountError,
