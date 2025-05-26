@@ -19,6 +19,7 @@ interface Environment {
   BUSINESS_UNIT?: string;
   COUNTRY: string;
   INCLUDES_SATURDAYS: string;
+  IVITE_VERCEL?: string;
 }
 
 const environment: Environment = {
@@ -36,6 +37,7 @@ const environment: Environment = {
     .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
   COUNTRY: import.meta.env.VITE_COUNTRY as string,
   INCLUDES_SATURDAYS: import.meta.env.VITE_INCLUDES_SATURDAYS as string,
+  IVITE_VERCEL: import.meta.env.VITE_VERCEL as string,
 };
 
 export {

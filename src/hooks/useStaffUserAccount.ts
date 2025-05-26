@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { staffUserAccountById } from "@services/StaffUser/StaffUserAccountIportalStaff";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { useErrorFlag } from "./useErrorFlag";
+import { mapStaffUserAccountApiToEntity } from "@src/services/StaffUser/StaffUserAccountIportalStaff/mappers";
+import { dataStaff } from "@src/mocks/staff/staff.mock";
+import { environment } from "@src/config/environment";
 
 interface UseStaffUserAccountProps {
   userAccountId: string;
@@ -12,9 +15,7 @@ export const useStaffUserAccount = ({
   userAccountId,
   onUserAccountLoaded,
 }: UseStaffUserAccountProps) => {
-  const [userAccount, setUserAccount] = useState<IStaffUserAccount | null>(
-    null,
-  );
+  const [userAccount, setUserAccount] = useState<IStaffUserAccount>();
   const [loading, setLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<number | null>(1001);
   const [flagShown, setFlagShown] = useState(false);
@@ -25,7 +26,7 @@ export const useStaffUserAccount = ({
     const fetchUserAccount = async () => {
       if (!userAccountId) {
         setHasError(null);
-        setUserAccount(null);
+        setUserAccount(undefined);
         return;
       }
 
@@ -33,7 +34,10 @@ export const useStaffUserAccount = ({
       setHasError(null);
 
       try {
-        const data = await staffUserAccountById(userAccountId);
+        const data =
+          environment.IVITE_VERCEL === "Y"
+            ? mapStaffUserAccountApiToEntity(dataStaff)
+            : await staffUserAccountById(userAccountId);
         setUserAccount(data);
         if (onUserAccountLoaded) {
           onUserAccountLoaded(data);

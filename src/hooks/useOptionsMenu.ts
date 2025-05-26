@@ -3,6 +3,9 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { getOptionForCustomerPortal } from "@services/staffPortal/getOptionForCustomerPortal";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 import { useErrorFlag } from "./useErrorFlag";
+import { mapOptionForCustomerPortalApiToEntities } from "@src/services/staffPortal/getOptionForCustomerPortal/mappers";
+import { environment } from "@src/config/environment";
+import { optionDescriptionStaff } from "@mocks/staff/staff.mock";
 
 export function useOptionsMenu(
   staffPortalPublicCode: string,
@@ -27,10 +30,13 @@ export function useOptionsMenu(
         return;
       }
       try {
-        const staffoptionData = await getOptionForCustomerPortal(
-          staffPortalPublicCode,
-          businessUnit,
-        );
+        const staffoptionData =
+          environment.IVITE_VERCEL === "Y"
+            ? mapOptionForCustomerPortalApiToEntities(optionDescriptionStaff)
+            : await getOptionForCustomerPortal(
+                staffPortalPublicCode,
+                businessUnit,
+              );
         if (staffoptionData.length === 0) {
           setHasError(1005);
           setFlagShown(true);
