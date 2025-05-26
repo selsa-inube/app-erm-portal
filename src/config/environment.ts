@@ -1,4 +1,4 @@
-const IS_PRODUCTION: boolean = import.meta.env.PROD;
+const IS_PRODUCTION: boolean = import.meta.env.VITE_IS_PRODUCTION === "true";
 const AUTH_REDIRECT_URI: string = import.meta.env
   .VITE_AUTH0_REDIRECT_URI as string;
 
