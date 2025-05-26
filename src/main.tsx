@@ -7,7 +7,8 @@ import { environment } from "./config/environment.ts";
 import App from "./App.tsx";
 
 const redirect_uri = environment.REDIRECT_URI;
-
+console.log("Current origin:", window.location.origin);
+console.log("Environment:", redirect_uri);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Auth0Provider
