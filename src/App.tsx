@@ -106,6 +106,9 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  console.log("Current origin:", window.location.origin);
+  console.log("Environment:", environment.REDIRECT_URI);
+
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   const portalParam = params.get("portal");
