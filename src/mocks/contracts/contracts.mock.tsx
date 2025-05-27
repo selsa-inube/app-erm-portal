@@ -1,48 +1,135 @@
 import { ContractCardProps } from "@components/cards/ContractCard";
+import { currencyFormat } from "@utils/forms/currency";
+import { formatDate } from "@utils/date";
+import { capitalizeWords } from "@utils/text";
+import {
+  ContractRemunerationAssignment,
+  Employee,
+  EmploymentContract,
+} from "@ptypes/employeePortalConsultation.types";
 
-export const contractCardMock: ContractCardProps[] = [
-  {
-    contractNumber: 12345,
-    isContractValid: true,
-    lastSalary: 3290000,
-    startDate: "02/Sep/2024",
-    endDate: "Indefinido",
-    lastCharge: "Cargo anterior",
-    contractType: "Tiempo completo",
-    normativeFramework: "Marco XYZ",
-    company: "Empresa ABC",
-    workplace: "Oficina Central",
-    formalizationDate: "01/Sep/2024",
-    salaryProfile: 3290000,
-  },
-  {
-    contractNumber: 67895,
-    isContractValid: false,
-    lastSalary: 2500000,
-    startDate: "15/Mar/2022",
-    endDate: "20/Ago/2023",
-    lastCharge: "Analista de datos",
-    contractType: "Tiempo completo",
-    normativeFramework: "Ley 123",
-    company: "Empresa DEF",
-    workplace: "Sucursal Norte",
-    formalizationDate: "10/Mar/2022",
-    salaryProfile: 2500000,
-    retirementDate: "21/Ago/2023",
-    retirementReason: "Finalización del proyecto",
-  },
-  {
-    contractNumber: 98762,
-    isContractValid: true,
-    lastSalary: 4200000,
-    startDate: "10/Jun/2023",
-    endDate: "30/Nov/2026",
-    lastCharge: "Desarrollador Senior",
-    contractType: "Medio tiempo",
-    normativeFramework: "Norma ABC",
-    company: "Empresa GHI",
-    workplace: "Remoto",
-    formalizationDate: "09/Jun/2023",
-    salaryProfile: 4200000,
-  },
-];
+import {
+  contractTypeLabels,
+  workScheduleLabels,
+  workplaceLabels,
+} from "./enums";
+
+const FORMALIZED_STATUS = "Formalized";
+const IN_PROCESS_OF_ENDING_STATUS = "InTheProcessOfEnding";
+const PAYMENT_CURRENCY_CODE = "0001";
+const INDEFINITE_CONTRACT_TEXT = "Indefinido";
+
+const isContractActive = (status: string, deadline: string): boolean => {
+  if (status !== FORMALIZED_STATUS) return false;
+
+  if (!deadline) return true;
+
+  const currentDate = new Date();
+  const endDate = new Date(deadline);
+  return endDate > currentDate;
+};
+
+const extractPaymentCurrency = (
+  assignments: ContractRemunerationAssignment[],
+): string => {
+  if (!assignments?.length) return "";
+
+  const primaryAssignment = assignments.find(
+    (assignment) => assignment.currencyCodeForPayment === PAYMENT_CURRENCY_CODE,
+  );
+
+  return primaryAssignment?.currencyNameForPayment ?? "";
+};
+
+const isIndefiniteContract = (contractType: string): boolean => {
+  const type = contractType.toLowerCase();
+  return type.includes("indefinido") || type.includes("indefinite");
+};
+
+const calculateEndDate = (
+  deadline: string,
+  contractType: string,
+  isActive: boolean,
+): string => {
+  if (isActive || !deadline || isIndefiniteContract(contractType)) {
+    return INDEFINITE_CONTRACT_TEXT;
+  }
+
+  return formatDate(deadline);
+};
+
+const getRetirementInfo = (
+  contractStatus: string,
+  deadline: string,
+  isActive: boolean,
+) => {
+  if (isActive) return {};
+
+  return {
+    retirementDate: formatDate(deadline),
+    retirementReason:
+      contractStatus === IN_PROCESS_OF_ENDING_STATUS
+        ? "En proceso de finalización"
+        : "Contrato finalizado",
+  };
+};
+
+const getLocalizedLabel = (
+  value: string,
+  labelMap: Record<string, string>,
+): string => {
+  return labelMap[value] ?? value;
+};
+
+export const transformEmploymentContractsToContractCards = (
+  employmentContracts: EmploymentContract[],
+  selectedEmployee: Employee,
+): ContractCardProps[] => {
+  return employmentContracts.map((contract) =>
+    transformSingleContract(contract, selectedEmployee),
+  );
+};
+
+const transformSingleContract = (
+  contract: EmploymentContract,
+  selectedEmployee?: Employee,
+): ContractCardProps => {
+  const isActive = isContractActive(contract.contractStatus, contract.deadline);
+  const paymentCurrency = extractPaymentCurrency(
+    contract.contractRemunerationAssignments,
+  );
+
+  const positions = selectedEmployee?.positionsByEmployeeAndCompany;
+  const positionName = positions?.[positions.length - 1]?.positionName;
+
+  const baseContractData: ContractCardProps = {
+    contractNumber: parseInt(contract.contractNumber, 10),
+    isContractValid: isActive,
+    startDate: formatDate(contract.startDate),
+    endDate: calculateEndDate(
+      contract.deadline,
+      contract.contractType,
+      isActive,
+    ),
+    lastCharge: positionName ?? "No aplica",
+    lastSalary: currencyFormat(Number(paymentCurrency)),
+    contractType: getLocalizedLabel(contract.contractType, contractTypeLabels),
+    normativeFramework: contract.regulatoryFrameworkName,
+    company: capitalizeWords(contract.businessName),
+    workplace: getLocalizedLabel(contract.jobModality, workplaceLabels),
+    formalizationDate: formatDate(contract.formalizedStartDate),
+    workSchedule: getLocalizedLabel(contract.workSchedule, workScheduleLabels),
+    salaryProfile: paymentCurrency,
+  };
+
+  const retirementInfo = getRetirementInfo(
+    contract.contractStatus,
+    contract.deadline,
+    isActive,
+  );
+
+  return {
+    ...baseContractData,
+    ...retirementInfo,
+  };
+};

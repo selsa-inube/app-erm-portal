@@ -2,6 +2,7 @@ import {
   EmployeeReference,
   ContractRemunerationAssignment,
   TraceabilityEmploymentContract,
+  PositionByEmployeeAndCompany,
   VacationHistory,
   Employee,
 } from "@ptypes/employeePortalConsultation.types";
@@ -16,6 +17,15 @@ const toStringSafe = (value: unknown): string => {
 const toNumberSafe = (value: unknown): number => {
   return typeof value === "number" ? value : 0;
 };
+
+const mapPositionByEmployeeAndCompanyApiToEntity = (
+  pos: Record<string, unknown>,
+): PositionByEmployeeAndCompany => ({
+  positionId: toStringSafe(pos.positionId),
+  employeeId: toStringSafe(pos.employeeId),
+  companyName: toStringSafe(pos.companyName),
+  positionName: toStringSafe(pos.positionName),
+});
 
 const mapEmployeeReferenceApiToEntity = (
   reference: Record<string, unknown>,
@@ -135,6 +145,10 @@ const mapEmployeeApiToEntity = (
             mapVacationHistoryApiToEntity,
           ) || [],
         workSchedule: toStringSafe(contract.workSchedule),
+        positionsByEmployeeAndCompany:
+          (
+            contract.positionsByEmployeeAndCompany as Record<string, unknown>[]
+          )?.map(mapPositionByEmployeeAndCompanyApiToEntity) || [],
       }),
     ) || [],
   identificationDocumentNumber: toStringSafe(

@@ -18,7 +18,6 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { SelectModal } from "@components/modals/SelectModal";
 import { InfoModal } from "@components/modals/InfoModal";
-import { currencyFormat } from "@utils/forms/currency";
 
 import {
   StyledContractsContainer,
@@ -309,10 +308,10 @@ function ContractsUI(props: ContractsUIProps) {
               label: "Fecha de formalización",
               value: selectedContract.formalizationDate,
             },
-            { label: "Jornada laboral", value: selectedContract.contractType },
+            { label: "Jornada laboral", value: selectedContract.workSchedule },
             {
               label: "Perfil salarial",
-              value: currencyFormat(selectedContract.lastSalary),
+              value: selectedContract.lastSalary,
             },
             ...(!selectedContract.isContractValid
               ? [
