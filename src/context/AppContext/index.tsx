@@ -7,7 +7,10 @@ import {
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import selsaLogo from "@assets/images/selsa.png";
-import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import {
+  IStaffPortalByBusinessManager,
+  IOptionWithSubOptions,
+} from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
@@ -82,6 +85,32 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+  const [optionForCustomerPortal, setOptionForCustomerPortal] = useState<
+    IOptionWithSubOptions[] | null
+  >(() => {
+    const storedOption = localStorage.getItem("optionForCustomerPortal");
+    if (storedOption) {
+      try {
+        return JSON.parse(storedOption);
+      } catch (error) {
+        console.error(
+          "Error al parsear optionForCustomerPortal desde localStorage",
+          error,
+        );
+      }
+    }
+    return null;
+  });
+  useEffect(() => {
+    if (optionForCustomerPortal) {
+      localStorage.setItem(
+        "optionForCustomerPortal",
+        JSON.stringify(optionForCustomerPortal),
+      );
+    } else {
+      localStorage.removeItem("optionForCustomerPortal");
+    }
+  }, [optionForCustomerPortal]);
 
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
@@ -164,6 +193,8 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         selectedEmployee,
         setSelectedEmployee,
+        optionForCustomerPortal,
+        setOptionForCustomerPortal,
       }}
     >
       {children}

@@ -5,6 +5,9 @@ import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessU
 import { useHeaders } from "@hooks/useHeaders";
 
 import { useErrorFlag } from "./useErrorFlag";
+import { mapBusinessUnitsApiToEntity } from "@src/services/businessUnits/getBusinessUnits/mappers";
+import { businessUnitStaff } from "@src/mocks/staff/staff.mock";
+import { environment } from "@src/config/environment";
 
 const ERROR_CODE_EMPTY_DATA = 1006;
 const ERROR_CODE_FETCH_FAILED = 1008;
@@ -42,11 +45,14 @@ export const useBusinessUnits = (
       try {
         const headers = await getHeaders();
 
-        const fetchedBusinessUnits = await getBusinessUnitsForOfficer(
-          userAccount,
-          portalPublicCode,
-          headers,
-        );
+        const fetchedBusinessUnits =
+          environment.IVITE_VERCEL === "Y"
+            ? businessUnitStaff.map(mapBusinessUnitsApiToEntity)
+            : await getBusinessUnitsForOfficer(
+                userAccount,
+                portalPublicCode,
+                headers,
+              );
 
         if (isMounted) {
           if (!fetchedBusinessUnits || fetchedBusinessUnits.length === 0) {

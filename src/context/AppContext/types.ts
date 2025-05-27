@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  IOptionWithSubOptions,
   IStaffPortalByBusinessManager,
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
@@ -64,4 +65,8 @@ export interface IAppContextType {
   setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
   selectedEmployee: Employee;
   setSelectedEmployee: (employee: Employee) => void;
+  optionForCustomerPortal: IOptionWithSubOptions[] | null;
+  setOptionForCustomerPortal: React.Dispatch<
+    React.SetStateAction<IOptionWithSubOptions[] | null>
+  >;
 }
