@@ -37,6 +37,11 @@ const getHumanResourceRequests = async (
         },
       );
 
+      if (res.status === 204) {
+        clearTimeout(timeoutId);
+        return [];
+      }
+
       clearTimeout(timeoutId);
 
       if (!res.ok) {
