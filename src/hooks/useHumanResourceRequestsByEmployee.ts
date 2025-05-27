@@ -1,63 +1,46 @@
 import { useState, useEffect } from "react";
-
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
-import {
-  HumanResourceRequest,
-  ERequestType,
-} from "@ptypes/humanResourcesRequest.types";
+import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
-import { useAppContext } from "@context/AppContext";
 
-import { useErrorFlag } from "./useErrorFlag";
-
-type RequestType = keyof typeof ERequestType;
-
-export const useHumanResourceRequests = <T>(
-  typeRequest: RequestType,
+export const useHumanResourceRequestsByEmployee = <T>(
+  employeeId: string,
   formatData: (data: HumanResourceRequest[]) => T[],
+  typeRequest?: string,
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
-  const [flagShown, setFlagShown] = useState(false);
-
   const { getHeaders } = useHeaders();
-  const { selectedEmployee } = useAppContext();
-
-  useErrorFlag(
-    flagShown,
-    `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`,
-    "Error en la solicitud",
-    false,
-  );
 
   const fetchData = async () => {
     setIsLoading(true);
-    setFlagShown(false);
     try {
       const headers = await getHeaders();
       const requests = await getHumanResourceRequests(
-        selectedEmployee.employeeId,
+        employeeId,
         headers,
         typeRequest,
       );
       setData(formatData(requests ?? []));
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      setError(
+        err instanceof Error
+          ? err
+          : new Error("Error al obtener solicitudes de recursos humanos"),
+      );
       setData([]);
-      setFlagShown(true);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (selectedEmployee.employeeId) {
+    if (employeeId) {
       fetchData();
     }
-  }, [typeRequest, selectedEmployee.employeeId]);
+  }, [typeRequest, employeeId]);
 
   return { data, isLoading, error, refetch: fetchData };
 };

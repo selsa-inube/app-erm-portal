@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { RequestsNavConfig } from "./config/nav.config";
+import { useHumanResourceRequestsByEmployee } from "@hooks/useHumanResourceRequestsByEmployee";
+import { useAppContext } from "@context/AppContext/useAppContext";
+
+import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
 import { IOption } from "./types";
@@ -13,10 +16,19 @@ function Requests() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
 
+  const { selectedEmployee } = useAppContext();
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const isTablet = useMediaQuery("(max-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 490px)");
+
+  const employeeId = selectedEmployee?.employeeId ?? "";
+
+  const { data } = useHumanResourceRequestsByEmployee(
+    employeeId,
+    formatHumanResourceRequests,
+  );
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -39,6 +51,27 @@ function Requests() {
     };
   }, [isMenuOpen]);
 
+  const boardSections = [
+    {
+      sectionTitle: "Por evaluar",
+      value: "Por evaluar",
+      sectionBackground: "gray" as const,
+      sectionInformation: data.filter((req) => req.status === "pending"),
+    },
+    {
+      sectionTitle: "En progreso",
+      value: "En progreso",
+      sectionBackground: "light" as const,
+      sectionInformation: data.filter((req) => req.status === "inProgress"),
+    },
+    {
+      sectionTitle: "Terminada",
+      value: "Terminada",
+      sectionBackground: "gray" as const,
+      sectionInformation: data.filter((req) => req.status === "completed"),
+    },
+  ];
+
   const openFilterModal = () => {
     setIsFilterModalOpen(true);
     setIsMenuOpen(false);
@@ -48,9 +81,9 @@ function Requests() {
 
   return (
     <RequestsUI
-      appName={RequestsNavConfig[0].label}
-      appRoute={RequestsNavConfig[0].crumbs}
-      navigatePage={RequestsNavConfig[0].url}
+      appName="Solicitudes de Recursos Humanos"
+      appRoute={[]}
+      navigatePage=""
       isFilterModalOpen={isFilterModalOpen}
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
@@ -66,6 +99,7 @@ function Requests() {
       openFilterModal={openFilterModal}
       closeFilterModal={closeFilterModal}
       setIsMenuOpen={setIsMenuOpen}
+      boardSections={boardSections}
     />
   );
 }

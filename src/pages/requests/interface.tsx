@@ -14,8 +14,8 @@ import { RequestCard } from "@components/cards/RequestCard";
 import { FilterRequestModal } from "@components/modals/FilterRequestModal";
 import { SelectedFilters } from "@components/cards/SelectedFilters";
 
-import { IRoute, IOption } from "./types";
-import { boardSections } from "./config";
+import { IRoute, IOption, BoardSections } from "./types";
+
 import {
   StyledRequestsContainer,
   StyledBoardContainer,
@@ -44,6 +44,7 @@ export interface RequestsUIProps {
   setIsMenuOpen: (isOpen: boolean) => void;
   setSearchTerm: (term: string) => void;
   setSelectedFilters: (filters: IOption[]) => void;
+  boardSections: BoardSections[];
 }
 
 function RequestsUI(props: RequestsUIProps) {
@@ -65,6 +66,7 @@ function RequestsUI(props: RequestsUIProps) {
     selectedFilters,
     setSearchTerm,
     setSelectedFilters,
+    boardSections,
   } = props;
 
   const handleRemove = (filterValueToRemove: string) => {
