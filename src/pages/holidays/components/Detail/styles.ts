@@ -4,6 +4,7 @@ import { inube } from "@inubekit/inubekit";
 interface IStyledActions {
   theme: typeof inube;
   $isMobile?: boolean;
+  $multipleContracts?: boolean;
 }
 
 const StyledDetail = styled.div<IStyledActions>`
@@ -11,7 +12,7 @@ const StyledDetail = styled.div<IStyledActions>`
   position: relative;
   height: 0px;
   z-index: 1;
-  top: -150px;
+  top: ${({ $multipleContracts }) => ($multipleContracts ? "-135px" : "-85px")};
 `;
 
 export { StyledDetail };
