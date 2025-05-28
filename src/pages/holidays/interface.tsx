@@ -10,6 +10,7 @@ import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
 import { capitalizeWords } from "@utils/text";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { useEmployee } from "@hooks/useEmployee";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -66,6 +67,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
+  const { employee } = useEmployee(selectedEmployee.employeeId);
+  const contracts = employee?.employmentContracts ?? [];
 
   const tabs: ITab[] = [
     { id: "dias", label: "Días utilizados" },
@@ -165,9 +168,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         </Text>
         {renderActions()}
       </Stack>
-      {selectedEmployee.employmentContracts?.map((contract, index) => (
+      {contracts.map((contract, index) => (
         <div key={index}>
-          {selectedEmployee.employmentContracts.length > 1 && (
+          {contracts.length > 1 && (
             <Text
               type="title"
               weight="bold"
