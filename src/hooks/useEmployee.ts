@@ -40,7 +40,7 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
         setLoading(false);
       }
     },
-    [employeeId, getHeaders],
+    [employeeId],
   );
 
   useEffect(() => {
