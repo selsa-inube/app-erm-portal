@@ -9,7 +9,7 @@ interface DetailProps {
   disableEnjoyment?: boolean;
   disablePayment?: boolean;
   actionDescriptions?: Record<string, string>;
-  multipleContracts?: boolean;
+  hasTableData?: boolean;
   onRequestEnjoyment?: () => void;
   onRequestPayment?: () => void;
   onInfoIconClick?: (description: string) => void;
@@ -20,7 +20,7 @@ export function Detail(props: DetailProps) {
     disableEnjoyment,
     disablePayment,
     actionDescriptions,
-    multipleContracts,
+    hasTableData,
     onRequestEnjoyment,
     onRequestPayment,
     onInfoIconClick,
@@ -29,7 +29,7 @@ export function Detail(props: DetailProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <StyledDetail $multipleContracts={multipleContracts}>
+    <StyledDetail $hasTableData={hasTableData}>
       <Stack justifyContent="flex-end">
         <Icon
           icon={<MdOutlineMoreVert />}
