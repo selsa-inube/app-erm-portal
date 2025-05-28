@@ -1,11 +1,18 @@
 import { IOption } from "./types";
 
 export const assignmentOptions: IOption[] = [
-  { id: "1", label: "Ascenso salarial", value: "Ascenso Salarial" },
-  { id: "2", label: "Certificación", value: "Solicitud de Certificación" },
-  { id: "3", label: "Incapacidad", value: "incapacidad" },
-  { id: "4", label: "Licencia no remunerada", value: "Licencia No Remunerada" },
-  { id: "5", label: "Permiso", value: "permiso" },
+  { id: "1", label: "Vinculación", value: "onboarding" },
+  { id: "2", label: "Vacaciones Disfrutadas", value: "vacationEnjoyed" },
+  { id: "3", label: "Vacaciones Pagadas", value: "paidVacation" },
+  { id: "4", label: "Certificación", value: "certification" },
+  { id: "5", label: "Incapacidad", value: "disability" },
+  { id: "6", label: "Permiso", value: "leave" },
+  { id: "7", label: "Licencia no remunerada", value: "unpaidLeave" },
+  { id: "8", label: "Retiro", value: "leavingTheJob" },
+  { id: "9", label: "Ascenso salarial", value: "salaryIncrease" },
+  { id: "10", label: "Traslado de cargo", value: "positionTransfer" },
+  { id: "11", label: "Ausencia", value: "absence" },
+  { id: "12", label: "PQR", value: "pqr" },
 ];
 
 export const statusOptions: IOption[] = [

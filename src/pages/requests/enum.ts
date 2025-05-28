@@ -1,3 +1,12 @@
+const removeAccents = (str: string) =>
+  str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+const normalize = (str: string) =>
+  removeAccents(str)
+    .toLowerCase()
+    .replace(/[\s\-_]/g, "")
+    .replace(/s$/, "");
+
 export enum HumanResourceRequestType {
   onboarding = "onboarding",
   vacationEnjoyed = "vacation enjoyed",
@@ -13,22 +22,32 @@ export enum HumanResourceRequestType {
   pqr = "pqr",
 }
 
-const normalize = (str: string) => str.toLowerCase().replace(/[\s\-_]/g, "");
+const aliases = [
+  ["onboarding", "Vinculación"],
+  ["vacation enjoyed", "Vacaciones Disfrutadas"],
+  ["vacationEnjoyed", "Vacaciones Disfrutadas"],
+  ["vacationsEnjoyed", "Vacaciones Disfrutadas"],
+  ["paid vacation", "Vacaciones Pagadas"],
+  ["paidVacation", "Vacaciones Pagadas"],
+  ["certification", "Certificación"],
+  ["disability", "Incapacidad"],
+  ["leave", "Permiso"],
+  ["unpaid_Leave", "Licencia no remunerada"],
+  ["unpaidLeave", "Licencia no remunerada"],
+  ["leaving_the_Job", "Retiro"],
+  ["leavingTheJob", "Retiro"],
+  ["salary_increase", "Ascenso salarial"],
+  ["salaryIncrease", "Ascenso salarial"],
+  ["position_transfer", "Traslado de cargo"],
+  ["positionTransfer", "Traslado de cargo"],
+  ["absence", "Ausencia"],
+  ["Absence", "Ausencia"],
+  ["pqr", "PQR"],
+];
 
-const requestTypeLabels: Record<string, string> = {
-  [normalize("onboarding")]: "Vinculación",
-  [normalize("vacation enjoyed")]: "Vacaciones Disfrutadas",
-  [normalize("paid vacation")]: "Vacaciones Pagadas",
-  [normalize("certification")]: "Certificación",
-  [normalize("disability")]: "Incapacidad",
-  [normalize("leave")]: "Permiso",
-  [normalize("unpaid_Leave")]: "Licencia no remunerada",
-  [normalize("leaving_the_Job")]: "Retiro",
-  [normalize("salary_increase")]: "Ascenso salarial",
-  [normalize("position_transfer")]: "Traslado de cargo",
-  [normalize("Absence")]: "Ausencia",
-  [normalize("pqr")]: "PQR",
-};
+const requestTypeLabels: Record<string, string> = Object.fromEntries(
+  aliases.map(([key, label]) => [normalize(key), label]),
+);
 
 export const getRequestTypeLabel = (type: string): string => {
   const normalizedType = normalize(type);

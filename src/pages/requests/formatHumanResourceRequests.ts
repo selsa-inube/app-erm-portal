@@ -8,13 +8,22 @@ const normalizeStatus = (status: string): Status => {
     case "por evaluar":
     case "pending":
       return "pending";
+
     case "en progreso":
     case "in progress":
     case "inprogress":
       return "inProgress";
+
     case "terminada":
     case "completed":
+    case "finished":
+    case "closed":
       return "completed";
+
+    case "rejected":
+    case "canceled":
+      return "pending";
+
     default:
       return "pending";
   }
