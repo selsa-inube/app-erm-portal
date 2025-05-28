@@ -13,7 +13,7 @@ interface UseEmployeeResult {
 }
 
 export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
-  const [employee, setEmployee] = useState<Employee>();
+  const [employee, setEmployee] = useState<Employee>({} as Employee);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [employeeId, setEmployeeId] = useState<string>(initialEmployeeId);
@@ -40,7 +40,7 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
         setLoading(false);
       }
     },
-    [employeeId],
+    [employeeId, getHeaders],
   );
 
   useEffect(() => {

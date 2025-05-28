@@ -59,7 +59,7 @@ const getEmployeeById = async (
         const msg =
           err instanceof Error
             ? err.message
-            : `Todos los intentos fallaron. No se pudo obtener el empleado ${employeeId}.`;
+            : `Todos los intentos fallaron. No se pudo obtener el empleado.`;
         throw new Error(msg);
       }
     }
