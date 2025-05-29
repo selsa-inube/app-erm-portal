@@ -2,14 +2,13 @@ import { Stack, Text } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
 import { useAppContext } from "@context/AppContext";
-import { formatVacationHistory } from "@pages/holidays/config/table.config";
+import { formatDate } from "@utils/date";
 
-import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
+import { PendingUsedDaysTable } from "../PendingUsedDaysTable";
 import { paymentTableHeaders } from "../PendingUsedDaysTable/tableConfig";
 import { useDaysUsedLogic } from "./interface";
 
-export function DaysUsed(props: { isMobile: boolean }) {
-  const { isMobile } = props;
+export function DaysUsed({ isMobile }: { isMobile: boolean }) {
   const { selectedEmployee } = useAppContext();
 
   if (!selectedEmployee) {
@@ -22,15 +21,15 @@ export function DaysUsed(props: { isMobile: boolean }) {
     return <Text>No hay contratos disponibles para este empleado.</Text>;
   }
 
-  const formattedVacations = formatVacationHistory([selectedEmployee]);
-
-  const { totalPendingDays, tableData } = useDaysUsedLogic(
-    formattedVacations.map(({ startDate, usageMode, days }) => ({
-      startDate: startDate.value,
-      usageMode: usageMode.value,
-      days: Number(days.value),
+  const allVacations = contracts.flatMap((contract) =>
+    contract.vacationsHistory.map((vacation) => ({
+      startDate: formatDate(vacation.startDateVacationEnjoyment),
+      usageMode: vacation.vacationType,
+      days: vacation.businessDaysOfVacation + vacation.nonWorkingDaysOfVacation,
     })),
   );
+
+  const { totalPendingDays, tableData } = useDaysUsedLogic(allVacations);
 
   return (
     <Stack
