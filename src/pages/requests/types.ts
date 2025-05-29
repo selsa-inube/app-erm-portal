@@ -27,4 +27,13 @@ interface IMockRequests {
   completed: IRequest[];
 }
 
-export type { IOption, IRoute, IRequest, IMockRequests };
+interface BoardSections {
+  sectionTitle: string;
+  value: string;
+  sectionBackground: "gray" | "light";
+  sectionInformation: IRequest[];
+}
+
+type Status = "pending" | "inProgress" | "completed";
+
+export type { IOption, IRoute, IRequest, IMockRequests, BoardSections, Status };

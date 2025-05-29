@@ -23,8 +23,8 @@ const Template: StoryFn<typeof SelectedFilters> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   filters: [
-    { label: "Incapacidad", count: 2, type: "status" },
-    { label: "Vacaciones", count: 1, type: "assignment" },
+    { id: "1", label: "Incapacidad", count: 2, type: "status" },
+    { id: "2", label: "Vacaciones", count: 1, type: "assignment" },
   ],
 };
 

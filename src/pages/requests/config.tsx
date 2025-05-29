@@ -1,85 +1,22 @@
-import { SectionBackground } from "@components/layout/BoardSection/types";
-
-import { IMockRequests, IOption } from "./types";
-
-const mockRequests: IMockRequests = {
-  pending: [
-    {
-      id: "112312",
-      title: "Solicitud de Certificación",
-      requestDate: "2024-04-02",
-      responsible: "Juan Pérez",
-      hasResponsible: true,
-      status: "pending",
-    },
-    {
-      id: "56645655642",
-      title: "Permiso Especial",
-      requestDate: "2025-04-01",
-      responsible: "María Gómez",
-      hasResponsible: false,
-      status: "pending",
-    },
-  ],
-  inProgress: [
-    {
-      id: "312312",
-      title: "Licencia No Remunerada",
-      requestDate: "2024-03-28",
-      responsible: "Carlos Ramírez",
-      hasResponsible: true,
-      status: "inProgress",
-    },
-  ],
-  completed: [
-    {
-      id: "45434",
-      title: "Ascenso Salarial",
-      requestDate: "2024-03-15",
-      responsible: "Ana Torres",
-      hasResponsible: true,
-      status: "completed",
-    },
-  ],
-};
+import { IOption } from "./types";
 
 export const assignmentOptions: IOption[] = [
-  { id: "1", label: "Ascenso salarial", value: "Ascenso Salarial" },
-  { id: "2", label: "Certificación", value: "Solicitud de Certificación" },
-  { id: "3", label: "Incapacidad", value: "incapacidad" },
-  { id: "4", label: "Licencia no remunerada", value: "Licencia No Remunerada" },
-  { id: "5", label: "Permiso", value: "permiso" },
+  { id: "1", label: "Vinculación", value: "onboarding" },
+  { id: "2", label: "Vacaciones Disfrutadas", value: "vacationEnjoyed" },
+  { id: "3", label: "Vacaciones Pagadas", value: "paidVacation" },
+  { id: "4", label: "Certificación", value: "certification" },
+  { id: "5", label: "Incapacidad", value: "disability" },
+  { id: "6", label: "Permiso", value: "leave" },
+  { id: "7", label: "Licencia no remunerada", value: "unpaidLeave" },
+  { id: "8", label: "Retiro", value: "leavingTheJob" },
+  { id: "9", label: "Ascenso salarial", value: "salaryIncrease" },
+  { id: "10", label: "Traslado de cargo", value: "positionTransfer" },
+  { id: "11", label: "Ausencia", value: "absence" },
+  { id: "12", label: "PQR", value: "pqr" },
 ];
 
 export const statusOptions: IOption[] = [
-  { id: "1", label: "Por evaluar", value: "Por evaluar" },
-  { id: "2", label: "En progreso", value: "En progreso" },
-  { id: "3", label: "Terminada", value: "terminada" },
-];
-
-export const boardSections = [
-  {
-    sectionTitle: "Por evaluar",
-    value: "Por evaluar",
-    sectionBackground: "gray" as SectionBackground,
-    sectionInformation: mockRequests.pending.filter(
-      (request) => request.status === "pending",
-    ),
-  },
-  {
-    sectionTitle: "En progreso",
-    value: "En progreso",
-    sectionBackground: "light" as SectionBackground,
-    sectionInformation: mockRequests.inProgress.filter(
-      (request) => request.status === "inProgress",
-    ),
-  },
-  {
-    sectionTitle: "Terminada",
-    value: "Terminada",
-    sectionBackground: "gray" as SectionBackground,
-    sectionInformation: mockRequests.completed.filter(
-      (request) => request.status === "completed",
-    ),
-  },
+  { id: "1", label: "Por evaluar", value: "pending" },
+  { id: "2", label: "En progreso", value: "inProgress" },
+  { id: "3", label: "Terminada", value: "completed" },
 ];

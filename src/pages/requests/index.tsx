@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { RequestsNavConfig } from "./config/nav.config";
+import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
+import { useAppContext } from "@context/AppContext/useAppContext";
+
+import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
-import { IOption } from "./types";
+import { IOption, IRequest } from "./types";
+import { RequestsNavConfig } from "./config/nav.config";
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -13,10 +17,20 @@ function Requests() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
 
+  const { selectedEmployee } = useAppContext();
+
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const isTablet = useMediaQuery("(max-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 490px)");
+
+  const employeeId = selectedEmployee?.employeeId ?? "";
+
+  const { data } = useHumanResourceRequests<IRequest>(
+    formatHumanResourceRequests,
+    undefined,
+    employeeId,
+  );
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -39,6 +53,27 @@ function Requests() {
     };
   }, [isMenuOpen]);
 
+  const boardSections = [
+    {
+      sectionTitle: "Por evaluar",
+      value: "pending",
+      sectionBackground: "gray" as const,
+      sectionInformation: data.filter((req) => req.status === "pending"),
+    },
+    {
+      sectionTitle: "En progreso",
+      value: "inProgress",
+      sectionBackground: "light" as const,
+      sectionInformation: data.filter((req) => req.status === "inProgress"),
+    },
+    {
+      sectionTitle: "Terminada",
+      value: "completed",
+      sectionBackground: "gray" as const,
+      sectionInformation: data.filter((req) => req.status === "completed"),
+    },
+  ];
+
   const openFilterModal = () => {
     setIsFilterModalOpen(true);
     setIsMenuOpen(false);
@@ -48,9 +83,9 @@ function Requests() {
 
   return (
     <RequestsUI
-      appName={RequestsNavConfig[0].label}
+      appName="Solicitudes de Recursos Humanos"
       appRoute={RequestsNavConfig[0].crumbs}
-      navigatePage={RequestsNavConfig[0].url}
+      navigatePage=""
       isFilterModalOpen={isFilterModalOpen}
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
@@ -66,6 +101,7 @@ function Requests() {
       openFilterModal={openFilterModal}
       closeFilterModal={closeFilterModal}
       setIsMenuOpen={setIsMenuOpen}
+      boardSections={boardSections}
     />
   );
 }

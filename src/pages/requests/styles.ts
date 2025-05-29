@@ -74,7 +74,7 @@ const StyledMenuContainer = styled.div<IMenuContainer>`
   width: ${({ $isTablet }) => ($isTablet ? "162px" : "120px")};
 
   top: ${({ $isMobile, $isTablet }) => {
-    if ($isMobile) return "190px";
+    if ($isMobile) return "150px";
     return $isTablet ? "195px" : "216px";
   }};
 

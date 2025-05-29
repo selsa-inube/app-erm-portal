@@ -39,4 +39,8 @@ const RequestsNavConfig = [
   },
 ];
 
-export { RequestsNavConfig };
+const RequestsNav: Record<string, { path: string }> = {
+  Vinculación: { path: "/requests/application-process" },
+};
+
+export { RequestsNavConfig, RequestsNav };

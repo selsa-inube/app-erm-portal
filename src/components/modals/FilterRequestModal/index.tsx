@@ -32,7 +32,7 @@ export interface FilterRequestModalProps {
   statusOptions?: IOption[];
   selectedFilters?: SelectedFilter[];
   onCloseModal?: () => void;
-  onSubmit?: (values: FormValues) => void;
+  onSubmit?: (values: object) => void;
   onClearFilters?: () => void;
   onRemoveFilter?: (filterValue: string) => void;
 }
@@ -66,8 +66,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     initialValues: {
       assignment: "",
       status: "",
-      value: 1,
-      filters: [],
     },
     validationSchema,
     onSubmit: () => {
@@ -82,7 +80,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
         onSubmit(formik.values);
       }
       setLoading(false);
-    }, 1000);
+    }, 800);
   };
 
   const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
@@ -128,7 +126,8 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
               />
               <SelectedFilters
                 filters={selectedFilters.map((filter) => ({
-                  label: filter.value,
+                  id: filter.id,
+                  label: filter.label,
                   type: statusOptions.some(
                     (status) => status.value === filter.value,
                   )
@@ -170,10 +169,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 fullwidth
                 onChange={(name, value) => {
                   void formik.setFieldValue(name, value);
-                  void formik.setFieldValue("filters", [
-                    ...(formik.values.filters ?? []),
-                    { id: name, label: value, value: value, color: "primary" },
-                  ]);
                 }}
                 options={sortedAssignmentOptions}
               />
@@ -202,10 +197,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 fullwidth
                 onChange={(name, value) => {
                   void formik.setFieldValue(name, value);
-                  void formik.setFieldValue("filters", [
-                    ...(formik.values.filters ?? []),
-                    { id: name, label: value, value: value, color: "dark" },
-                  ]);
                 }}
                 options={sortedStatusOptions}
               />

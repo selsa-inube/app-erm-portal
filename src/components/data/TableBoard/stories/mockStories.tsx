@@ -27,7 +27,7 @@ export const mockData: IEntries[] = [
       "Que el asociado sea activo y tiene mas de 5 años de antiguedad",
     tag: (
       <Stack padding="s0 s100 s0 s0">
-        <Tag label="Cumple" appearance="success" weight="strong" />
+        <Tag label="Cumple" appearance="success" />
       </Stack>
     ),
   },
@@ -36,7 +36,7 @@ export const mockData: IEntries[] = [
     "Validaciones del sistema": "Que este al día con las obligaciones",
     tag: (
       <Stack padding="s0 s100 s0 s0">
-        <Tag label="No Cumple" appearance="warning" weight="strong" />
+        <Tag label="No Cumple" appearance="warning" />
       </Stack>
     ),
   },
@@ -45,7 +45,7 @@ export const mockData: IEntries[] = [
     "Validaciones del sistema": "Que tenga mas de 30 años",
     tag: (
       <Stack padding="s0 s100 s0 s0">
-        <Tag label="Sin Validar" appearance="danger" weight="strong" />
+        <Tag label="Sin Validar" appearance="danger" />
       </Stack>
     ),
   },
@@ -54,7 +54,7 @@ export const mockData: IEntries[] = [
     "Validaciones del sistema": "Que tenga mas de 30 años",
     tag: (
       <Stack padding="s0 s100 s0 s0">
-        <Tag label="Cumple" appearance="success" weight="strong" />
+        <Tag label="Cumple" appearance="success" />
       </Stack>
     ),
   },

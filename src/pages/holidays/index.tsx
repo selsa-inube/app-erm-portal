@@ -18,14 +18,14 @@ function HolidaysOptions() {
 
   const { data: enjoyedData, isLoading: isLoadingEnjoyed } =
     useHumanResourceRequests<IHolidaysTable>(
-      "VacationsEnjoyed",
       formatHolidaysData,
+      "VacationsEnjoyed",
     );
 
   const { data: paidData, isLoading: isLoadingPaid } =
     useHumanResourceRequests<IHolidaysTable>(
-      "PaidVacations",
       formatHolidaysData,
+      "PaidVacations",
     );
 
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);

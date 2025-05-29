@@ -23,7 +23,7 @@ function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
   const [collapse, setCollapse] = useState(false);
 
   const handleCollapse = () => {
-    if (!isEmpty) setCollapse((prev) => !prev);
+    setCollapse((prev) => !prev);
   };
 
   const getNoDataMessage = () => {

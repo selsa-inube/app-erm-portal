@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import { MdAdd, MdOutlineInfo, MdOutlineWarningAmber } from "react-icons/md";
 import { Button, Stack, Tabs, ITab, Text, Icon } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 
@@ -77,6 +77,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       label: isMobile
         ? "Solicitudes en trámite"
         : "Solicitudes de vacaciones en trámite",
+      icon: {
+        appearance: "warning",
+        icon: <MdOutlineWarningAmber />,
+        size: "14px",
+      },
     },
   ];
 

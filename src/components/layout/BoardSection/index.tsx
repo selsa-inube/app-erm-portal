@@ -23,7 +23,9 @@ function BoardSection(props: IBoardSectionProps) {
 
   const isVertical = orientation === "vertical";
   const isEmpty = sectionInformation.length === 0;
-  const disabledCollapse = isEmpty;
+
+  const disabledCollapse = false;
+
   const titleType = isVertical || isMobile ? "title" : "headline";
   const titleSize = isVertical || isMobile ? "large" : "medium";
 

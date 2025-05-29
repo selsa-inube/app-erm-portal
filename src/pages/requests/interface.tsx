@@ -14,8 +14,8 @@ import { RequestCard } from "@components/cards/RequestCard";
 import { FilterRequestModal } from "@components/modals/FilterRequestModal";
 import { SelectedFilters } from "@components/cards/SelectedFilters";
 
-import { IRoute, IOption } from "./types";
-import { boardSections } from "./config";
+import { IRoute, IOption, BoardSections } from "./types";
+
 import {
   StyledRequestsContainer,
   StyledBoardContainer,
@@ -24,6 +24,8 @@ import {
   StyledMenuButton,
   StyledMenuIconContainer,
 } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { RequestsNav } from "./config/nav.config";
 
 export interface RequestsUIProps {
   appName: string;
@@ -44,6 +46,7 @@ export interface RequestsUIProps {
   setIsMenuOpen: (isOpen: boolean) => void;
   setSearchTerm: (term: string) => void;
   setSelectedFilters: (filters: IOption[]) => void;
+  boardSections: BoardSections[];
 }
 
 function RequestsUI(props: RequestsUIProps) {
@@ -65,36 +68,45 @@ function RequestsUI(props: RequestsUIProps) {
     selectedFilters,
     setSearchTerm,
     setSelectedFilters,
+    boardSections,
   } = props;
 
-  const handleRemove = (filterValueToRemove: string) => {
+  const navigate = useNavigate();
+
+  const handleRemove = (filterIdToRemove: string) => {
     setSelectedFilters(
-      selectedFilters.filter((filter) => filter.value !== filterValueToRemove),
+      selectedFilters.filter((filter) => filter.id !== filterIdToRemove),
     );
   };
 
   const selectedStatusFilters = selectedFilters.filter((filter) =>
-    statusOptions.some((status) => status.value === filter.value),
+    statusOptions.some((status) => status.id === filter.id),
   );
 
   const selectedAssignmentFilters = selectedFilters.filter((filter) =>
-    assignmentOptions.some((assignment) => assignment.value === filter.value),
+    assignmentOptions.some((assignment) => assignment.id === filter.id),
   );
 
-  const handleApplyFilters = (values: { filters?: IOption[] }) => {
-    const newFilters = values.filters ?? [];
+  const handleApplyFilters = (values: object) => {
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        const valueArray = value.toString().split(",");
+        const newFilter: IOption[] = [];
 
-    const mergedFilters = [
-      ...selectedFilters,
-      ...newFilters.filter(
-        (newFilter) =>
-          !selectedFilters.some(
-            (existingFilter) => existingFilter.value === newFilter.value,
-          ),
-      ),
-    ];
-
-    setSelectedFilters(mergedFilters);
+        if (key === "assignment") {
+          const found = assignmentOptions.filter((option) =>
+            valueArray.includes(option.id),
+          );
+          newFilter.push(...found);
+        } else if (key === "status") {
+          const found = statusOptions.filter((option) =>
+            valueArray.includes(option.id),
+          );
+          newFilter.push(...found);
+        }
+        setSelectedFilters(newFilter);
+      }
+    });
     closeFilterModal();
   };
 
@@ -136,10 +148,10 @@ function RequestsUI(props: RequestsUIProps) {
 
     return filteredRequestsData.filter((info) => {
       if (isStatusFilter) {
-        return info.status.toLowerCase() === filter.value.toLowerCase();
+        return info.status.toLowerCase() === filter.label.toLowerCase();
       }
       if (isAssignmentFilter) {
-        return info.title.toLowerCase().includes(filter.value.toLowerCase());
+        return info.title.toLowerCase().includes(filter.label.toLowerCase());
       }
       return false;
     }).length;
@@ -233,6 +245,7 @@ function RequestsUI(props: RequestsUIProps) {
               <SelectedFilters
                 onRemove={handleRemove}
                 filters={selectedFilters.map((filter) => ({
+                  id: filter.id,
                   label: filter.label,
                   type: statusOptions.some(
                     (status) => status.value === filter.value,
@@ -312,7 +325,6 @@ function RequestsUI(props: RequestsUIProps) {
                     (filter) =>
                       filter.value.toLowerCase() === value.toLowerCase(),
                   );
-
                 return matchesSearch && matchesAssignment && matchesStatus;
               },
             );
@@ -344,6 +356,13 @@ function RequestsUI(props: RequestsUIProps) {
                         requestDate={requestDate}
                         responsible={responsible}
                         hasResponsible={hasResponsible}
+                        onclick={() => {
+                          if (RequestsNav[title]) {
+                            navigate(`${RequestsNav[title].path}/${id}`, {
+                              state: { section: value },
+                            });
+                          }
+                        }}
                       />
                     ),
                   )
