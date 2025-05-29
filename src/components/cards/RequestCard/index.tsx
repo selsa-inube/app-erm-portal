@@ -10,6 +10,7 @@ interface RequestCardProps {
   requestDate: string;
   responsible?: string;
   hasResponsible?: boolean;
+  onclick?: () => void;
 }
 
 const RequestCard = (props: RequestCardProps) => {
@@ -19,11 +20,12 @@ const RequestCard = (props: RequestCardProps) => {
     requestDate,
     responsible = "Sin responsable",
     hasResponsible = false,
+    onclick,
   } = props;
 
   return (
     <Stack direction="column" width="280px">
-      <StyledRequestCard>
+      <StyledRequestCard onClick={onclick}>
         <StyledTitle>
           <Stack justifyContent="center">
             <Text

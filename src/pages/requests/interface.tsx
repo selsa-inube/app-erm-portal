@@ -24,6 +24,8 @@ import {
   StyledMenuButton,
   StyledMenuIconContainer,
 } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { RequestsNav } from "./config/nav.config";
 
 export interface RequestsUIProps {
   appName: string;
@@ -68,6 +70,8 @@ function RequestsUI(props: RequestsUIProps) {
     setSelectedFilters,
     boardSections,
   } = props;
+
+  const navigate = useNavigate();
 
   const handleRemove = (filterIdToRemove: string) => {
     setSelectedFilters(
@@ -352,6 +356,13 @@ function RequestsUI(props: RequestsUIProps) {
                         requestDate={requestDate}
                         responsible={responsible}
                         hasResponsible={hasResponsible}
+                        onclick={() => {
+                          if (RequestsNav[title]) {
+                            navigate(`${RequestsNav[title].path}/${id}`, {
+                              state: { section: value },
+                            });
+                          }
+                        }}
                       />
                     ),
                   )

@@ -8,6 +8,7 @@ import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
 import { IOption, IRequest } from "./types";
+import { RequestsNavConfig } from "./config/nav.config";
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -83,7 +84,7 @@ function Requests() {
   return (
     <RequestsUI
       appName="Solicitudes de Recursos Humanos"
-      appRoute={[]}
+      appRoute={RequestsNavConfig[0].crumbs}
       navigatePage=""
       isFilterModalOpen={isFilterModalOpen}
       isMenuOpen={isMenuOpen}
