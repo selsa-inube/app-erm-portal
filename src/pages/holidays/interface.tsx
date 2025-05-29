@@ -8,6 +8,9 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
+import { capitalizeWords } from "@utils/text";
+import { contractTypeLabels } from "@mocks/contracts/enums";
+import { useEmployee } from "@hooks/useEmployee";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -64,6 +67,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     title: "",
     description: "",
   });
+  const { employee } = useEmployee(selectedEmployee.employeeId);
+  const contracts = employee?.employmentContracts ?? [];
 
   const tabs: ITab[] = [
     { id: "dias", label: "Días utilizados" },
@@ -164,9 +169,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         </Text>
         {renderActions()}
       </Stack>
-      {selectedEmployee.employmentContracts?.map((contract, index) => (
+      {contracts.map((contract, index) => (
         <div key={index}>
-          {selectedEmployee.employmentContracts.length > 1 && (
+          {contracts.length > 1 && (
             <Text
               type="title"
               weight="bold"
@@ -174,7 +179,10 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               appearance="gray"
               padding={`${spacing.s100} ${spacing.s0}`}
             >
-              {contract.businessName} - {contract.contractType}
+              {`${capitalizeWords(contract.businessName)} - ${
+                contractTypeLabels[contract.contractType] ??
+                contract.contractType
+              }`}
             </Text>
           )}
           <DaysUsedTable data={daysUsedMock} />

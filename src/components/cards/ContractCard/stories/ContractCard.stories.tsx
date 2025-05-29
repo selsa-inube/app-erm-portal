@@ -22,7 +22,7 @@ const Template: StoryFn<ContractCardProps> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   isContractValid: true,
-  lastSalary: 3290000,
+  lastSalary: "3290000",
   startDate: "02/Sep/2024",
   endDate: "31/Dic/2025",
   lastCharge: "Cargo anterior",

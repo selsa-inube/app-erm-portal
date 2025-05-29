@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { ContractCardProps } from "@components/cards/ContractCard";
-import { contractCardMock } from "@mocks/contracts/contracts.mock";
+import { useAppContext } from "@context/AppContext";
+import { useEmployee } from "@hooks/useEmployee";
+import { transformEmploymentContractsToContractCards } from "@mocks/contracts/contracts.mock";
 
 import { ContractsNavConfig } from "./config/nav.config";
 import { ContractsUI } from "./interface";
@@ -24,13 +26,29 @@ function Contracts(props: ContractsProps) {
     canModify = true,
   } = props;
 
-  const hasFixedEndDate = contractCardMock.some(
+  const { selectedEmployee } = useAppContext();
+  const { employee } = useEmployee(selectedEmployee.employeeId);
+  const contracts = employee?.employmentContracts ?? [];
+
+  const contractCards = useMemo(() => {
+    if (!contracts || contracts.length === 0) {
+      return [];
+    }
+    return transformEmploymentContractsToContractCards(
+      contracts,
+      selectedEmployee,
+    );
+  }, [contracts, selectedEmployee]);
+
+  const hasFixedEndDate = contractCards.some(
     (contract) => contract.endDate !== "Indefinido",
   );
-  const sortedContracts = [...contractCardMock].sort(
+
+  const sortedContracts = [...contractCards].sort(
     (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
   );
-  const hasValidContract = contractCardMock.some(
+
+  const hasValidContract = contractCards.some(
     (contract) => contract.isContractValid,
   );
 
@@ -79,7 +97,7 @@ function Contracts(props: ContractsProps) {
     openModal("detail");
   };
 
-  const terminationOptions = contractCardMock
+  const terminationOptions = contractCards
     .filter((contract) => contract.isContractValid)
     .map((contract, index) => ({
       id: index.toString(),
@@ -87,7 +105,7 @@ function Contracts(props: ContractsProps) {
       value: index.toString(),
     }));
 
-  const renewOptions = contractCardMock
+  const renewOptions = contractCards
     .filter((contract) => contract.endDate !== "Indefinido")
     .map((contract, index) => ({
       id: index.toString(),
@@ -95,7 +113,7 @@ function Contracts(props: ContractsProps) {
       value: index.toString(),
     }));
 
-  const modifyOptions = contractCardMock.map((contract, index) => ({
+  const modifyOptions = contractCards.map((contract, index) => ({
     id: index.toString(),
     label: `${contract.contractNumber} - ${contract.company}`,
     value: index.toString(),
