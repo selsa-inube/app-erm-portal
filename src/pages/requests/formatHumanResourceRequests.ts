@@ -1,5 +1,6 @@
 import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
 import { getRequestTypeLabel } from "./enum";
+import { formatDate } from "@utils/date";
 
 type Status = "pending" | "inProgress" | "completed";
 
@@ -35,7 +36,7 @@ export const formatHumanResourceRequests = (
   return requests.map((req) => ({
     id: req.humanResourceRequestNumber,
     title: getRequestTypeLabel(req.humanResourceRequestType),
-    requestDate: req.humanResourceRequestDate,
+    requestDate: formatDate(req.humanResourceRequestDate),
     responsible: req.userNameInCharge,
     hasResponsible: !!req.userNameInCharge,
     status: normalizeStatus(req.humanResourceRequestStatus),
