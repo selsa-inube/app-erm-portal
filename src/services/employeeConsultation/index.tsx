@@ -10,7 +10,7 @@ import { mapEmployeeApiToEntity } from "./mappers";
 
 const getAllEmployees = async (
   page = 1,
-  perPage = 50,
+  perPage = 500,
   headers: Record<string, string>,
 ): Promise<Employee[]> => {
   const maxRetries = maxRetriesServices;

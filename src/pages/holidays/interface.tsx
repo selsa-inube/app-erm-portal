@@ -13,7 +13,7 @@ import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
 import { DaysUsedTable } from "./components/DaysUsedTable";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
-import { daysUsedMock } from "./config/table.config";
+import { formatVacationHistory } from "./config/table.config";
 import { Detail } from "./components/Detail";
 
 interface HolidaysOptionsUIProps {
@@ -155,32 +155,36 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       </Stack>
     );
 
-  const renderDaysUsedContent = () => (
-    <StyledHolidaysContainer $isMobile={isMobile}>
-      <Stack alignItems="center" justifyContent="space-between">
-        <Text type="title" size="medium">
-          Consulta de días utilizados
-        </Text>
-        {renderActions()}
-      </Stack>
-      {selectedEmployee.employmentContracts?.map((contract, index) => (
-        <div key={index}>
-          {selectedEmployee.employmentContracts.length > 1 && (
-            <Text
-              type="title"
-              weight="bold"
-              size="small"
-              appearance="gray"
-              padding={`${spacing.s100} ${spacing.s0}`}
-            >
-              {contract.businessName} - {contract.contractType}
-            </Text>
-          )}
-          <DaysUsedTable data={daysUsedMock} />
-        </div>
-      ))}
-    </StyledHolidaysContainer>
-  );
+  const renderDaysUsedContent = () => {
+    const formattedVacationData = formatVacationHistory([selectedEmployee]);
+
+    return (
+      <StyledHolidaysContainer $isMobile={isMobile}>
+        <Stack alignItems="center" justifyContent="space-between">
+          <Text type="title" size="medium">
+            Consulta de días utilizados
+          </Text>
+          {renderActions()}
+        </Stack>
+        {selectedEmployee.employmentContracts?.map((contract, index) => (
+          <div key={index}>
+            {selectedEmployee.employmentContracts.length > 1 && (
+              <Text
+                type="title"
+                weight="bold"
+                size="small"
+                appearance="gray"
+                padding={`${spacing.s100} ${spacing.s0}`}
+              >
+                {contract.businessName} - {contract.contractType}
+              </Text>
+            )}
+            <DaysUsedTable data={formattedVacationData} />
+          </div>
+        ))}
+      </StyledHolidaysContainer>
+    );
+  };
 
   return (
     <>
