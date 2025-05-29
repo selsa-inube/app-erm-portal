@@ -1,7 +1,6 @@
 export interface IDaysUsed {
   isMobile: boolean;
-  paymentData: { startDate: string; usageMode: string; days: number }[];
-  opronData: { startDate: string; usageMode: string; days: number }[];
+  data: { startDate: string; usageMode: string; days: number }[];
 }
 
 export interface IPendingUsedDaysTable {

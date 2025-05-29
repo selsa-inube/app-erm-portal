@@ -3,10 +3,6 @@ import { Stack, Tabs } from "@inubekit/inubekit";
 
 import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
 import { spacing } from "@design/tokens/spacing";
-import {
-  mockDataDaysPayment,
-  mockDataOpronPayment,
-} from "@mocks/mockDataDays/mockDataPayment";
 import { BaseModal } from "@components/modals/baseModal";
 
 import { DaysPending } from "./DaysPending";
@@ -46,13 +42,7 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
           <DaysPending isMobile={isMobile} data={mockDataDaysPending} />
         )}
         <ScrollableContainer>
-          {currentTab === "used" && (
-            <DaysUsed
-              isMobile={isMobile}
-              paymentData={mockDataDaysPayment}
-              opronData={mockDataOpronPayment}
-            />
-          )}
+          {currentTab === "used" && <DaysUsed isMobile={isMobile} />}
         </ScrollableContainer>
       </Stack>
     </BaseModal>
