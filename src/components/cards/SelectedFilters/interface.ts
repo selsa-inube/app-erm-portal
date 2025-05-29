@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQueries } from "@inubekit/inubekit";
 
 export interface Filter {
+  id: string;
   label: string;
   type: "status" | "assignment";
   count: number;
@@ -9,7 +10,7 @@ export interface Filter {
 
 export interface SelectedFiltersProps {
   filters: Filter[];
-  onRemove?: (filterLabel: string) => void;
+  onRemove?: (filterId: string) => void;
 }
 
 export function useSelectedFilters(

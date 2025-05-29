@@ -32,7 +32,7 @@ function SelectedFilters({ filters, onRemove }: SelectedFiltersProps) {
               appearance={filter.type === "status" ? "dark" : "primary"}
               label={`${filter.label} (${filter.count})`}
               removable={!!onRemove}
-              onClose={() => handleRemoveFilter(filter.label)}
+              onClose={() => handleRemoveFilter(filter.id)}
             />
           ))}
 
