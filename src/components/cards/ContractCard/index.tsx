@@ -2,7 +2,6 @@ import { Stack, Text, Divider, Button } from "@inubekit/inubekit";
 import { MdOutlineVisibility } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
-import { currencyFormat } from "@utils/forms/currency";
 
 import { StyledContractCard, StyledSeparatorLine } from "./styles";
 
@@ -12,13 +11,14 @@ interface ContractCardProps {
   startDate: string;
   endDate: string;
   lastCharge: string;
-  lastSalary: number;
+  lastSalary: string;
   contractType: string;
   normativeFramework: string;
   company: string;
   workplace: string;
   formalizationDate: string;
-  salaryProfile: number;
+  salaryProfile: string;
+  workSchedule: string;
   retirementDate?: string;
   retirementReason?: string;
   onDetailsClick?: () => void;
@@ -104,7 +104,7 @@ function ContractCard(props: ContractCardProps) {
                 Último salario
               </Text>
               <Text size="medium" appearance="gray">
-                {currencyFormat(lastSalary)}
+                {lastSalary}
               </Text>
             </Stack>
             <Stack direction="column" gap={spacing.s050}>
