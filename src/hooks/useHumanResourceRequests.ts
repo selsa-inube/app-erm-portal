@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import {
   HumanResourceRequest,
@@ -7,38 +6,42 @@ import {
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
-
 import { useErrorFlag } from "./useErrorFlag";
 
 type RequestType = keyof typeof ERequestType;
 
 export const useHumanResourceRequests = <T>(
-  typeRequest: RequestType,
   formatData: (data: HumanResourceRequest[]) => T[],
+  typeRequest?: RequestType,
+  employeeId?: string,
 ) => {
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
   const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
   const { selectedEmployee } = useAppContext();
 
+  const effectiveEmployeeId = employeeId ?? selectedEmployee?.employeeId;
+
   useErrorFlag(
     flagShown,
-    `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`,
+    typeRequest
+      ? `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`
+      : "Error al obtener solicitudes",
     "Error en la solicitud",
     false,
   );
 
   const fetchData = async () => {
+    if (!effectiveEmployeeId) return;
     setIsLoading(true);
     setFlagShown(false);
     try {
       const headers = await getHeaders();
       const requests = await getHumanResourceRequests(
-        selectedEmployee.employeeId,
+        effectiveEmployeeId,
         headers,
         typeRequest,
       );
@@ -54,10 +57,8 @@ export const useHumanResourceRequests = <T>(
   };
 
   useEffect(() => {
-    if (selectedEmployee.employeeId) {
-      fetchData();
-    }
-  }, [typeRequest, selectedEmployee.employeeId]);
+    fetchData();
+  }, [typeRequest, effectiveEmployeeId]);
 
   return { data, isLoading, error, refetch: fetchData };
 };

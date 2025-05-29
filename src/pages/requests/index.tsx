@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { useHumanResourceRequestsByEmployee } from "@hooks/useHumanResourceRequestsByEmployee";
+import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
-import { IOption } from "./types";
+import { IOption, IRequest } from "./types";
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -25,9 +25,10 @@ function Requests() {
 
   const employeeId = selectedEmployee?.employeeId ?? "";
 
-  const { data } = useHumanResourceRequestsByEmployee(
-    employeeId,
+  const { data } = useHumanResourceRequests<IRequest>(
     formatHumanResourceRequests,
+    undefined,
+    employeeId,
   );
 
   useEffect(() => {
@@ -54,19 +55,19 @@ function Requests() {
   const boardSections = [
     {
       sectionTitle: "Por evaluar",
-      value: "Por evaluar",
+      value: "pending",
       sectionBackground: "gray" as const,
       sectionInformation: data.filter((req) => req.status === "pending"),
     },
     {
       sectionTitle: "En progreso",
-      value: "En progreso",
+      value: "inProgress",
       sectionBackground: "light" as const,
       sectionInformation: data.filter((req) => req.status === "inProgress"),
     },
     {
       sectionTitle: "Terminada",
-      value: "Terminada",
+      value: "completed",
       sectionBackground: "gray" as const,
       sectionInformation: data.filter((req) => req.status === "completed"),
     },

@@ -1,44 +1,34 @@
 import { HumanResourceRequest } from "@ptypes/humanResourcesRequest.types";
-import { getRequestTypeLabel } from "./enum";
 import { formatDate } from "@utils/date";
 
-type Status = "pending" | "inProgress" | "completed";
-
-const normalizeStatus = (status: string): Status => {
-  switch (status.toLowerCase()) {
-    case "por evaluar":
-    case "pending":
-      return "pending";
-
-    case "en progreso":
-    case "in progress":
-    case "inprogress":
-      return "inProgress";
-
-    case "terminada":
-    case "completed":
-    case "finished":
-    case "closed":
-      return "completed";
-
-    case "rejected":
-    case "canceled":
-      return "pending";
-
-    default:
-      return "pending";
-  }
-};
+import { Status } from "./types";
+import { getRequestTypeLabel } from "./enum";
 
 export const formatHumanResourceRequests = (
   requests: HumanResourceRequest[],
 ) => {
-  return requests.map((req) => ({
-    id: req.humanResourceRequestNumber,
-    title: getRequestTypeLabel(req.humanResourceRequestType),
-    requestDate: formatDate(req.humanResourceRequestDate),
-    responsible: req.userNameInCharge,
-    hasResponsible: !!req.userNameInCharge,
-    status: normalizeStatus(req.humanResourceRequestStatus),
-  }));
+  return requests.map((req) => {
+    const statusRaw = req.humanResourceRequestStatus?.toLowerCase();
+    const hasResponsible = !!req.userCodeInCharge;
+    const isFinalized = ["closed", "rejected", "canceled"].includes(statusRaw);
+
+    let status: Status;
+
+    if (isFinalized) {
+      status = "completed";
+    } else if (hasResponsible) {
+      status = "inProgress";
+    } else {
+      status = "pending";
+    }
+
+    return {
+      id: req.humanResourceRequestNumber,
+      title: getRequestTypeLabel(req.humanResourceRequestType),
+      requestDate: formatDate(req.humanResourceRequestDate),
+      responsible: req.userNameInCharge,
+      hasResponsible,
+      status,
+    };
+  });
 };
