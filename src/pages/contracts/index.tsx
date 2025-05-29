@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 
 import { ContractCardProps } from "@components/cards/ContractCard";
 import { useAppContext } from "@context/AppContext";
+import { useEmployee } from "@hooks/useEmployee";
 import { transformEmploymentContractsToContractCards } from "@mocks/contracts/contracts.mock";
 
 import { ContractsNavConfig } from "./config/nav.config";
@@ -26,16 +27,18 @@ function Contracts(props: ContractsProps) {
   } = props;
 
   const { selectedEmployee } = useAppContext();
+  const { employee } = useEmployee(selectedEmployee.employeeId);
+  const contracts = employee?.employmentContracts ?? [];
 
   const contractCards = useMemo(() => {
-    if (!selectedEmployee?.employmentContracts) {
+    if (!contracts || contracts.length === 0) {
       return [];
     }
     return transformEmploymentContractsToContractCards(
-      selectedEmployee.employmentContracts,
+      contracts,
       selectedEmployee,
     );
-  }, [selectedEmployee?.employmentContracts, selectedEmployee]);
+  }, [contracts, selectedEmployee]);
 
   const hasFixedEndDate = contractCards.some(
     (contract) => contract.endDate !== "Indefinido",
