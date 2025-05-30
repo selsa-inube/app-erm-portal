@@ -1,7 +1,6 @@
 export interface IDaysUsed {
   isMobile: boolean;
-  paymentData: { startDate: string; usageMode: string; days: number }[];
-  opronData: { startDate: string; usageMode: string; days: number }[];
+  data: { startDate: string; usageMode: string; days: number }[];
 }
 
 export interface IPendingUsedDaysTable {
@@ -16,4 +15,20 @@ export interface IPendingUsedDaysTable {
 export interface IPendingUsedDaysTableHeader {
   label: string;
   key: string;
+}
+
+export interface IUsedDay {
+  startDate: string;
+  usageMode: string;
+  days: number;
+}
+
+export interface IContractDaysUsed {
+  contractName: string;
+  daysUsed: IUsedDay[];
+}
+
+export interface IPendingUsedDaysByContractTable {
+  contractName: { value: string };
+  days: { value: number };
 }

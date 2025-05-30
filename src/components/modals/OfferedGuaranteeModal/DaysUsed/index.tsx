@@ -2,31 +2,34 @@ import { Stack, Text } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
 import { useAppContext } from "@context/AppContext";
+import { formatDate } from "@utils/date";
 
-import { dataDaysUsed } from "./config";
-import { IDaysUsed } from "./types";
-import { useDaysUsedLogic } from "./interface";
-import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
+import { PendingUsedDaysTable } from "../PendingUsedDaysTable";
 import { paymentTableHeaders } from "../PendingUsedDaysTable/tableConfig";
+import { useDaysUsedLogic } from "./interface";
 
-export function DaysUsed(props: IDaysUsed) {
-  const { isMobile, paymentData, opronData } = props;
+export function DaysUsed({ isMobile }: { isMobile: boolean }) {
   const { selectedEmployee } = useAppContext();
 
-  const { totalPendingDays, paymentTableData, opronTableData } =
-    useDaysUsedLogic(paymentData, opronData);
+  if (!selectedEmployee) {
+    return <Text>No hay empleado seleccionado.</Text>;
+  }
 
-  const headers = paymentTableHeaders;
-
-  const contracts = selectedEmployee?.employmentContracts ?? [];
+  const contracts = selectedEmployee.employmentContracts ?? [];
 
   if (contracts.length === 0) {
     return <Text>No hay contratos disponibles para este empleado.</Text>;
   }
 
-  const contract = contracts[0];
-  const businessName = contract?.businessName ?? "Empresa desconocida";
-  const contractType = contract?.contractType ?? "Contrato desconocido";
+  const allVacations = contracts.flatMap((contract) =>
+    contract.vacationsHistory.map((vacation) => ({
+      startDate: formatDate(vacation.startDateVacationEnjoyment),
+      usageMode: vacation.vacationType,
+      days: vacation.businessDaysOfVacation + vacation.nonWorkingDaysOfVacation,
+    })),
+  );
+
+  const { totalPendingDays, tableData } = useDaysUsedLogic(allVacations);
 
   return (
     <Stack
@@ -37,47 +40,34 @@ export function DaysUsed(props: IDaysUsed) {
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>
         <Text type="body" size="medium" appearance="gray">
-          {dataDaysUsed.title}
+          Vacaciones utilizadas
         </Text>
         <Text type="title" weight="bold" size="large" appearance="primary">
           {totalPendingDays}
         </Text>
       </Stack>
 
-      <Stack>
-        <Text type="title" size="small" appearance="gray" weight="bold">
-          {`${businessName} - ${contractType}`}
-        </Text>
-      </Stack>
+      {contracts.map((contract, index) => {
+        const businessName = contract.businessName ?? "Empresa desconocida";
+        const contractType = contract.contractType ?? "Contrato desconocido";
 
-      {contracts.length > 1 ? (
-        <>
-          <PendingUsedDaysTable
-            data={paymentTableData}
-            loading={false}
-            variant="payment"
-            headers={headers}
-          />
-          <Stack>
-            <Text type="title" size="small" appearance="gray" weight="bold">
-              {`${businessName} - ${contractType}`}
-            </Text>
+        return (
+          <Stack key={index} direction="column" gap="8px">
+            {contracts.length > 1 && (
+              <Text type="title" size="small" appearance="gray" weight="bold">
+                {`${businessName} - ${contractType}`}
+              </Text>
+            )}
+
+            <PendingUsedDaysTable
+              data={tableData}
+              loading={false}
+              variant="payment"
+              headers={paymentTableHeaders}
+            />
           </Stack>
-          <PendingUsedDaysTable
-            data={opronTableData}
-            loading={false}
-            variant="payment"
-            headers={headers}
-          />
-        </>
-      ) : (
-        <PendingUsedDaysTable
-          data={paymentTableData}
-          loading={false}
-          variant="payment"
-          headers={headers}
-        />
-      )}
+        );
+      })}
     </Stack>
   );
 }
