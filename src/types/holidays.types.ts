@@ -46,3 +46,8 @@ export enum HolidaysActionTypes {
   apprentice = "Aprendiz",
   contingent_worker = "Contrato ocasional de trabajo",
 }
+
+export enum HolidayTypes {
+  EnjoyHolidays = "Disrutadas",
+  HolidayPay = "Pagadas",
+}

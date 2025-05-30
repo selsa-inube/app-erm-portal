@@ -1,3 +1,4 @@
+import { HolidayTypes } from "@ptypes/holidays.types";
 import { IPendingUsedDaysTable } from "./types";
 
 export function useDaysUsedLogic(
@@ -7,7 +8,9 @@ export function useDaysUsedLogic(
 
   const tableData: IPendingUsedDaysTable[] = data.map((item) => ({
     startDate: { value: item.startDate },
-    usageMode: { value: item.usageMode },
+    usageMode: {
+      value: HolidayTypes[item.usageMode as keyof typeof HolidayTypes],
+    },
     days: { value: item.days },
   }));
 
