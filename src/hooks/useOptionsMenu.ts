@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { getOptionForCustomerPortal } from "@services/staffPortal/getOptionForCustomerPortal";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
-import { useErrorFlag } from "./useErrorFlag";
-import { mapOptionForCustomerPortalApiToEntities } from "@src/services/staffPortal/getOptionForCustomerPortal/mappers";
-import { environment } from "@src/config/environment";
+import { mapOptionForCustomerPortalApiToEntities } from "@services/staffPortal/getOptionForCustomerPortal/mappers";
+import { environment } from "@config/environment";
 import { optionDescriptionStaff } from "@mocks/staff/staff.mock";
+
+import { useErrorFlag } from "./useErrorFlag";
 
 export function useOptionsMenu(
   staffPortalPublicCode: string,

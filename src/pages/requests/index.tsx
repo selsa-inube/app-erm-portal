@@ -8,7 +8,7 @@ import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
 import { IOption, IRequest } from "./types";
-import { RequestsNavConfig } from "./config/nav.config";
+import { breadcrumbs } from "./config/nav.config";
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -83,9 +83,9 @@ function Requests() {
 
   return (
     <RequestsUI
-      appName="Solicitudes de Recursos Humanos"
-      appRoute={RequestsNavConfig[0].crumbs}
-      navigatePage=""
+      appName={breadcrumbs.label}
+      appRoute={breadcrumbs.crumbs}
+      navigatePage={breadcrumbs.url}
       isFilterModalOpen={isFilterModalOpen}
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
