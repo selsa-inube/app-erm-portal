@@ -88,10 +88,10 @@ function RequestsUI(props: RequestsUIProps) {
   );
 
   const handleApplyFilters = (values: object) => {
+    const newFilter: IOption[] = [];
     Object.entries(values).forEach(([key, value]) => {
       if (value) {
         const valueArray = value.toString().split(",");
-        const newFilter: IOption[] = [];
 
         if (key === "assignment") {
           const found = assignmentOptions.filter((option) =>
@@ -104,9 +104,9 @@ function RequestsUI(props: RequestsUIProps) {
           );
           newFilter.push(...found);
         }
-        setSelectedFilters(newFilter);
       }
     });
+    setSelectedFilters(newFilter);
     closeFilterModal();
   };
 
@@ -310,7 +310,6 @@ function RequestsUI(props: RequestsUIProps) {
                 ].some((field) =>
                   field?.toString().toLowerCase().includes(debouncedSearchTerm),
                 );
-
                 const matchesAssignment =
                   selectedAssignmentFilters.length === 0 ||
                   selectedAssignmentFilters.some((assignment) =>
@@ -325,10 +324,9 @@ function RequestsUI(props: RequestsUIProps) {
                     (filter) =>
                       filter.value.toLowerCase() === value.toLowerCase(),
                   );
-                return matchesSearch && matchesAssignment && matchesStatus;
+                return matchesSearch && (matchesAssignment || matchesStatus);
               },
             );
-
             return (
               <BoardSection
                 key={sectionTitle}

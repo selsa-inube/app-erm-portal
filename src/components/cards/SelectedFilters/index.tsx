@@ -33,6 +33,7 @@ function SelectedFilters({ filters, onRemove }: SelectedFiltersProps) {
               label={`${filter.label} (${filter.count})`}
               removable={!!onRemove}
               onClose={() => handleRemoveFilter(filter.id)}
+              displayIcon={false}
             />
           ))}
 
