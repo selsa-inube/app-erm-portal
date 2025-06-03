@@ -1,85 +1,91 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
-
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
-import { IOption, IRequest } from "./types";
+import { IOption, IRequest, Status } from "./types";
 import { RequestsNavConfig } from "./config/nav.config";
+
+const useDebouncedSearch = (value: string, delay = 500) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+};
+
+const useOutsideClick = (
+  ref: React.RefObject<HTMLElement>,
+  active: boolean,
+  onOutsideClick: () => void,
+) => {
+  useEffect(() => {
+    if (!active) return;
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        onOutsideClick();
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [active, ref, onOutsideClick]);
+};
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
-
-  const { selectedEmployee } = useAppContext();
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   const isTablet = useMediaQuery("(max-width: 1280px)");
   const isMobile = useMediaQuery("(max-width: 490px)");
 
+  const { selectedEmployee } = useAppContext();
   const employeeId = selectedEmployee?.employeeId ?? "";
-
   const { data } = useHumanResourceRequests<IRequest>(
     formatHumanResourceRequests,
     undefined,
     employeeId,
   );
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
+  const debouncedSearchTerm = useDebouncedSearch(searchTerm);
+  useOutsideClick(menuRef, isMenuOpen, () => setIsMenuOpen(false));
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
+  const boardSections = useMemo(() => {
+    const statusMap: Record<Status, string> = {
+      pending: "Por evaluar",
+      inProgress: "En progreso",
+      completed: "Terminada",
     };
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+
+    const backgroundMap: Record<Status, "gray" | "light"> = {
+      pending: "gray",
+      inProgress: "light",
+      completed: "gray",
     };
-  }, [isMenuOpen]);
 
-  const boardSections = [
-    {
-      sectionTitle: "Por evaluar",
-      value: "pending",
-      sectionBackground: "gray" as const,
-      sectionInformation: data.filter((req) => req.status === "pending"),
-    },
-    {
-      sectionTitle: "En progreso",
-      value: "inProgress",
-      sectionBackground: "light" as const,
-      sectionInformation: data.filter((req) => req.status === "inProgress"),
-    },
-    {
-      sectionTitle: "Terminada",
-      value: "completed",
-      sectionBackground: "gray" as const,
-      sectionInformation: data.filter((req) => req.status === "completed"),
-    },
-  ];
+    const statuses: Status[] = ["pending", "inProgress", "completed"];
 
-  const openFilterModal = () => {
+    return statuses.map((status) => ({
+      sectionTitle: statusMap[status],
+      value: status,
+      sectionBackground: backgroundMap[status],
+      sectionInformation: data.filter((req) => req.status === status),
+    }));
+  }, [data]);
+
+  const openFilterModal = useCallback(() => {
     setIsFilterModalOpen(true);
     setIsMenuOpen(false);
-  };
+  }, []);
 
-  const closeFilterModal = () => setIsFilterModalOpen(false);
+  const closeFilterModal = useCallback(() => setIsFilterModalOpen(false), []);
 
   return (
     <RequestsUI
