@@ -24,6 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -82,6 +83,23 @@ function CertificationsTable({
   } = usePagination(data);
 
   const displayData = isMobile ? data : currentData;
+
+  const transformContractValue = (contractValue: string): string => {
+    if (!contractValue) return contractValue;
+
+    const contractTypeKey = Object.keys(contractTypeLabels).find((key) =>
+      contractValue.includes(key),
+    );
+
+    if (contractTypeKey) {
+      return contractValue.replace(
+        contractTypeKey,
+        contractTypeLabels[contractTypeKey],
+      );
+    }
+
+    return contractValue;
+  };
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -241,7 +259,10 @@ function CertificationsTable({
       ?.value as unknown as CertificationsTableDataDetails;
     const dataDeta = [
       { label: "Destinatario", value: dataDe.addressee },
-      { label: "Contrato", value: dataDe.contract },
+      {
+        label: "Contrato",
+        value: transformContractValue(dataDe.contract),
+      },
       { label: "Observaciones", value: dataDe.description },
     ];
     setSelectedRecord(dataDeta);
