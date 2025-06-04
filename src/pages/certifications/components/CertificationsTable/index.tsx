@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { transformContractValue } from "@utils/text";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -83,23 +83,6 @@ function CertificationsTable({
   } = usePagination(data);
 
   const displayData = isMobile ? data : currentData;
-
-  const transformContractValue = (contractValue: string): string => {
-    if (!contractValue) return contractValue;
-
-    const contractTypeKey = Object.keys(contractTypeLabels).find((key) =>
-      contractValue.includes(key),
-    );
-
-    if (contractTypeKey) {
-      return contractValue.replace(
-        contractTypeKey,
-        contractTypeLabels[contractTypeKey],
-      );
-    }
-
-    return contractValue;
-  };
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
