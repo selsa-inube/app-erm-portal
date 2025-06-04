@@ -14,7 +14,7 @@ import { RequestCard } from "@components/cards/RequestCard";
 import { FilterRequestModal } from "@components/modals/FilterRequestModal";
 import { SelectedFilters } from "@components/cards/SelectedFilters";
 
-import { IRoute, IOption, BoardSections } from "./types";
+import { IRoute, IOption, BoardSections, RequestItem } from "./types";
 
 import {
   StyledRequestsContainer,
@@ -88,10 +88,10 @@ function RequestsUI(props: RequestsUIProps) {
   );
 
   const handleApplyFilters = (values: object) => {
-    const newFilter: IOption[] = [];
     Object.entries(values).forEach(([key, value]) => {
       if (value) {
         const valueArray = value.toString().split(",");
+        const newFilter: IOption[] = [];
 
         if (key === "assignment") {
           const found = assignmentOptions.filter((option) =>
@@ -104,39 +104,54 @@ function RequestsUI(props: RequestsUIProps) {
           );
           newFilter.push(...found);
         }
+        setSelectedFilters(newFilter);
       }
     });
-    setSelectedFilters(newFilter);
     closeFilterModal();
   };
 
-  const getFilteredRequests = () =>
-    boardSections.flatMap(({ value, sectionInformation }) =>
-      sectionInformation
-        .filter(({ id, title, requestDate, responsible }) => {
-          const matchesSearch = [id, title, requestDate, responsible].some(
-            (field) =>
-              field?.toString().toLowerCase().includes(debouncedSearchTerm),
+  const filterRequests = (
+    sectionInformation: RequestItem[],
+    sectionValue: string,
+    debouncedSearchTerm: string,
+    selectedAssignmentFilters: { label: string }[],
+    selectedStatusFilters: { value: string }[],
+  ) => {
+    return sectionInformation.filter(
+      ({ id, title, requestDate, responsible }) => {
+        const matchesSearch = [id, title, requestDate, responsible].some(
+          (field) =>
+            field?.toString().toLowerCase().includes(debouncedSearchTerm),
+        );
+
+        const matchesAssignment =
+          selectedAssignmentFilters.length === 0 ||
+          selectedAssignmentFilters.some((assignment) =>
+            title.toLowerCase().includes(assignment.label.toLowerCase()),
           );
 
-          const matchesAssignment =
-            selectedAssignmentFilters.length === 0 ||
-            selectedAssignmentFilters.some((assignment) =>
-              title.toLowerCase().includes(assignment.label.toLowerCase()),
-            );
+        const matchesStatus =
+          selectedStatusFilters.length === 0 ||
+          selectedStatusFilters.some(
+            (filter) =>
+              filter.value.toLowerCase() === sectionValue.toLowerCase(),
+          );
 
-          const matchesStatus =
-            selectedStatusFilters.length === 0 ||
-            selectedStatusFilters.some(
-              (filter) => filter.value.toLowerCase() === value.toLowerCase(),
-            );
-
-          return matchesSearch && matchesAssignment && matchesStatus;
-        })
-        .map((info) => ({ ...info, status: value })),
+        return matchesSearch && matchesAssignment && matchesStatus;
+      },
     );
+  };
 
-  const filteredRequestsData = getFilteredRequests();
+  const filteredRequestsData = boardSections.flatMap(
+    ({ value, sectionInformation }) =>
+      filterRequests(
+        sectionInformation,
+        value,
+        debouncedSearchTerm,
+        selectedAssignmentFilters,
+        selectedStatusFilters,
+      ).map((item) => ({ ...item, status: value })),
+  );
 
   const getFilterCount = (filter: IOption) => {
     const isStatusFilter = statusOptions.some(
@@ -300,32 +315,12 @@ function RequestsUI(props: RequestsUIProps) {
       <StyledBoardContainer $isTablet={isTablet}>
         {boardSections.map(
           ({ value, sectionTitle, sectionBackground, sectionInformation }) => {
-            const filteredRequests = sectionInformation.filter(
-              ({ id, title, requestDate, responsible }) => {
-                const matchesSearch = [
-                  id,
-                  title,
-                  requestDate,
-                  responsible,
-                ].some((field) =>
-                  field?.toString().toLowerCase().includes(debouncedSearchTerm),
-                );
-                const matchesAssignment =
-                  selectedAssignmentFilters.length === 0 ||
-                  selectedAssignmentFilters.some((assignment) =>
-                    title
-                      .toLowerCase()
-                      .includes(assignment.label.toLowerCase()),
-                  );
-
-                const matchesStatus =
-                  selectedStatusFilters.length === 0 ||
-                  selectedStatusFilters.some(
-                    (filter) =>
-                      filter.value.toLowerCase() === value.toLowerCase(),
-                  );
-                return matchesSearch && (matchesAssignment || matchesStatus);
-              },
+            const filteredRequests = filterRequests(
+              sectionInformation,
+              value,
+              debouncedSearchTerm,
+              selectedAssignmentFilters,
+              selectedStatusFilters,
             );
             return (
               <BoardSection

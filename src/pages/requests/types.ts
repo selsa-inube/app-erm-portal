@@ -34,6 +34,22 @@ interface BoardSections {
   sectionInformation: IRequest[];
 }
 
+interface RequestItem {
+  id: string;
+  title: string;
+  requestDate: string;
+  responsible: string;
+  hasResponsible?: boolean;
+}
+
 type Status = "pending" | "inProgress" | "completed";
 
-export type { IOption, IRoute, IRequest, IMockRequests, BoardSections, Status };
+export type {
+  IOption,
+  IRoute,
+  IRequest,
+  IMockRequests,
+  BoardSections,
+  Status,
+  RequestItem,
+};
