@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
 import { useHeaders } from "@hooks/useHeaders";
+import { mapBusinessUnitsApiToEntity } from "@services/businessUnits/getBusinessUnits/mappers";
+import { businessUnitStaff } from "@mocks/staff/staff.mock";
+import { environment } from "@config/environment";
 
 import { useErrorFlag } from "./useErrorFlag";
-import { mapBusinessUnitsApiToEntity } from "@src/services/businessUnits/getBusinessUnits/mappers";
-import { businessUnitStaff } from "@src/mocks/staff/staff.mock";
-import { environment } from "@src/config/environment";
 
 const ERROR_CODE_EMPTY_DATA = 1006;
 const ERROR_CODE_FETCH_FAILED = 1008;
