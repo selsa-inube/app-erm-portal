@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+
 import { staffUserAccountById } from "@services/StaffUser/StaffUserAccountIportalStaff";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
+import { mapStaffUserAccountApiToEntity } from "@services/StaffUser/StaffUserAccountIportalStaff/mappers";
+import { dataStaff } from "@mocks/staff/staff.mock";
+import { environment } from "@config/environment";
+
 import { useErrorFlag } from "./useErrorFlag";
-import { mapStaffUserAccountApiToEntity } from "@src/services/StaffUser/StaffUserAccountIportalStaff/mappers";
-import { dataStaff } from "@src/mocks/staff/staff.mock";
-import { environment } from "@src/config/environment";
 
 interface UseStaffUserAccountProps {
   userAccountId: string;

@@ -7,7 +7,7 @@ import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
 import { IRequest, Status } from "./types";
-import { RequestsNavConfig } from "./config/nav.config";
+import { breadcrumbs } from "./config/nav.config";
 
 const useDebouncedSearch = (value: string, delay = 500) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -89,9 +89,9 @@ function Requests() {
 
   return (
     <RequestsUI
-      appName="Solicitudes de Recursos Humanos"
-      appRoute={RequestsNavConfig[0].crumbs}
-      navigatePage=""
+      appName={breadcrumbs.label}
+      appRoute={breadcrumbs.crumbs}
+      navigatePage={breadcrumbs.url}
       isFilterModalOpen={isFilterModalOpen}
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
