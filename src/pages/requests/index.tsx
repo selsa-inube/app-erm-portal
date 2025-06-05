@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { useMediaQuery } from "@inubekit/inubekit";
+import { useMediaQuery, IOption } from "@inubekit/inubekit";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
 import { RequestsUI } from "./interface";
 import { assignmentOptions, statusOptions } from "./config";
-import { IOption, IRequest, Status } from "./types";
+import { IRequest, Status } from "./types";
 import { RequestsNavConfig } from "./config/nav.config";
 
 const useDebouncedSearch = (value: string, delay = 500) => {

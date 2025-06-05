@@ -1,4 +1,4 @@
-import { IOption } from "./types";
+import { IOption } from "@inubekit/inubekit";
 
 export const assignmentOptions: IOption[] = [
   { id: "1", label: "Vinculación", value: "Onboarding" },
@@ -16,7 +16,7 @@ export const assignmentOptions: IOption[] = [
 ];
 
 export const statusOptions: IOption[] = [
-  { id: "1", label: "Por evaluar", value: "pending" },
-  { id: "2", label: "En progreso", value: "inProgress" },
-  { id: "3", label: "Terminada", value: "completed" },
+  { id: "pending", label: "Por evaluar", value: "pending" },
+  { id: "inProgress", label: "En progreso", value: "inProgress" },
+  { id: "completed", label: "Terminada", value: "completed" },
 ];
