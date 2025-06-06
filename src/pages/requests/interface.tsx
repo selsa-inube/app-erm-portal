@@ -371,10 +371,14 @@ function RequestsUI(props: RequestsUIProps) {
                         responsible={responsible}
                         hasResponsible={hasResponsible}
                         onclick={() => {
-                          if (RequestsNav[title]) {
-                            navigate(`${RequestsNav[title].path}/${id}`, {
-                              state: { section: value },
-                            });
+                          const requestTypeTitle = getRequestTypeTitle(title);
+                          if (RequestsNav[requestTypeTitle]) {
+                            navigate(
+                              `${RequestsNav[requestTypeTitle].path}/${id}`,
+                              {
+                                state: { section: value },
+                              },
+                            );
                           }
                         }}
                       />
