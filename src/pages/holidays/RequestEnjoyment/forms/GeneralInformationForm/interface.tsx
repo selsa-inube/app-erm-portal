@@ -6,6 +6,7 @@ import {
   Textfield,
   useMediaQuery,
   Text,
+  IOption,
 } from "@inubekit/inubekit";
 import { useEffect, useState, useMemo } from "react";
 import { FormikProps } from "formik";
@@ -14,7 +15,6 @@ import * as Yup from "yup";
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
-import { IOption } from "@pages/requests/types";
 import { useDayOptions } from "@hooks/useDayOptions";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 

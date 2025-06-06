@@ -1,9 +1,3 @@
-interface IOption {
-  id: string;
-  label: string;
-  value: string;
-}
-
 interface IRoute {
   path: string;
   label: string;
@@ -34,6 +28,22 @@ interface BoardSections {
   sectionInformation: IRequest[];
 }
 
+interface RequestItem {
+  id: string;
+  title: string;
+  requestDate: string;
+  responsible: string;
+  hasResponsible?: boolean;
+  status: string;
+}
+
 type Status = "pending" | "inProgress" | "completed";
 
-export type { IOption, IRoute, IRequest, IMockRequests, BoardSections, Status };
+export type {
+  IRoute,
+  IRequest,
+  IMockRequests,
+  BoardSections,
+  Status,
+  RequestItem,
+};

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { IOption } from "@inubekit/inubekit";
 import Holidays from "date-holidays";
 
-import { IOption } from "@pages/requests/types";
 import { environment } from "@config/environment";
 
 export function useDayOptions(
