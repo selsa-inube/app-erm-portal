@@ -16,6 +16,7 @@ import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { useDayOptions } from "@hooks/useDayOptions";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer, StyledDateContainer } from "./styles";
@@ -61,8 +62,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     () =>
       (selectedEmployee.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
-        value: `${c.businessName} - ${c.contractType}`,
-        label: `${c.businessName} - ${c.contractType}`,
+        value: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
+        label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
     [selectedEmployee.employmentContracts],
   );
