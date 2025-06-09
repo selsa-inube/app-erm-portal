@@ -41,7 +41,12 @@ function SelectedFilters({ filters, onRemove }: SelectedFiltersProps) {
             <MoreFiltersWrapper
               onClick={() => setShowHiddenFilters((prev) => !prev)}
             >
-              <Tag appearance="primary" label="..." removable={false} />
+              <Tag
+                appearance="primary"
+                label="..."
+                removable={false}
+                displayIcon={false}
+              />
               {showHiddenFilters && (
                 <HiddenFiltersMenu $isMobile={isMobile}>
                   {hiddenFilters.map((filter, index) => (
