@@ -44,7 +44,7 @@ export function useSelectedFilters(
 
       for (const filter of filters) {
         dummy.innerText = `${filter.label} (${filter.count})`;
-        const tagWidth = dummy.offsetWidth + 10;
+        const tagWidth = dummy.offsetWidth + 60;
         if (usedWidth + tagWidth < containerWidth - 50) {
           usedWidth += tagWidth;
           count++;

@@ -1,4 +1,4 @@
-import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
+import { Input, Stack, Text, Icon, Button, IOption } from "@inubekit/inubekit";
 import {
   MdSearch,
   MdOutlineFilterAltOff,
@@ -13,8 +13,9 @@ import { BoardSection } from "@components/layout/BoardSection";
 import { RequestCard } from "@components/cards/RequestCard";
 import { FilterRequestModal } from "@components/modals/FilterRequestModal";
 import { SelectedFilters } from "@components/cards/SelectedFilters";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
-import { IRoute, IOption, BoardSections } from "./types";
+import { IRoute, BoardSections, RequestItem } from "./types";
 
 import {
   StyledRequestsContainer,
@@ -41,12 +42,12 @@ export interface RequestsUIProps {
   searchTerm: string;
   debouncedSearchTerm: string;
   selectedFilters: IOption[];
+  boardSections: BoardSections[];
   openFilterModal: () => void;
   closeFilterModal: () => void;
   setIsMenuOpen: (isOpen: boolean) => void;
   setSearchTerm: (term: string) => void;
   setSelectedFilters: (filters: IOption[]) => void;
-  boardSections: BoardSections[];
 }
 
 function RequestsUI(props: RequestsUIProps) {
@@ -59,17 +60,24 @@ function RequestsUI(props: RequestsUIProps) {
     menuRef,
     isMobile,
     isTablet,
-    openFilterModal,
-    closeFilterModal,
-    setIsMenuOpen,
     assignmentOptions,
     statusOptions,
     debouncedSearchTerm,
     selectedFilters,
+    boardSections,
     setSearchTerm,
     setSelectedFilters,
-    boardSections,
+    openFilterModal,
+    closeFilterModal,
+    setIsMenuOpen,
   } = props;
+
+  function getRequestTypeTitle(type: string): string {
+    if (type in ERequestType) {
+      return ERequestType[type as keyof typeof ERequestType];
+    }
+    return "Tipo desconocido";
+  }
 
   const navigate = useNavigate();
 
@@ -87,56 +95,82 @@ function RequestsUI(props: RequestsUIProps) {
     assignmentOptions.some((assignment) => assignment.id === filter.id),
   );
 
-  const handleApplyFilters = (values: object) => {
-    Object.entries(values).forEach(([key, value]) => {
-      if (value) {
-        const valueArray = value.toString().split(",");
-        const newFilter: IOption[] = [];
+  const handleApplyFilters = (values: {
+    assignment?: string;
+    status?: string;
+  }) => {
+    const combinedFilters: IOption[] = [];
 
-        if (key === "assignment") {
-          const found = assignmentOptions.filter((option) =>
-            valueArray.includes(option.id),
-          );
-          newFilter.push(...found);
-        } else if (key === "status") {
-          const found = statusOptions.filter((option) =>
-            valueArray.includes(option.id),
-          );
-          newFilter.push(...found);
-        }
-        setSelectedFilters(newFilter);
-      }
-    });
+    if (values.assignment) {
+      const assignmentIds = values.assignment.toString().split(",");
+      const foundAssignments = assignmentOptions.filter((opt) =>
+        assignmentIds.includes(opt.id),
+      );
+      combinedFilters.push(...foundAssignments);
+    }
+
+    if (values.status) {
+      const statusIds = values.status.toString().split(",");
+      const foundStatuses = statusOptions.filter((opt) =>
+        statusIds.includes(opt.id),
+      );
+      combinedFilters.push(...foundStatuses);
+    }
+
+    setSelectedFilters(combinedFilters);
     closeFilterModal();
   };
 
-  const getFilteredRequests = () =>
-    boardSections.flatMap(({ value, sectionInformation }) =>
-      sectionInformation
-        .filter(({ id, title, requestDate, responsible }) => {
-          const matchesSearch = [id, title, requestDate, responsible].some(
-            (field) =>
-              field?.toString().toLowerCase().includes(debouncedSearchTerm),
+  const filterRequests = (
+    sectionInformation: RequestItem[],
+    sectionValue: string,
+    debouncedSearchTerm: string,
+    selectedAssignmentFilters: { label: string }[],
+    selectedStatusFilters: { value: string }[],
+  ) => {
+    return sectionInformation.filter(
+      ({ id, title, requestDate, responsible }) => {
+        const titleTransformed = getRequestTypeTitle(title);
+
+        const matchesSearch = [
+          id,
+          titleTransformed,
+          requestDate,
+          responsible,
+        ].some((field) =>
+          field?.toString().toLowerCase().includes(debouncedSearchTerm),
+        );
+
+        const matchesAssignment =
+          selectedAssignmentFilters.length === 0 ||
+          selectedAssignmentFilters.some((assignment) =>
+            titleTransformed
+              .toLowerCase()
+              .includes(assignment.label.toLowerCase()),
           );
 
-          const matchesAssignment =
-            selectedAssignmentFilters.length === 0 ||
-            selectedAssignmentFilters.some((assignment) =>
-              title.toLowerCase().includes(assignment.label.toLowerCase()),
-            );
+        const matchesStatus =
+          selectedStatusFilters.length === 0 ||
+          selectedStatusFilters.some(
+            (filter) =>
+              filter.value.toLowerCase() === sectionValue.toLowerCase(),
+          );
 
-          const matchesStatus =
-            selectedStatusFilters.length === 0 ||
-            selectedStatusFilters.some(
-              (filter) => filter.value.toLowerCase() === value.toLowerCase(),
-            );
-
-          return matchesSearch && matchesAssignment && matchesStatus;
-        })
-        .map((info) => ({ ...info, status: value })),
+        return matchesSearch && matchesAssignment && matchesStatus;
+      },
     );
+  };
 
-  const filteredRequestsData = getFilteredRequests();
+  const filteredRequestsData = boardSections.flatMap(
+    ({ value, sectionInformation }) =>
+      filterRequests(
+        sectionInformation,
+        value,
+        debouncedSearchTerm,
+        selectedAssignmentFilters,
+        selectedStatusFilters,
+      ).map((item) => ({ ...item, status: value })),
+  );
 
   const getFilterCount = (filter: IOption) => {
     const isStatusFilter = statusOptions.some(
@@ -148,10 +182,12 @@ function RequestsUI(props: RequestsUIProps) {
 
     return filteredRequestsData.filter((info) => {
       if (isStatusFilter) {
-        return info.status.toLowerCase() === filter.label.toLowerCase();
+        return info.status.toLowerCase() === filter.id.toLowerCase();
       }
       if (isAssignmentFilter) {
-        return info.title.toLowerCase().includes(filter.label.toLowerCase());
+        return getRequestTypeTitle(info.title)
+          .toLowerCase()
+          .includes(filter.label.toLowerCase());
       }
       return false;
     }).length;
@@ -300,35 +336,13 @@ function RequestsUI(props: RequestsUIProps) {
       <StyledBoardContainer $isTablet={isTablet}>
         {boardSections.map(
           ({ value, sectionTitle, sectionBackground, sectionInformation }) => {
-            const filteredRequests = sectionInformation.filter(
-              ({ id, title, requestDate, responsible }) => {
-                const matchesSearch = [
-                  id,
-                  title,
-                  requestDate,
-                  responsible,
-                ].some((field) =>
-                  field?.toString().toLowerCase().includes(debouncedSearchTerm),
-                );
-
-                const matchesAssignment =
-                  selectedAssignmentFilters.length === 0 ||
-                  selectedAssignmentFilters.some((assignment) =>
-                    title
-                      .toLowerCase()
-                      .includes(assignment.label.toLowerCase()),
-                  );
-
-                const matchesStatus =
-                  selectedStatusFilters.length === 0 ||
-                  selectedStatusFilters.some(
-                    (filter) =>
-                      filter.value.toLowerCase() === value.toLowerCase(),
-                  );
-                return matchesSearch && matchesAssignment && matchesStatus;
-              },
+            const filteredRequests = filterRequests(
+              sectionInformation,
+              value,
+              debouncedSearchTerm,
+              selectedAssignmentFilters,
+              selectedStatusFilters,
             );
-
             return (
               <BoardSection
                 key={sectionTitle}
@@ -352,15 +366,19 @@ function RequestsUI(props: RequestsUIProps) {
                       <RequestCard
                         key={id}
                         id={id}
-                        title={title}
+                        title={getRequestTypeTitle(title)}
                         requestDate={requestDate}
                         responsible={responsible}
                         hasResponsible={hasResponsible}
                         onclick={() => {
-                          if (RequestsNav[title]) {
-                            navigate(`${RequestsNav[title].path}/${id}`, {
-                              state: { section: value },
-                            });
+                          const requestTypeTitle = getRequestTypeTitle(title);
+                          if (RequestsNav[requestTypeTitle]) {
+                            navigate(
+                              `${RequestsNav[requestTypeTitle].path}/${id}`,
+                              {
+                                state: { section: value },
+                              },
+                            );
                           }
                         }}
                       />

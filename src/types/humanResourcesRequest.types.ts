@@ -67,13 +67,13 @@ export enum ERequestType {
   Disability = "Incapacidad",
   Leave = "Permiso",
   LeavingTheJob = "Retiro",
-  Onboarding = "Ingreso",
-  PaidVacations = "Pago de vacaciones",
-  PositionTransfer = "Traslado de puesto",
+  Onboarding = "Vinculación",
+  PaidVacations = "Vacaciones Pagadas",
+  PositionTransfer = "Traslado de cargo",
   PQR = "PQR",
-  SalaryIncrease = "Aumento salarial",
+  SalaryIncrease = "Ascenso salarial",
   UnpaidLeave = "Licencia no remunerada",
-  VacationsEnjoyed = "Disfrute de vacaciones",
+  VacationsEnjoyed = "Vacaciones Disfrutadas",
 }
 
 export enum ETaskStatus {
