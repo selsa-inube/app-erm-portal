@@ -11,6 +11,7 @@ export interface Filter {
 export interface SelectedFiltersProps {
   filters: Filter[];
   onRemove?: (filterId: string) => void;
+  onRemoveHiddenFilter?: (filterId: string) => void;
 }
 
 export function useSelectedFilters(
