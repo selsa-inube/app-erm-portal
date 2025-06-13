@@ -28,6 +28,7 @@ import { AppProvider } from "./context/AppContext";
 import { ProtectedAppPage } from "./ProtectedAppPage";
 import { Contracts } from "./pages/contracts";
 import { RequestsRoutes } from "./routes/requests";
+import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
 
 function LogOut() {
   localStorage.clear();
@@ -67,7 +68,7 @@ function FirstPage() {
   }
 
   if (userAccountLoading) {
-    return <div>Cargando!!...</div>;
+    return <LoadingAppUI />;
   }
 
   if (userAccountError || !userAccount) {
@@ -151,7 +152,7 @@ function App() {
   ]);
 
   if (isLoading || isFetching || isFetchingManagers) {
-    return <div>Cargando...</div>;
+    return <LoadingAppUI />;
   }
 
   if (hasPortalError || hasManagersError) {
