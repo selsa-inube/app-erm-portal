@@ -25,7 +25,7 @@ function LoadingAppUI(props: LoadingAppUIProps) {
         </Text>
       </Stack>
       <Stack alignItems="center" direction="column">
-        <Spinner size="large" appearance="primary" transparent={false} />
+        <Spinner size="large" />
       </Stack>
     </Stack>
   );
