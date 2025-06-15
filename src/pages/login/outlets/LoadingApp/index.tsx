@@ -14,7 +14,7 @@ function LoadingApp() {
     return () => clearTimeout(timer);
   }, [navigate]);
 
-  return <LoadingAppUI />;
+  return <LoadingAppUI inLogin />;
 }
 
 export { LoadingApp };
