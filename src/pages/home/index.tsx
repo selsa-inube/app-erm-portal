@@ -18,7 +18,7 @@ import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { VinculationBanner } from "@components/layout/Banner";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
-import { usePendingData } from "@components/modals/OfferedGuaranteeModal/DaysPending/interface";
+import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 
 import {
   StyledAppPage,
@@ -49,6 +49,13 @@ function Home() {
     selectedEmployee,
     optionForCustomerPortal,
   } = useAppContext();
+
+  const { vacationDays, loading } = useEmployeeVacationDays(
+    selectedEmployee?.employeeId ?? null,
+  );
+  const totalDays =
+    vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
+
   const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
@@ -67,8 +74,6 @@ function Home() {
       description: string;
     }[]
   >();
-
-  const { totalPendingDays } = usePendingData();
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -185,11 +190,12 @@ function Home() {
                       cursorHover
                     />
                   ),
-                  value: totalPendingDays,
+                  value: totalDays,
                   label: "Días pendientes",
                   onClick: toggleModal,
                 },
               ]}
+              isLoading={loading}
               expandedWidth
             />
           </Stack>

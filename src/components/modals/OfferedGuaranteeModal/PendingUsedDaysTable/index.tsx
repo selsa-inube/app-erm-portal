@@ -101,7 +101,7 @@ function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
       </Thead>
       <Tbody>
         {loading ? (
-          [...Array(3)].map((_, index) => (
+          [...Array(1)].map((_, index) => (
             <Tr key={index} border="bottom">
               {headers.map((_, cellIndex) => (
                 <Td
@@ -118,7 +118,7 @@ function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
         ) : data.length === 0 ? (
           <Tr border="bottom">
             <Td colSpan={headers.length} align="center" type="custom">
-              <Text size="medium">No tiene solicitudes en trámite.</Text>
+              <Text size="medium">No se encontraron dias pendientes</Text>
             </Td>
           </Tr>
         ) : (
