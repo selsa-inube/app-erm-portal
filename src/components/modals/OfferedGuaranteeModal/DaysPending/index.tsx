@@ -15,7 +15,7 @@ interface IDaysPending {
 
 export function DaysPending({ isMobile }: IDaysPending) {
   const { selectedEmployee } = useAppContext();
-  const { vacationDays, loading } = useEmployeeVacationDays(
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
     selectedEmployee.employeeId,
   );
 
@@ -41,7 +41,7 @@ export function DaysPending({ isMobile }: IDaysPending) {
           Total de días pendientes a la fecha:
         </Text>
 
-        {loading ? (
+        {loadingDays ? (
           <SkeletonIcon animated />
         ) : (
           <Text type="title" weight="bold" size="large" appearance="primary">
@@ -52,7 +52,7 @@ export function DaysPending({ isMobile }: IDaysPending) {
 
       <PendingUsedDaysTable
         data={contractData}
-        loading={loading}
+        loading={loadingDays}
         variant="contract"
         headers={headers}
       />

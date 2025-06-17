@@ -74,7 +74,7 @@ function AppPage(props: AppPageProps) {
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
 
-  const { vacationDays, loading } = useEmployeeVacationDays(
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
   const totalDays =
@@ -208,7 +208,7 @@ function AppPage(props: AppPageProps) {
                           onClick: toggleModal,
                         },
                       ]}
-                      isLoading={loading}
+                      isLoading={loadingDays}
                     />
                   </Stack>
                 )}

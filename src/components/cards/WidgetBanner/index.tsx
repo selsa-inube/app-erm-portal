@@ -22,7 +22,7 @@ export const WidgetBanner = (props: WidgetBannerProps) => {
         {isLoading ? (
           <SkeletonIcon animated />
         ) : (
-          <Text type="title" weight="bold" size="large" appearance="primary">
+          <Text type="title" weight="bold" appearance="primary">
             {value}
           </Text>
         )}

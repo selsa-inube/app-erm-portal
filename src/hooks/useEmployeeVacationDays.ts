@@ -9,7 +9,7 @@ import { useHeaders } from "@hooks/useHeaders";
 
 interface UseEmployeeVacationDaysResult {
   vacationDays: IVacationDaysResponse[];
-  loading: boolean;
+  loadingDays: boolean;
   error: string | null;
   refetch: () => void;
 }
@@ -18,7 +18,7 @@ export const useEmployeeVacationDays = (
   employeeId: string | null,
 ): UseEmployeeVacationDaysResult => {
   const [vacationDays, setVacationDays] = useState<IVacationDaysResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingDays, setLoadingDays] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { getHeaders } = useHeaders();
 
@@ -42,7 +42,7 @@ export const useEmployeeVacationDays = (
         return;
       }
 
-      setLoading(true);
+      setLoadingDays(true);
       setError(null);
       lastFetchedEmployeeId.current = employeeId;
       isInitialMount.current = false;
@@ -60,7 +60,7 @@ export const useEmployeeVacationDays = (
         setError(errorMessage);
         setVacationDays([]);
       } finally {
-        setLoading(false);
+        setLoadingDays(false);
       }
     },
     [employeeId, getHeaders],
@@ -74,5 +74,5 @@ export const useEmployeeVacationDays = (
     fetchVacationDays(true);
   }, [fetchVacationDays]);
 
-  return { vacationDays, loading, error, refetch };
+  return { vacationDays, loadingDays, error, refetch };
 };

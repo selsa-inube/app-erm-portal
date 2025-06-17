@@ -50,7 +50,7 @@ function Home() {
     optionForCustomerPortal,
   } = useAppContext();
 
-  const { vacationDays, loading } = useEmployeeVacationDays(
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
   const totalDays =
@@ -195,7 +195,7 @@ function Home() {
                   onClick: toggleModal,
                 },
               ]}
-              isLoading={loading}
+              isLoading={loadingDays}
               expandedWidth
             />
           </Stack>
