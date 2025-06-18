@@ -1,22 +1,34 @@
-import { Stack, Text } from "@inubekit/inubekit";
+import { Stack, Text, SkeletonIcon } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
+import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
+import { useAppContext } from "@context/AppContext";
+import { capitalizeWords } from "@utils/text";
 
-import { dataDaysPending } from "./config";
-import { usePendingData } from "./interface";
 import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
 import { IPendingUsedDaysTableHeader } from "../PendingUsedDaysTable/types";
 import { contractTableHeaders } from "../PendingUsedDaysTable/tableConfig";
 
 interface IDaysPending {
   isMobile: boolean;
-  data: { contrato: string; diasPendientes: number }[];
 }
 
 export function DaysPending({ isMobile }: IDaysPending) {
-  const { totalPendingDays, contractData } = usePendingData();
+  const { selectedEmployee } = useAppContext();
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
+    selectedEmployee.employeeId,
+  );
 
   const headers: IPendingUsedDaysTableHeader[] = contractTableHeaders;
+
+  const contractData =
+    vacationDays?.map((item) => ({
+      contract: { value: capitalizeWords(item.businessName) },
+      pendingDays: { value: item.pendingDays },
+    })) ?? [];
+
+  const totalDays =
+    vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
   return (
     <Stack
@@ -26,16 +38,21 @@ export function DaysPending({ isMobile }: IDaysPending) {
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>
         <Text type="body" size="medium" appearance="gray">
-          {dataDaysPending.title}
+          Total de días pendientes a la fecha:
         </Text>
-        <Text type="title" weight="bold" size="large" appearance="primary">
-          {totalPendingDays}
-        </Text>
+
+        {loadingDays ? (
+          <SkeletonIcon animated />
+        ) : (
+          <Text type="title" weight="bold" size="large" appearance="primary">
+            {totalDays}
+          </Text>
+        )}
       </Stack>
 
       <PendingUsedDaysTable
         data={contractData}
-        loading={false}
+        loading={loadingDays}
         variant="contract"
         headers={headers}
       />
