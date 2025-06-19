@@ -1,3 +1,65 @@
+export enum ERequestType {
+  Absence = "Ausencia",
+  Certification = "Certificación",
+  Disability = "Incapacidad",
+  Leave = "Permiso",
+  LeavingTheJob = "Retiro",
+  Onboarding = "Vinculación",
+  PaidVacations = "Vacaciones Pagadas",
+  PositionTransfer = "Traslado de cargo",
+  PQR = "PQR",
+  SalaryIncrease = "Ascenso salarial",
+  UnpaidLeave = "Licencia no remunerada",
+  VacationsEnjoyed = "Vacaciones Disfrutadas",
+}
+
+export enum ETaskStatus {
+  Assigned = "Asignada",
+  Executed = "Ejecutada",
+}
+
+export enum ERequestStatus {
+  Canceled = "Cancelado",
+  Closed = "Cerrado",
+  Finished = "Finalizado",
+  InProgress = "En progreso",
+  Rejected = "Rechazado",
+}
+
+export interface IGeneralInformationEntry {
+  id: string;
+  startDate: string;
+  contract: string;
+  observations: string;
+  contractId: string;
+  contractNumber: string;
+  businessName: string;
+  contractType: string;
+  observationEmployee: string;
+  certification: string;
+  contractDesc: string;
+}
+
+export interface IVacationEnjoyedData extends IGeneralInformationEntry {
+  daysOff: string;
+  startDateEnyoment: string;
+}
+
+export interface IVacationPaymentData extends IGeneralInformationEntry {
+  daysToPay: string;
+  disbursementDate: string;
+}
+
+export interface ICertificationData extends IGeneralInformationEntry {
+  certificationType: string;
+  addressee: string;
+}
+
+export type HumanResourceRequestData =
+  | IVacationEnjoyedData
+  | IVacationPaymentData
+  | ICertificationData;
+
 export interface HumanResourceRequestTraceability {
   actionExecuted: string;
   description: string;
@@ -29,64 +91,6 @@ export interface HumanResourceRequest {
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;
-}
-
-export interface IVacationGeneralInformationEntry {
-  id: string;
-  daysOff: string;
-  startDate: string;
-  contract: string;
-  observations: string;
-  typeOfRequest?: string;
-}
-
-export interface IVacationPaymentGeneralInformationEntry {
-  id: string;
-  daysToPay: string;
-  contract: string;
-  observations: string;
-}
-
-export interface ICertificationGeneralInformationEntry {
-  id: string;
-  certification: string;
-  addressee: string;
-  contract: string;
-  contractDesc: string;
-  observations: string;
-}
-
-export type HumanResourceRequestData =
-  | IVacationGeneralInformationEntry
-  | ICertificationGeneralInformationEntry
-  | IVacationPaymentGeneralInformationEntry;
-
-export enum ERequestType {
-  Absence = "Ausencia",
-  Certification = "Certificación",
-  Disability = "Incapacidad",
-  Leave = "Permiso",
-  LeavingTheJob = "Retiro",
-  Onboarding = "Vinculación",
-  PaidVacations = "Vacaciones Pagadas",
-  PositionTransfer = "Traslado de cargo",
-  PQR = "PQR",
-  SalaryIncrease = "Ascenso salarial",
-  UnpaidLeave = "Licencia no remunerada",
-  VacationsEnjoyed = "Vacaciones Disfrutadas",
-}
-
-export enum ETaskStatus {
-  Assigned = "Asignada",
-  Executed = "Ejecutada",
-}
-
-export enum ERequestStatus {
-  Canceled = "Cancelado",
-  Closed = "Cerrado",
-  Finished = "Finalizado",
-  InProgress = "En progreso",
-  Rejected = "Rechazado",
 }
 
 export type HumanResourceRequests = HumanResourceRequest[];

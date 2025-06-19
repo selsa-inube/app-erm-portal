@@ -3,6 +3,8 @@ import { spacing } from "@design/tokens/spacing";
 
 import { useAppContext } from "@context/AppContext";
 import { formatDate } from "@utils/date";
+import { capitalizeWords } from "@utils/text";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { PendingUsedDaysTable } from "../PendingUsedDaysTable";
 import { paymentTableHeaders } from "../PendingUsedDaysTable/tableConfig";
@@ -55,7 +57,7 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
           <Stack key={index} direction="column" gap="8px">
             {contracts.length > 1 && (
               <Text type="title" size="small" appearance="gray" weight="bold">
-                {`${businessName} - ${contractType}`}
+                {`${capitalizeWords(businessName)} - ${contractTypeLabels[contractType]}`}
               </Text>
             )}
 
