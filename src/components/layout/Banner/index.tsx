@@ -29,6 +29,7 @@ export interface VinculationBannerProps {
   redirectUrl?: string;
   pendingDays?: number;
   infoItems: InfoItemProps[];
+  isLoading: boolean;
   expandedWidth?: boolean;
 }
 
@@ -40,7 +41,14 @@ interface InfoItemProps {
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status, redirectUrl, infoItems, expandedWidth = false } = props;
+  const {
+    name,
+    status,
+    redirectUrl,
+    infoItems,
+    expandedWidth = false,
+    isLoading,
+  } = props;
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -145,6 +153,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                       icon={item.icon}
                       value={item.value}
                       label={item.label}
+                      isLoading={isLoading}
                       onClick={() => {
                         if (item.onClick) item.onClick();
                         setIsExpanded(false);
@@ -167,6 +176,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                     icon={item.icon}
                     value={item.value}
                     label={item.label}
+                    isLoading={isLoading}
                     onClick={item.onClick}
                   />
                 </React.Fragment>

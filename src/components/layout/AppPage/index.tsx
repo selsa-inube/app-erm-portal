@@ -22,7 +22,7 @@ import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
-import { usePendingData } from "@components/modals/OfferedGuaranteeModal/DaysPending/interface";
+import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 
 import {
   StyledAppPage,
@@ -74,7 +74,11 @@ function AppPage(props: AppPageProps) {
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
 
-  const { totalPendingDays } = usePendingData();
+  const { vacationDays, loadingDays } = useEmployeeVacationDays(
+    selectedEmployee?.employeeId ?? null,
+  );
+  const totalDays =
+    vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -199,11 +203,12 @@ function AppPage(props: AppPageProps) {
                               cursorHover
                             />
                           ),
-                          value: totalPendingDays,
+                          value: totalDays,
                           label: "Días pendientes",
                           onClick: toggleModal,
                         },
                       ]}
+                      isLoading={loadingDays}
                     />
                   </Stack>
                 )}

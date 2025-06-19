@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Stack, Tabs } from "@inubekit/inubekit";
 
-import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
 import { spacing } from "@design/tokens/spacing";
 import { BaseModal } from "@components/modals/baseModal";
 
@@ -38,9 +37,7 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
       </Stack>
 
       <Stack padding={`${spacing.s300} ${spacing.s0}  ${spacing.s0}`}>
-        {currentTab === "pending" && (
-          <DaysPending isMobile={isMobile} data={mockDataDaysPending} />
-        )}
+        {currentTab === "pending" && <DaysPending isMobile={isMobile} />}
         <ScrollableContainer>
           {currentTab === "used" && <DaysUsed isMobile={isMobile} />}
         </ScrollableContainer>
