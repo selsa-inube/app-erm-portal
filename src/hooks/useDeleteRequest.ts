@@ -4,9 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useHeaders } from "@hooks/useHeaders";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
-import { validateVacationDeletion } from "@utils/vacationValidations";
+import { validateVacationDeletion } from "@validations/vacationDeletion/vacationDeletion";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
-import { ValidationResult } from "@utils/validationTypes";
+import { IVacationDeletion } from "@validations/vacationDeletion/types";
 
 export function useDeleteRequest<T extends { requestId?: string }>(
   updateStateFunction: (filterFn: (item: T) => boolean) => void,
@@ -37,7 +37,7 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     requestType: ERequestType,
     disbursementDate: string | null | undefined,
     startDateEnment: string | null | undefined,
-  ): ValidationResult => {
+  ): IVacationDeletion => {
     return validateVacationDeletion(
       requestType,
       disbursementDate,

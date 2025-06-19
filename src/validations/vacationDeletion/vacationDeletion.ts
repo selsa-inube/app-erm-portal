@@ -1,10 +1,10 @@
-import { ValidationResult } from "./validationTypes";
+import { IVacationDeletion } from "./types";
 
 export const validateVacationDeletion = (
   requestType: string,
   disbursementDate: string | null | undefined,
   startDateEnment: string | null | undefined,
-): ValidationResult => {
+): IVacationDeletion => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
