@@ -17,13 +17,13 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { useDayOptions } from "@hooks/useDayOptions";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { IVacationEnjoyedData } from "@ptypes/humanResourcesRequest.types";
 
-import { IGeneralInformationEntry } from "./types";
 import { StyledContainer, StyledDateContainer } from "./styles";
 import { monthAbbr, monthFull } from "./config/formConfig";
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<IGeneralInformationEntry>;
+  formik: FormikProps<IVacationEnjoyedData>;
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
@@ -92,7 +92,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   useEffect(() => {
     if (!selectedYear) {
       setMonthOptions([]);
-
       return;
     }
     const current = new Date();
@@ -227,6 +226,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             />
           </Stack>
         </StyledContainer>
+
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
             <Button

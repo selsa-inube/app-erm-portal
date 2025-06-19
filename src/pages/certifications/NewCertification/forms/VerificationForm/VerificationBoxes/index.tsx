@@ -5,7 +5,6 @@ import { spacing } from "@design/tokens/spacing";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
-import { IFormsUpdateData } from "../../../types";
 
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
@@ -37,6 +36,7 @@ const renderPersonalInfoVerification = (
         />
       )}
     </Grid>
+
     <Stack width="100%" direction="column">
       <BoxAttribute
         label="Observaciones:"
@@ -66,19 +66,23 @@ const renderAlerts = (isTablet: boolean) => (
   </Grid>
 );
 
-interface VerificationBoxesProps {
-  updatedData: IFormsUpdateData;
+interface VerificationBoxesProps<
+  T extends IGeneralInformationEntry = IGeneralInformationEntry,
+> {
+  updatedData: {
+    personalInformation: { isValid: boolean; values: T };
+  };
   stepKey: number;
   isTablet: boolean;
   contractOptions: { id: string; value: string; label: string }[];
 }
 
-function VerificationBoxes({
+function VerificationBoxes<T extends IGeneralInformationEntry>({
   updatedData,
   stepKey,
   isTablet,
   contractOptions,
-}: VerificationBoxesProps) {
+}: VerificationBoxesProps<T>) {
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}

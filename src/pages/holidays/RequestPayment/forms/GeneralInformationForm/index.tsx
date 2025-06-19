@@ -1,5 +1,5 @@
 import { useEffect, forwardRef, useImperativeHandle } from "react";
-import { FormikProps, useFormik } from "formik";
+import { useFormik, FormikProps } from "formik";
 import { object, string } from "yup";
 
 import { validationMessages } from "@validations/validationMessages";
@@ -7,7 +7,7 @@ import { validationRules } from "@validations/validationRules";
 
 import { generalInformationRequiredFields } from "./config/formConfig";
 import { GeneralInformationFormUI } from "./interface";
-import { IGeneralInformationEntry } from "./types";
+import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -25,17 +25,17 @@ const createValidationSchema = () =>
 const validationSchema = createValidationSchema();
 
 interface GeneralInformationFormProps {
-  initialValues: IGeneralInformationEntry;
+  initialValues: IVacationPaymentData;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: IGeneralInformationEntry) => void;
+  onSubmit?: (values: IVacationPaymentData) => void;
 }
 
 const GeneralInformationForm = forwardRef<
-  FormikProps<IGeneralInformationEntry>,
+  FormikProps<IVacationPaymentData>,
   GeneralInformationFormProps
 >(
   (
@@ -56,8 +56,6 @@ const GeneralInformationForm = forwardRef<
       validateOnBlur: false,
       onSubmit: onSubmit ?? (() => true),
     });
-
-    GeneralInformationForm.displayName = "GeneralInformationForm";
 
     useImperativeHandle(ref, () => formik);
 
@@ -82,6 +80,8 @@ const GeneralInformationForm = forwardRef<
     );
   },
 );
+
+GeneralInformationForm.displayName = "GeneralInformationForm";
 
 export { GeneralInformationForm };
 export type { GeneralInformationFormProps };

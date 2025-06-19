@@ -15,8 +15,15 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => {
     const parsedData = parseDataSafely(holiday.humanResourceRequestData);
 
+    const isPaidVacation =
+      holiday.humanResourceRequestType === ERequestType.PaidVacations;
+
     const daysValue = (getValueFromData(parsedData, "daysToPay", null) ??
       getValueFromData(parsedData, "daysOff", 0)) as number;
+
+    const displayDate = isPaidVacation
+      ? (getValueFromData(parsedData, "disbursementDate", "") as string)
+      : holiday.humanResourceRequestDate;
 
     return {
       requestId: holiday.humanResourceRequestId,
@@ -24,11 +31,11 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       description: {
         value:
           ERequestType[
-            holiday.humanResourceRequestType as unknown as keyof typeof ERequestType
+            holiday.humanResourceRequestType as keyof typeof ERequestType
           ],
       },
       date: {
-        value: formatDate(holiday.humanResourceRequestDate),
+        value: formatDate(displayDate),
       },
       days: {
         value: daysValue,
