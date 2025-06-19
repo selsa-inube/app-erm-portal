@@ -30,7 +30,7 @@ export const validateVacationDeletion = (
     const startDate = new Date(startDateEnment);
     startDate.setHours(0, 0, 0, 0);
 
-    if (startDate <= today) {
+    if (startDate >= today) {
       return {
         canDelete: false,
         title: "No se puede eliminar la solicitud",
