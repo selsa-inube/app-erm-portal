@@ -118,7 +118,9 @@ function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
         ) : data.length === 0 ? (
           <Tr border="bottom">
             <Td colSpan={headers.length} align="center" type="custom">
-              <Text size="medium">No se encontraron dias pendientes</Text>
+              <Text size="medium">
+                Aún no has utilizado ningún día de vacaciones.
+              </Text>
             </Td>
           </Tr>
         ) : (

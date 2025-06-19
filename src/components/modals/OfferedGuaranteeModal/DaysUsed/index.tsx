@@ -31,7 +31,7 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
     })),
   );
 
-  const { totalPendingDays, tableData } = useDaysUsedLogic(allVacations);
+  const { totalPendingDays } = useDaysUsedLogic(allVacations);
 
   return (
     <Stack
@@ -53,8 +53,22 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
         const businessName = contract.businessName ?? "Empresa desconocida";
         const contractType = contract.contractType ?? "Contrato desconocido";
 
+        const contractVacations = contract.vacationsHistory.map((vacation) => ({
+          startDate: formatDate(vacation.startDateVacationEnjoyment),
+          usageMode: vacation.vacationType,
+          days:
+            vacation.businessDaysOfVacation + vacation.nonWorkingDaysOfVacation,
+        }));
+
+        const { tableData: contractTableData } =
+          useDaysUsedLogic(contractVacations);
+
         return (
-          <Stack key={index} direction="column" gap="8px">
+          <Stack
+            key={contract.contractId ?? index}
+            direction="column"
+            gap={spacing.s100}
+          >
             {contracts.length > 1 && (
               <Text type="title" size="small" appearance="gray" weight="bold">
                 {`${capitalizeWords(businessName)} - ${contractTypeLabels[contractType]}`}
@@ -62,7 +76,7 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
             )}
 
             <PendingUsedDaysTable
-              data={tableData}
+              data={contractTableData}
               loading={false}
               variant="payment"
               headers={paymentTableHeaders}
