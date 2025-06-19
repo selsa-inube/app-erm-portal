@@ -8,22 +8,32 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
+import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
+
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
+  const [formValues, setFormValues] = useState<IVacationPaymentData>({
     id: "",
-    daysToPay: "",
+    startDate: "",
     contract: "",
-    contractDesc: "",
     observations: "",
+    contractId: "",
+    contractNumber: "",
+    businessName: "",
+    contractType: "",
+    observationEmployee: "",
+    certification: "",
+    contractDesc: "",
+    daysToPay: "",
+    disbursementDate: "",
   });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+
+  const generalInformationRef = useRef<FormikProps<IVacationPaymentData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

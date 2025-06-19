@@ -6,15 +6,17 @@ import { MdRule } from "react-icons/md";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardContainer } from "./forms/RequirementsForm";
+
+import { IVacationEnjoyedData } from "@ptypes/humanResourcesRequest.types";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -22,7 +24,10 @@ interface RequestEnjoymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<FormikProps<IVacationEnjoyedData>>;
+  initialGeneralInformationValues: IVacationEnjoyedData;
+  humanResourceRequestType: ERequestType;
+  humanResourceRequestDate: string;
   isCurrentFormValid: boolean;
   isTablet: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
@@ -31,7 +36,6 @@ interface RequestEnjoymentUIProps {
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
 }
-
 function RequestEnjoymentUI({
   appName,
   appRoute,
@@ -48,7 +52,7 @@ function RequestEnjoymentUI({
   handlePreviousStep,
   handleFinishAssisted,
 }: RequestEnjoymentUIProps & {
-  initialGeneralInformationValues: IGeneralInformationEntry;
+  initialGeneralInformationValues: IVacationEnjoyedData;
 }) {
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
 

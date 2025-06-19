@@ -1,11 +1,34 @@
 import { useState } from "react";
 
 import { formatDate } from "@utils/date";
-import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import {
+  HumanResourceRequestData,
+  ICertificationData,
+  IVacationPaymentData,
+  IVacationEnjoyedData,
+} from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
+
+function isVacationPaymentData(
+  data: HumanResourceRequestData,
+): data is IVacationPaymentData {
+  return "daysToPay" in data;
+}
+
+function isVacationEnjoyedData(
+  data: HumanResourceRequestData,
+): data is IVacationEnjoyedData {
+  return "daysOff" in data;
+}
+
+function isCertificationData(
+  data: HumanResourceRequestData,
+): data is ICertificationData {
+  return "certificationType" in data && "addressee" in data;
+}
 
 export function useRequestSubmission(
   formValues: HumanResourceRequestData,
@@ -31,27 +54,28 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if ("daysToPay" in formValues) {
+      if (isVacationPaymentData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay,
           contract: formValues.contract,
           observations: formValues.observations,
         });
-      } else if ("daysOff" in formValues) {
+      } else if (isVacationEnjoyedData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff,
           startDate: formatDate(formValues.startDate),
           contract: formValues.contract,
           observations: formValues.observations,
         });
-      } else {
+      } else if (isCertificationData(formValues)) {
         humanResourceRequestData = JSON.stringify({
-          certification: formValues.certification,
+          certificationType: formValues.certificationType,
           addressee: formValues.addressee,
           contract: formValues.contract,
-          contractDesc: formValues.contractDesc,
           observations: formValues.observations,
         });
+      } else {
+        throw new Error("Tipo de solicitud no reconocido.");
       }
 
       const requestBody = {
@@ -73,6 +97,7 @@ export function useRequestSubmission(
         if (humanResourceRequestId) {
           navigateAfterSubmission(typeRequest);
         }
+
         return true;
       }
 

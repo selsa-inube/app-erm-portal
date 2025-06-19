@@ -6,24 +6,35 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
-import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import {
+  IVacationEnjoyedData,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
 
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] =
-    useState<IVacationGeneralInformationEntry>({
-      id: "",
-      daysOff: "",
-      startDate: "",
-      observations: "",
-      contract: "",
-    });
+  const [formValues, setFormValues] = useState<IVacationEnjoyedData>({
+    id: "",
+    daysOff: "",
+    startDateEnyoment: "",
+    startDate: "",
+    contractId: "",
+    contractNumber: "",
+    businessName: "",
+    contractType: "",
+    observationEmployee: "",
+    contract: "",
+    observations: "",
+    certification: "",
+    contractDesc: "",
+  });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const generalInformationRef =
-    useRef<FormikProps<IVacationGeneralInformationEntry>>(null);
+
+  const generalInformationRef = useRef<FormikProps<IVacationEnjoyedData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -70,6 +81,7 @@ function useModalManagement() {
 
 function RequestEnjoyment() {
   const [currentStep, setCurrentStep] = useState(1);
+
   const {
     formValues,
     isCurrentFormValid,
@@ -77,6 +89,7 @@ function RequestEnjoyment() {
     generalInformationRef,
     updateFormValues,
   } = useFormManagement();
+
   const {
     modalState,
     openSendModal,
@@ -165,6 +178,9 @@ function RequestEnjoyment() {
     url: "/holidays",
   };
 
+  const humanResourceRequestType = ERequestType.VacationsEnjoyed;
+  const humanResourceRequestDate = new Date().toISOString();
+
   return (
     <>
       <RequestEnjoymentUI
@@ -177,6 +193,8 @@ function RequestEnjoyment() {
         isCurrentFormValid={isCurrentFormValid}
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
+        humanResourceRequestType={humanResourceRequestType}
+        humanResourceRequestDate={humanResourceRequestDate}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}

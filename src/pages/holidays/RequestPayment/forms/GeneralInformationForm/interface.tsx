@@ -16,7 +16,7 @@ import { getFieldState } from "@utils/forms/forms";
 import { useAppContext } from "@context/AppContext";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 
-import { IGeneralInformationEntry } from "./types";
+import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
 import { StyledContainer } from "./styles";
 
 function getDisabledState(loading: boolean | undefined, isValid: boolean) {
@@ -24,7 +24,7 @@ function getDisabledState(loading: boolean | undefined, isValid: boolean) {
 }
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<IGeneralInformationEntry>;
+  formik: FormikProps<IVacationPaymentData>;
   validationSchema: ObjectSchema<AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
@@ -155,3 +155,4 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 }
 
 export { GeneralInformationFormUI };
+export type { GeneralInformationFormUIProps };

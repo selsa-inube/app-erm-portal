@@ -17,7 +17,7 @@ import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardStep } from "./forms/RequirementsForm";
 
@@ -27,8 +27,8 @@ interface RequestPaymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
-  initialGeneralInformationValues: IGeneralInformationEntry;
+  generalInformationRef: React.RefObject<FormikProps<IVacationPaymentData>>;
+  initialGeneralInformationValues: IVacationPaymentData;
   isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,18 +55,11 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -119,7 +112,12 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
                 updatedData={{
                   personalInformation: {
                     isValid: isCurrentFormValid,
-                    values: initialGeneralInformationValues,
+                    values: {
+                      ...initialGeneralInformationValues,
+                      daysToPay: String(
+                        initialGeneralInformationValues.daysToPay,
+                      ),
+                    },
                   },
                 }}
                 handleStepChange={(stepId) => setCurrentStep(stepId)}

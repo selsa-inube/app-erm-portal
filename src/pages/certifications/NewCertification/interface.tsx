@@ -17,59 +17,48 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardStep } from "./forms/RequirementsForm";
 
-interface RequestEnjoymentUIProps {
+import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
+
+interface NewCertificationUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<FormikProps<ICertificationData>>;
   isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
+  initialGeneralInformationValues: ICertificationData;
 }
 
-function NewCertificationUI(
-  props: RequestEnjoymentUIProps & {
-    initialGeneralInformationValues: IGeneralInformationEntry;
-  },
-) {
-  const {
-    appName,
-    appRoute,
-    navigatePage,
-    steps,
-    currentStep,
-    generalInformationRef,
-    initialGeneralInformationValues,
-    isCurrentFormValid,
-    setCurrentStep,
-    setIsCurrentFormValid,
-    handleNextStep,
-    handlePreviousStep,
-    handleFinishAssisted,
-  } = props;
-
+function NewCertificationUI({
+  appName,
+  appRoute,
+  navigatePage,
+  steps,
+  currentStep,
+  generalInformationRef,
+  initialGeneralInformationValues,
+  isCurrentFormValid,
+  setCurrentStep,
+  setIsCurrentFormValid,
+  handleNextStep,
+  handlePreviousStep,
+  handleFinishAssisted,
+}: NewCertificationUIProps) {
   const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -103,22 +92,29 @@ function NewCertificationUI(
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
           />
+
           <Stack direction="column">
             <Stack direction="column" gap={spacing.s500}>
               {currentStep === 1 && (
                 <AlertCardStep handleNextStep={handleNextStep} />
               )}
+
               {currentStep === 2 && (
                 <GeneralInformationForm
-                  ref={generalInformationRef}
+                  ref={
+                    generalInformationRef as React.Ref<
+                      FormikProps<ICertificationData>
+                    >
+                  }
                   initialValues={initialGeneralInformationValues}
-                  withNextButton={true}
+                  withNextButton
                   onFormValid={setIsCurrentFormValid}
                   handleNextStep={handleNextStep}
                   handlePreviousStep={handlePreviousStep}
                 />
               )}
             </Stack>
+
             {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
@@ -127,7 +123,7 @@ function NewCertificationUI(
                     values: initialGeneralInformationValues,
                   },
                 }}
-                handleStepChange={(stepId) => setCurrentStep(stepId)}
+                handleStepChange={setCurrentStep}
                 handlePreviousStep={handlePreviousStep}
                 handleSubmit={handleFinishAssisted}
                 contractOptions={[]}

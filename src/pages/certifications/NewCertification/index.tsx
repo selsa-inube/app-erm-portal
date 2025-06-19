@@ -5,7 +5,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { ICertificationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { NewCertificationUI } from "./interface";
@@ -13,19 +13,24 @@ import { newCCertificationApplication } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] =
-    useState<ICertificationGeneralInformationEntry>({
-      id: "",
-      certification: "",
-      addressee: "",
-      observations: "",
-      contractDesc: "",
-      contract: "",
-    });
+  const [formValues, setFormValues] = useState<ICertificationData>({
+    id: "",
+    startDate: "",
+    contract: "",
+    observations: "",
+    contractId: "",
+    contractNumber: "",
+    businessName: "",
+    contractType: "",
+    observationEmployee: "",
+    certificationType: "",
+    addressee: "",
+    certification: "",
+    contractDesc: "",
+  });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const generalInformationRef =
-    useRef<FormikProps<ICertificationGeneralInformationEntry>>(null);
+  const generalInformationRef = useRef<FormikProps<ICertificationData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

@@ -16,11 +16,11 @@ import { useAppContext } from "@context/AppContext";
 import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 
+import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
 import { StyledContainer } from "./styles";
-import { IGeneralInformationEntry } from "./types";
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<IGeneralInformationEntry>;
+  formik: FormikProps<ICertificationData>;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
@@ -32,15 +32,13 @@ function getDisabledState(loading: boolean | undefined, isValid: boolean) {
   return loading ? true : !isValid;
 }
 
-const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
-  const {
-    formik,
-    loading,
-    withNextButton,
-    handleNextStep,
-    handlePreviousStep,
-  } = props;
-
+const GeneralInformationFormUI = ({
+  formik,
+  loading,
+  withNextButton,
+  handleNextStep,
+  handlePreviousStep,
+}: GeneralInformationFormUIProps) => {
   const { selectedEmployee } = useAppContext();
 
   const contractOptions = useMemo(
@@ -69,6 +67,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
   }, [formik.values.contract]);
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack direction="column" gap={spacing.s300}>
@@ -81,17 +80,17 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               name="certification"
               size="compact"
               label="Tipo de certificación"
-              fullwidth={true}
+              fullwidth
               options={certificationOptions}
               placeholder="Selecciona de la lista"
               value={formik.values.certification}
               onChange={(name, value) => {
-                formik.setFieldValue(name, value);
+                void formik.setFieldValue(name, value);
               }}
             />
             <Input
               size="compact"
-              fullwidth={true}
+              fullwidth
               counter
               id="addressee"
               required
@@ -103,45 +102,52 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-          </Stack>{" "}
+          </Stack>
+
           {contractOptions.length > 1 && (
-            <Stack>
-              <Select
-                label="Contrato"
-                name="contract"
-                id="contract"
-                options={contractOptions}
-                placeholder="Selecciona de la lista"
-                value={formik.values.contract}
-                message={formik.errors.contract}
-                disabled={getDisabledState(
-                  loading,
-                  contractOptions.length !== 1 || !formik.values.contract,
-                )}
-                size="compact"
-                fullwidth
-                onBlur={formik.handleBlur}
-                onChange={handleContractChange}
-              />
-            </Stack>
-          )}
-          <Stack>
-            <Textarea
-              label="Observaciones"
-              placeholder="Detalles a tener en cuenta."
-              name="observations"
-              id="observations"
-              value={formik.values.observations}
-              maxLength={1000}
-              disabled={loading}
-              status={getFieldState(formik, "observations")}
-              message={formik.errors.observations}
+            <Select
+              label="Contrato"
+              name="contract"
+              id="contract"
+              options={contractOptions}
+              placeholder="Selecciona de la lista"
+              value={formik.values.contract}
+              message={
+                typeof formik.errors.contract === "string"
+                  ? formik.errors.contract
+                  : undefined
+              }
+              disabled={getDisabledState(
+                loading,
+                contractOptions.length !== 1 || !formik.values.contract,
+              )}
+              size="compact"
               fullwidth
               onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
+              onChange={handleContractChange}
             />
-          </Stack>
+          )}
+
+          <Textarea
+            label="Observaciones"
+            placeholder="Detalles a tener en cuenta."
+            name="observations"
+            id="observations"
+            value={formik.values.observations}
+            maxLength={1000}
+            disabled={loading}
+            status={getFieldState(formik, "observations")}
+            message={
+              typeof formik.errors.observations === "string"
+                ? formik.errors.observations
+                : undefined
+            }
+            fullwidth
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+          />
         </StyledContainer>
+
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s200}>
             <Button
@@ -152,8 +158,11 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               Anterior
             </Button>
             <Button
-              onClick={handleNextStep}
+              type="submit"
               disabled={loading ?? !formik.isValid}
+              onClick={() => {
+                handleNextStep();
+              }}
             >
               Siguiente
             </Button>

@@ -8,7 +8,7 @@ import { validationRules } from "@validations/validationRules";
 
 import { generalInformationRequiredFields } from "./config/formConfig";
 import { GeneralInformationFormUI } from "./interface";
-import { IGeneralInformationEntry } from "./types";
+import { IVacationEnjoyedData } from "@ptypes/humanResourcesRequest.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -29,17 +29,17 @@ const createValidationSchema = () =>
 const validationSchema = createValidationSchema();
 
 interface GeneralInformationFormProps {
-  initialValues: IGeneralInformationEntry;
+  initialValues: IVacationEnjoyedData;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: IGeneralInformationEntry) => void;
+  onSubmit?: (values: IVacationEnjoyedData) => void;
 }
 
 const GeneralInformationForm = forwardRef<
-  FormikProps<IGeneralInformationEntry>,
+  FormikProps<IVacationEnjoyedData>,
   GeneralInformationFormProps
 >(
   (
@@ -54,7 +54,7 @@ const GeneralInformationForm = forwardRef<
     },
     ref,
   ) => {
-    const formik = useFormik({
+    const formik = useFormik<IVacationEnjoyedData>({
       initialValues,
       validationSchema,
       validateOnBlur: false,
@@ -62,8 +62,6 @@ const GeneralInformationForm = forwardRef<
     });
 
     useImperativeHandle(ref, () => formik);
-
-    GeneralInformationForm.displayName = "GeneralInformationForm";
 
     useEffect(() => {
       if (onFormValid) {
@@ -86,6 +84,8 @@ const GeneralInformationForm = forwardRef<
     );
   },
 );
+
+GeneralInformationForm.displayName = "GeneralInformationForm";
 
 export { GeneralInformationForm };
 export type { GeneralInformationFormProps };
