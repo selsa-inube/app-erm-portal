@@ -21,7 +21,7 @@ export const formatHumanResourceRequests = (
     if (isFinalized) {
       status = "completed";
     } else if (hasResponsible) {
-      status = "inProgress";
+      status = "supervisor_approval";
     } else {
       status = "pending";
     }

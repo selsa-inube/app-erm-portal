@@ -12,12 +12,12 @@ interface IRequest {
   requestDate: string;
   responsible: string;
   hasResponsible: boolean;
-  status: "pending" | "inProgress" | "completed";
+  status: "pending" | "supervisor_approval" | "completed";
 }
 
 interface IMockRequests {
   pending: IRequest[];
-  inProgress: IRequest[];
+  supervisor_approval: IRequest[];
   completed: IRequest[];
 }
 
@@ -37,7 +37,7 @@ interface RequestItem {
   status: string;
 }
 
-type Status = "pending" | "inProgress" | "completed";
+type Status = "pending" | "supervisor_approval" | "completed";
 
 export type {
   IRoute,

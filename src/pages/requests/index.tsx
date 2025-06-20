@@ -60,17 +60,17 @@ function Requests() {
   const boardSections = useMemo(() => {
     const statusMap: Record<Status, string> = {
       pending: "Por evaluar",
-      inProgress: "En progreso",
+      supervisor_approval: "En progreso",
       completed: "Terminada",
     };
 
     const backgroundMap: Record<Status, "gray" | "light"> = {
       pending: "gray",
-      inProgress: "light",
+      supervisor_approval: "light",
       completed: "gray",
     };
 
-    const statuses: Status[] = ["pending", "inProgress", "completed"];
+    const statuses: Status[] = ["pending", "supervisor_approval", "completed"];
 
     return statuses.map((status) => ({
       sectionTitle: statusMap[status],

@@ -16,6 +16,7 @@ export const useHumanResourceRequests = <T>(
   employeeId?: string,
 ) => {
   const [data, setData] = useState<T[]>([]);
+  const [rawData, setRawData] = useState<HumanResourceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [flagShown, setFlagShown] = useState(false);
@@ -45,11 +46,14 @@ export const useHumanResourceRequests = <T>(
         headers,
         typeRequest,
       );
-      setData(formatData(requests ?? []));
+      const requestsData = requests ?? [];
+      setRawData(requestsData);
+      setData(formatData(requestsData));
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
       setData([]);
+      setRawData([]);
       setFlagShown(true);
     } finally {
       setIsLoading(false);
@@ -60,5 +64,5 @@ export const useHumanResourceRequests = <T>(
     fetchData();
   }, [typeRequest, effectiveEmployeeId]);
 
-  return { data, isLoading, error, refetch: fetchData };
+  return { data, rawData, isLoading, error, refetch: fetchData };
 };
