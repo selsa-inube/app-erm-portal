@@ -1,3 +1,7 @@
+const IS_PRODUCTION: boolean = import.meta.env.PROD;
+const AUTH_REDIRECT_URI: string = import.meta.env
+  .VITE_AUTH0_REDIRECT_URI as string;
+
 const maxRetriesServices = 5;
 const fetchTimeoutServices = 3000;
 
@@ -22,7 +26,7 @@ const environment: Environment = {
   CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID as string,
   CLIENT_SECRET: import.meta.env.VITE_AUTH0_CLIENT_SECRET as string,
   AUTH0_DOMAIN: import.meta.env.VITE_AUTH0_DOMAIN as string,
-  REDIRECT_URI: import.meta.env.VITE_AUTH0_REDIRECT_URI as string,
+  REDIRECT_URI: IS_PRODUCTION ? AUTH_REDIRECT_URI : window.location.origin,
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IVITE_ISAAS_QUERY_PROCESS_SERVICE as string,
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: import.meta.env
