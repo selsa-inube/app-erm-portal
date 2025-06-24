@@ -18,12 +18,16 @@ export enum ETaskStatus {
   Executed = "Ejecutada",
 }
 
-export enum ERequestStatus {
-  Canceled = "Cancelado",
-  Closed = "Cerrado",
-  Finished = "Finalizado",
-  InProgress = "En progreso",
-  Rejected = "Rechazado",
+export enum HumanResourceRequestStatus {
+  closed = "Cerrada",
+  rejected = "Rechazada",
+  canceled = "Cancelada",
+  supervisor_approval = "Aprobación Jefe Inmediato",
+  HR_compliance_verification = "Verificación en Gestión Humana",
+  confirmation_of_vacation_taken = "Confirmación Disfrute de vacaciones",
+  successfully_processed = "Tramitada con Éxito",
+  certification_generation = "Generación de la certificación",
+  onboarding_in_progress = "Vinculación en Progreso",
 }
 
 export interface IUnifiedHumanResourceRequestData {
@@ -65,7 +69,7 @@ export interface HumanResourceRequest {
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;
   humanResourceRequestNumber: string;
-  humanResourceRequestStatus: ERequestStatus;
+  humanResourceRequestStatus: HumanResourceRequestStatus;
   humanResourceRequestTraceabilities: HumanResourceRequestTraceability[];
   humanResourceRequestType: ERequestType;
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
