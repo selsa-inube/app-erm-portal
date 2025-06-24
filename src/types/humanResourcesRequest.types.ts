@@ -26,39 +26,19 @@ export enum ERequestStatus {
   Rejected = "Rechazado",
 }
 
-export interface IGeneralInformationEntry {
-  id: string;
-  startDate: string;
-  contract: string;
-  observations: string;
+export interface IUnifiedHumanResourceRequestData {
   contractId: string;
   contractNumber: string;
   businessName: string;
   contractType: string;
   observationEmployee: string;
-  certification: string;
-  contractDesc: string;
+  daysToPay?: string;
+  disbursementDate?: string;
+  daysOff?: string;
+  startDateEnyoment?: string;
+  certificationType?: string;
+  addressee?: string;
 }
-
-export interface IVacationEnjoyedData extends IGeneralInformationEntry {
-  daysOff: string;
-  startDateEnyoment: string;
-}
-
-export interface IVacationPaymentData extends IGeneralInformationEntry {
-  daysToPay: string;
-  disbursementDate: string;
-}
-
-export interface ICertificationData extends IGeneralInformationEntry {
-  certificationType: string;
-  addressee: string;
-}
-
-export type HumanResourceRequestData =
-  | IVacationEnjoyedData
-  | IVacationPaymentData
-  | ICertificationData;
 
 export interface HumanResourceRequestTraceability {
   actionExecuted: string;
@@ -80,7 +60,7 @@ export interface TaskToManageHumanResourceRequest {
 
 export interface HumanResourceRequest {
   employeeId: string;
-  humanResourceRequestData: HumanResourceRequestData;
+  humanResourceRequestData: IUnifiedHumanResourceRequestData;
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;

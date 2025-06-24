@@ -5,32 +5,27 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
 import { ModalState } from "./types";
 
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<ICertificationData>({
-    id: "",
-    startDate: "",
-    contract: "",
-    observations: "",
-    contractId: "",
-    contractNumber: "",
-    businessName: "",
-    contractType: "",
-    observationEmployee: "",
-    certificationType: "",
-    addressee: "",
-    certification: "",
-    contractDesc: "",
-  });
+  const [formValues, setFormValues] =
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
+    });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const generalInformationRef = useRef<FormikProps<ICertificationData>>(null);
+  const generalInformationRef =
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -56,13 +51,16 @@ function useModalManagement() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
+
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
 
@@ -152,12 +150,7 @@ function NewCertification() {
   const breadcrumbs = {
     label: "Agregar solicitud",
     crumbs: [
-      {
-        path: "/",
-        label: "Inicio",
-        id: "/",
-        isActive: false,
-      },
+      { path: "/", label: "Inicio", id: "/", isActive: false },
       {
         path: "/certifications",
         label: isTablet ? "..." : "Certificaciones",
@@ -191,6 +184,7 @@ function NewCertification() {
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
       />
+
       {modalState.isSendModalVisible && (
         <SendRequestModal
           descriptionText="¿Realmente deseas enviar la solicitud de certificación?"

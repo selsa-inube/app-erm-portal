@@ -7,17 +7,17 @@ import { validationRules } from "@validations/validationRules";
 
 import { generalInformationRequiredFields } from "./config/formConfig";
 import { GeneralInformationFormUI } from "./interface";
-import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 const createValidationSchema = () =>
   object().shape({
     daysToPay: generalInformationRequiredFields.daysToPay
       ? validationRules.daysOff.required(validationMessages.required)
       : validationRules.daysOff,
-    contract: generalInformationRequiredFields.contract
+    contractId: generalInformationRequiredFields.contract
       ? string().required(validationMessages.required)
       : string(),
-    observations: generalInformationRequiredFields.observations
+    observationEmployee: generalInformationRequiredFields.observations
       ? validationRules.observations.required(validationMessages.required)
       : validationRules.observations,
   });
@@ -25,17 +25,17 @@ const createValidationSchema = () =>
 const validationSchema = createValidationSchema();
 
 interface GeneralInformationFormProps {
-  initialValues: IVacationPaymentData;
+  initialValues: IUnifiedHumanResourceRequestData;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: IVacationPaymentData) => void;
+  onSubmit?: (values: IUnifiedHumanResourceRequestData) => void;
 }
 
 const GeneralInformationForm = forwardRef<
-  FormikProps<IVacationPaymentData>,
+  FormikProps<IUnifiedHumanResourceRequestData>,
   GeneralInformationFormProps
 >(
   (
@@ -50,7 +50,7 @@ const GeneralInformationForm = forwardRef<
     },
     ref,
   ) => {
-    const formik = useFormik({
+    const formik = useFormik<IUnifiedHumanResourceRequestData>({
       initialValues,
       validationSchema,
       validateOnBlur: false,

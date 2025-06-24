@@ -12,28 +12,28 @@ import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
-import { IVacationPaymentData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IVacationPaymentData>({
-    id: "",
-    startDate: "",
-    contract: "",
-    observations: "",
-    contractId: "",
-    contractNumber: "",
-    businessName: "",
-    contractType: "",
-    observationEmployee: "",
-    certification: "",
-    contractDesc: "",
-    daysToPay: "",
-    disbursementDate: "",
-  });
+  const [formValues, setFormValues] =
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
+      daysToPay: "",
+      disbursementDate: "",
+      daysOff: "",
+      startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
+    });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
-  const generalInformationRef = useRef<FormikProps<IVacationPaymentData>>(null);
+  const generalInformationRef =
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

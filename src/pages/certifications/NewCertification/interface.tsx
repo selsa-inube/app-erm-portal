@@ -17,48 +17,64 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardStep } from "./forms/RequirementsForm";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
-import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
-
-interface NewCertificationUIProps {
+interface RequestEnjoymentUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<ICertificationData>>;
+  generalInformationRef: React.RefObject<
+    FormikProps<IUnifiedHumanResourceRequestData>
+  >;
   isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
-  initialGeneralInformationValues: ICertificationData;
 }
 
-function NewCertificationUI({
-  appName,
-  appRoute,
-  navigatePage,
-  steps,
-  currentStep,
-  generalInformationRef,
-  initialGeneralInformationValues,
-  isCurrentFormValid,
-  setCurrentStep,
-  setIsCurrentFormValid,
-  handleNextStep,
-  handlePreviousStep,
-  handleFinishAssisted,
-}: NewCertificationUIProps) {
+function NewCertificationUI(
+  props: RequestEnjoymentUIProps & {
+    initialGeneralInformationValues: IUnifiedHumanResourceRequestData;
+  },
+) {
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    steps,
+    currentStep,
+    generalInformationRef,
+    initialGeneralInformationValues,
+    isCurrentFormValid,
+    setCurrentStep,
+    setIsCurrentFormValid,
+    handleNextStep,
+    handlePreviousStep,
+    handleFinishAssisted,
+  } = props;
+
   const isTablet = useMediaQuery("(max-width: 1100px)");
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const generalInformationEntry: IGeneralInformationEntry = {
+    id: "",
+    certification: initialGeneralInformationValues.certificationType ?? "",
+    contract: initialGeneralInformationValues.contractId ?? "",
+    contractDesc: "",
+    observations: initialGeneralInformationValues.observationEmployee ?? "",
+    addressee: initialGeneralInformationValues.addressee ?? "",
+  };
 
   return (
     <>
@@ -92,38 +108,31 @@ function NewCertificationUI({
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
           />
-
           <Stack direction="column">
             <Stack direction="column" gap={spacing.s500}>
               {currentStep === 1 && (
                 <AlertCardStep handleNextStep={handleNextStep} />
               )}
-
               {currentStep === 2 && (
                 <GeneralInformationForm
-                  ref={
-                    generalInformationRef as React.Ref<
-                      FormikProps<ICertificationData>
-                    >
-                  }
+                  ref={generalInformationRef}
                   initialValues={initialGeneralInformationValues}
-                  withNextButton
+                  withNextButton={true}
                   onFormValid={setIsCurrentFormValid}
                   handleNextStep={handleNextStep}
                   handlePreviousStep={handlePreviousStep}
                 />
               )}
             </Stack>
-
             {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
                   personalInformation: {
                     isValid: isCurrentFormValid,
-                    values: initialGeneralInformationValues,
+                    values: generalInformationEntry,
                   },
                 }}
-                handleStepChange={setCurrentStep}
+                handleStepChange={(stepId) => setCurrentStep(stepId)}
                 handlePreviousStep={handlePreviousStep}
                 handleSubmit={handleFinishAssisted}
                 contractOptions={[]}

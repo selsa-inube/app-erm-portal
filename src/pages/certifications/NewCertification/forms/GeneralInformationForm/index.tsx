@@ -7,7 +7,7 @@ import { validationRules } from "@validations/validationRules";
 import { generalInformationRequiredFields } from "./config/formConfig";
 
 import { GeneralInformationFormUI } from "./interface";
-import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 const createValidationSchema = () =>
   object().shape({
@@ -24,17 +24,17 @@ const createValidationSchema = () =>
 const validationSchema = createValidationSchema();
 
 export interface GeneralInformationFormProps {
-  initialValues: ICertificationData;
+  initialValues: IUnifiedHumanResourceRequestData;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: ICertificationData) => void;
+  onSubmit?: (values: IUnifiedHumanResourceRequestData) => void;
 }
 
 const GeneralInformationForm = forwardRef<
-  FormikProps<ICertificationData>,
+  FormikProps<IUnifiedHumanResourceRequestData>,
   GeneralInformationFormProps
 >(
   (
@@ -49,7 +49,7 @@ const GeneralInformationForm = forwardRef<
     },
     ref,
   ) => {
-    const formik = useFormik<ICertificationData>({
+    const formik = useFormik<IUnifiedHumanResourceRequestData>({
       initialValues,
       validationSchema,
       validateOnBlur: false,
@@ -57,6 +57,7 @@ const GeneralInformationForm = forwardRef<
     });
 
     useImperativeHandle(ref, () => formik);
+
     useEffect(() => {
       if (onFormValid) {
         formik.validateForm().then((errors) => {

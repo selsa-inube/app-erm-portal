@@ -16,11 +16,11 @@ import { useAppContext } from "@context/AppContext";
 import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 import { contractTypeLabels } from "@mocks/contracts/enums";
 
-import { ICertificationData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { StyledContainer } from "./styles";
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<ICertificationData>;
+  formik: FormikProps<IUnifiedHumanResourceRequestData>;
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
@@ -45,7 +45,7 @@ const GeneralInformationFormUI = ({
     () =>
       (selectedEmployee.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
-        value: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
+        value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
     [selectedEmployee.employmentContracts],
@@ -53,18 +53,14 @@ const GeneralInformationFormUI = ({
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
-    formik.setFieldValue(
-      "contractDesc",
-      contractOptions.find((option) => option.value === value)?.label,
-    );
   };
 
   useEffect(() => {
-    if (contractOptions.length === 1 && !formik.values.contract) {
+    if (contractOptions.length === 1 && !formik.values.contractId) {
       const onlyOption = contractOptions[0];
-      handleContractChange("contract", onlyOption.value);
+      handleContractChange("contractId", onlyOption.value);
     }
-  }, [formik.values.contract]);
+  }, [formik.values.contractId]);
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
@@ -77,13 +73,13 @@ const GeneralInformationFormUI = ({
             gap={isMobile ? spacing.s200 : spacing.s300}
           >
             <Select
-              name="certification"
+              name="certificationType"
               size="compact"
               label="Tipo de certificación"
               fullwidth
               options={certificationOptions}
               placeholder="Selecciona de la lista"
-              value={formik.values.certification}
+              value={formik.values.certificationType ?? ""}
               onChange={(name, value) => {
                 void formik.setFieldValue(name, value);
               }}
@@ -107,19 +103,19 @@ const GeneralInformationFormUI = ({
           {contractOptions.length > 1 && (
             <Select
               label="Contrato"
-              name="contract"
-              id="contract"
+              name="contractId"
+              id="contractId"
               options={contractOptions}
               placeholder="Selecciona de la lista"
-              value={formik.values.contract}
+              value={formik.values.contractId}
               message={
-                typeof formik.errors.contract === "string"
-                  ? formik.errors.contract
+                typeof formik.errors.contractId === "string"
+                  ? formik.errors.contractId
                   : undefined
               }
               disabled={getDisabledState(
                 loading,
-                contractOptions.length !== 1 || !formik.values.contract,
+                contractOptions.length !== 1 || !formik.values.contractId,
               )}
               size="compact"
               fullwidth
@@ -131,15 +127,15 @@ const GeneralInformationFormUI = ({
           <Textarea
             label="Observaciones"
             placeholder="Detalles a tener en cuenta."
-            name="observations"
-            id="observations"
-            value={formik.values.observations}
+            name="observationEmployee"
+            id="observationEmployee"
+            value={formik.values.observationEmployee}
             maxLength={1000}
             disabled={loading}
-            status={getFieldState(formik, "observations")}
+            status={getFieldState(formik, "observationEmployee")}
             message={
-              typeof formik.errors.observations === "string"
-                ? formik.errors.observations
+              typeof formik.errors.observationEmployee === "string"
+                ? formik.errors.observationEmployee
                 : undefined
             }
             fullwidth

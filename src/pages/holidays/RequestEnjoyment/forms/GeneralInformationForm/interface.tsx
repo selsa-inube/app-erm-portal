@@ -17,13 +17,13 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { useDayOptions } from "@hooks/useDayOptions";
 import { contractTypeLabels } from "@mocks/contracts/enums";
-import { IVacationEnjoyedData } from "@ptypes/humanResourcesRequest.types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 
 import { StyledContainer, StyledDateContainer } from "./styles";
 import { monthAbbr, monthFull } from "./config/formConfig";
 
 interface GeneralInformationFormUIProps {
-  formik: FormikProps<IVacationEnjoyedData>;
+  formik: FormikProps<IUnifiedHumanResourceRequestData>;
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
@@ -62,7 +62,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     () =>
       (selectedEmployee.employmentContracts ?? []).map((c) => ({
         id: c.contractId,
-        value: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
+        value: c.contractId,
         label: `${c.businessName} - ${contractTypeLabels[c.contractType]}`,
       })),
     [selectedEmployee.employmentContracts],
@@ -79,7 +79,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   }, []);
 
   useEffect(() => {
-    const sd = formik.values.startDate;
+    const sd = formik.values.startDateEnyoment;
     if (sd) {
       const [d, mName, y] = sd.split("/");
       const mIdx = monthAbbr.indexOf(mName);
@@ -87,7 +87,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       setSelectedMonth(String(mIdx));
       setSelectedDay(d);
     }
-  }, [formik.values.startDate, setSelectedDay]);
+  }, [formik.values.startDateEnyoment, setSelectedDay]);
 
   useEffect(() => {
     if (!selectedYear) {
@@ -106,17 +106,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   useEffect(() => {
     if (selectedYear && selectedMonth && selectedDay) {
       const formatted = `${selectedDay}/${monthAbbr[parseInt(selectedMonth, 10)]}/${selectedYear}`;
-      formik.setFieldValue("startDate", formatted);
+      formik.setFieldValue("startDateEnyoment", formatted);
     } else {
-      formik.setFieldValue("startDate", "");
+      formik.setFieldValue("startDateEnyoment", "");
     }
   }, [selectedYear, selectedMonth, selectedDay]);
 
   useEffect(() => {
-    if (contractOptions.length === 1 && !formik.values.contract) {
+    if (contractOptions.length === 1 && !formik.values.contractId) {
       const opt = contractOptions[0];
-      formik.setFieldValue("contract", opt.value);
-      formik.setFieldValue("contractDesc", opt.label);
+      formik.setFieldValue("contractId", opt.value);
     }
   }, [contractOptions]);
 
@@ -161,7 +160,10 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     disabled={loading}
                     size="compact"
                     onChange={(_, v) => setSelectedYear(v)}
-                    required={isRequired(props.validationSchema, "startDate")}
+                    required={isRequired(
+                      props.validationSchema,
+                      "startDateEnyoment",
+                    )}
                   />
                   <Select
                     name="startDateMonth"
@@ -172,7 +174,10 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     disabled={!selectedYear || loading}
                     size="compact"
                     onChange={(_, v) => setSelectedMonth(v)}
-                    required={isRequired(props.validationSchema, "startDate")}
+                    required={isRequired(
+                      props.validationSchema,
+                      "startDateEnyoment",
+                    )}
                   />
                   <Select
                     name="startDateDay"
@@ -181,46 +186,51 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     options={dayOptions}
                     value={selectedDay}
                     disabled={!selectedMonth || !selectedYear || loading}
-                    message={formik.errors.startDate}
+                    message={formik.errors.startDateEnyoment}
                     size="compact"
                     onChange={(_, v) => setSelectedDay(v)}
-                    required={isRequired(props.validationSchema, "startDate")}
+                    required={isRequired(
+                      props.validationSchema,
+                      "startDateEnyoment",
+                    )}
                   />
                 </StyledDateContainer>
               </Stack>
             </Stack>
+
             {contractOptions.length > 1 && (
               <Select
                 label="Contrato"
-                name="contract"
+                name="contractId"
                 options={contractOptions}
                 placeholder="Selecciona de la lista"
-                value={formik.values.contract}
-                message={formik.errors.contract}
+                value={formik.values.contractId}
+                message={formik.errors.contractId}
                 disabled={loading}
                 size="compact"
                 fullwidth
                 onChange={(_, v) => {
-                  formik.setFieldValue("contract", v);
-                  const lbl =
-                    contractOptions.find((o) => o.value === v)?.label ?? "";
-                  formik.setFieldValue("contractDesc", lbl);
+                  formik.setFieldValue("contractId", v);
                 }}
-                required={isRequired(props.validationSchema, "contract")}
+                required={isRequired(props.validationSchema, "contractId")}
               />
             )}
+
             <Textarea
               label="Observaciones"
               placeholder="Detalles a tener en cuenta."
-              name="observations"
-              id="observations"
-              value={formik.values.observations}
+              name="observationEmployee"
+              id="observationEmployee"
+              value={formik.values.observationEmployee}
               maxLength={1000}
               disabled={loading}
-              status={getFieldState(formik, "observations")}
-              message={formik.errors.observations}
+              status={getFieldState(formik, "observationEmployee")}
+              message={formik.errors.observationEmployee}
               fullwidth
-              required={isRequired(props.validationSchema, "observations")}
+              required={isRequired(
+                props.validationSchema,
+                "observationEmployee",
+              )}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             />

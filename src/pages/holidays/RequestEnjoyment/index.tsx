@@ -7,7 +7,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import {
-  IVacationEnjoyedData,
+  IUnifiedHumanResourceRequestData,
   ERequestType,
 } from "@ptypes/humanResourcesRequest.types";
 
@@ -16,25 +16,24 @@ import { requestEnjoymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IVacationEnjoyedData>({
-    id: "",
-    daysOff: "",
-    startDateEnyoment: "",
-    startDate: "",
-    contractId: "",
-    contractNumber: "",
-    businessName: "",
-    contractType: "",
-    observationEmployee: "",
-    contract: "",
-    observations: "",
-    certification: "",
-    contractDesc: "",
-  });
+  const [formValues, setFormValues] =
+    useState<IUnifiedHumanResourceRequestData>({
+      contractId: "",
+      contractNumber: "",
+      businessName: "",
+      contractType: "",
+      observationEmployee: "",
+      daysOff: "",
+      disbursementDate: "",
+      startDateEnyoment: "",
+      certificationType: "",
+      addressee: "",
+    });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
-  const generalInformationRef = useRef<FormikProps<IVacationEnjoyedData>>(null);
+  const generalInformationRef =
+    useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -60,13 +59,16 @@ function useModalManagement() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
+
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
 
