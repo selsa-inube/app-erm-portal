@@ -58,7 +58,9 @@ export function useRequestSubmission(
       } else if (isVacationEnjoyedData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff,
-          startDateEnyoment: formatDate(formValues.startDateEnyoment ?? ""),
+          startDateEnyoment: formValues.startDateEnyoment
+            ? formatDate(formValues.startDateEnyoment)
+            : "",
           contractId: formValues.contractId,
           contractNumber: formValues.contractNumber,
           businessName: formValues.businessName,
@@ -84,7 +86,7 @@ export function useRequestSubmission(
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observationEmployee ?? "",
-        humanResourceRequestStatus: "InProgress",
+        humanResourceRequestStatus: "supervisor_approval",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,
         userNameInCharge,

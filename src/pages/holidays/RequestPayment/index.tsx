@@ -1,20 +1,22 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
 import { ModalState } from "./types";
 
-import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
-
 function useFormManagement() {
+  const { selectedEmployee } = useAppContext();
+
   const [formValues, setFormValues] =
     useState<IUnifiedHumanResourceRequestData>({
       contractId: "",
@@ -34,6 +36,20 @@ function useFormManagement() {
 
   const generalInformationRef =
     useRef<FormikProps<IUnifiedHumanResourceRequestData>>(null);
+
+  useEffect(() => {
+    const contrato = selectedEmployee?.employmentContracts?.[0];
+
+    if (contrato) {
+      setFormValues((prev) => ({
+        ...prev,
+        contractId: contrato.contractId ?? "",
+        contractNumber: contrato.contractNumber ?? "",
+        businessName: contrato.businessName ?? "",
+        contractType: contrato.contractType ?? "",
+      }));
+    }
+  }, [selectedEmployee]);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

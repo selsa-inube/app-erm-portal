@@ -191,12 +191,12 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataDeta = [
       { label: "Días de disfrute", value: dataDe.daysOff },
       { label: "Días hábiles a pagar", value: dataDe.daysToPay },
-      { label: "Fecha de inicio o pago", value: dataDe.startDate },
+      { label: "Fecha de inicio o pago", value: dataDe.startDateEnyoment },
       {
         label: "Contrato",
-        value: transformContractValue(dataDe.contract),
+        value: transformContractValue(dataDe.contractId, dataDe.businessName),
       },
-      { label: "Observaciones", value: dataDe.description },
+      { label: "Observaciones", value: dataDe.observationEmployee },
     ].filter(
       (item) =>
         item.value !== undefined &&
