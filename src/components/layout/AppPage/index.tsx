@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   Nav,
   Grid,
@@ -65,6 +65,7 @@ function AppPage(props: AppPageProps) {
   } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navConfig = useNavConfig(optionForCustomerPortal ?? []);
   const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
@@ -74,7 +75,7 @@ function AppPage(props: AppPageProps) {
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
 
-  const { vacationDays, loadingDays } = useEmployeeVacationDays(
+  const { vacationDays, loadingDays, refetch } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
   const totalDays =
@@ -113,6 +114,12 @@ function AppPage(props: AppPageProps) {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  useEffect(() => {
+    if (location.pathname.includes("/holidays")) {
+      refetch();
+    }
+  }, [location.pathname]);
 
   return (
     <StyledAppPage>
