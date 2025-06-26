@@ -86,7 +86,7 @@ export function useRequestSubmission(
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observationEmployee ?? "",
-        humanResourceRequestStatus: "InProgress",
+        humanResourceRequestStatus: "supervisor_approval",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,
         userNameInCharge,

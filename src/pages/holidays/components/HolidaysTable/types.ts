@@ -35,4 +35,5 @@ export interface HolidayTableDataDetails {
   contractId: string;
   observationEmployee: string;
   businessName: string;
+  contractType: string;
 }
