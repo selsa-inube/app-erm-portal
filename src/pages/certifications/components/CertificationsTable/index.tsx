@@ -244,7 +244,10 @@ function CertificationsTable({
       { label: "Destinatario", value: dataDe.addressee },
       {
         label: "Contrato",
-        value: transformContractValue(dataDe.contract),
+        value: transformContractValue(
+          dataDe.contract,
+          dataDe.businessName || "",
+        ),
       },
       { label: "Observaciones", value: dataDe.description },
     ];

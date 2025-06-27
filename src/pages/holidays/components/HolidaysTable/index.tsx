@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { transformContractValue } from "@utils/text";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -192,18 +192,26 @@ function HolidaysTable(props: HolidaysTableProps) {
       ?.value as unknown as HolidayTableDataDetails;
 
     const dataDeta = [
-      { label: "Días de disfrute", value: dataDe.daysOff },
-      { label: "Días hábiles a pagar", value: dataDe.daysToPay },
-      { label: "Fecha de inicio o pago", value: dataDe.startDate },
+      { label: "Días de disfrute", value: String(dataDe.daysOff ?? "") },
+      { label: "Días hábiles a pagar", value: String(dataDe.daysToPay ?? "") },
+      {
+        label: "Fecha de inicio o pago",
+        value: String(dataDe.startDateEnyoment ?? ""),
+      },
       {
         label: "Contrato",
-        value: transformContractValue(dataDe.contract),
+        value:
+          dataDe.businessName && dataDe.contractType
+            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType]}`
+            : "",
       },
-      { label: "Observaciones", value: dataDe.description },
+      {
+        label: "Observaciones",
+        value: String(dataDe.observationEmployee ?? ""),
+      },
     ].filter(
       (item) =>
-        item.value !== undefined &&
-        item.value !== null &&
+        item.value !== "" &&
         !(typeof item.value === "string" && item.value.trim() === ""),
     );
 
