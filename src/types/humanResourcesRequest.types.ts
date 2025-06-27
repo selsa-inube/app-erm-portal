@@ -18,7 +18,6 @@ export enum ETaskStatus {
   Executed = "Ejecutada",
 }
 
-// Estado específico para solicitudes de RRHH
 export enum HumanResourceRequestStatus {
   closed = "Cerrada",
   rejected = "Rechazada",
@@ -31,7 +30,6 @@ export enum HumanResourceRequestStatus {
   onboarding_in_progress = "Vinculación en Progreso",
 }
 
-// Estado general de una solicitud (puede ser usado en otros contextos)
 export enum ERequestStatus {
   Canceled = "Cancelado",
   Closed = "Cerrado",
