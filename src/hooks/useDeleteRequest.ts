@@ -51,5 +51,8 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     }
   };
 
-  return { isDeleting, handleDelete };
+  return {
+    isDeleting,
+    handleDelete,
+  };
 }

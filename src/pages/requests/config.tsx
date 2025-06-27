@@ -17,6 +17,10 @@ export const assignmentOptions: IOption[] = [
 
 export const statusOptions: IOption[] = [
   { id: "pending", label: "Por evaluar", value: "pending" },
-  { id: "inProgress", label: "En progreso", value: "inProgress" },
+  {
+    id: "supervisor_approval",
+    label: "En progreso",
+    value: "supervisor_approval",
+  },
   { id: "completed", label: "Terminada", value: "completed" },
 ];
