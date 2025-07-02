@@ -42,13 +42,11 @@ interface AppPageProps {
 
 const renderLogo = (imgUrl: string, clientName: string) => {
   return imgUrl ? (
-    <StyledContentImg to="/employees/select-employee">
+    <StyledContentImg to="/">
       <StyledLogo src={imgUrl} alt={clientName} />
     </StyledContentImg>
   ) : (
-    <StyledContentImg to="/employees/select-employee">
-      {clientName}
-    </StyledContentImg>
+    <StyledContentImg to="/">{clientName}</StyledContentImg>
   );
 };
 
