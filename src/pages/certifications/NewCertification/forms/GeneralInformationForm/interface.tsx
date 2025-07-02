@@ -51,6 +51,16 @@ const GeneralInformationFormUI = ({
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
+
+    const contrato = selectedEmployee.employmentContracts?.find(
+      (c) => c.contractId === value,
+    );
+
+    if (contrato) {
+      formik.setFieldValue("businessName", contrato.businessName);
+      formik.setFieldValue("contractType", contrato.contractType);
+      formik.setFieldValue("contractNumber", contrato.contractNumber);
+    }
   };
 
   useEffect(() => {
@@ -58,7 +68,7 @@ const GeneralInformationFormUI = ({
       const onlyOption = contractOptions[0];
       handleContractChange("contractId", onlyOption.value);
     }
-  }, [formik.values.contractId]);
+  }, [contractOptions, formik.values.contractId]);
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 

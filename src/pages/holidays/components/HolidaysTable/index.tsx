@@ -177,7 +177,6 @@ function HolidaysTable(props: HolidaysTableProps) {
     });
     setIsInfoModalOpen(true);
   };
-
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(
@@ -190,6 +189,9 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataSource = isMobile ? data : currentData;
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
+    const contractLabel = dataDe.contractType
+      ? contractTypeLabels[dataDe.contractType]
+      : "";
 
     const dataDeta = [
       { label: "Días de disfrute", value: String(dataDe.daysOff ?? "") },
@@ -201,8 +203,8 @@ function HolidaysTable(props: HolidaysTableProps) {
       {
         label: "Contrato",
         value:
-          dataDe.businessName && dataDe.contractType
-            ? `${dataDe.businessName} - ${contractTypeLabels[dataDe.contractType]}`
+          dataDe.businessName && contractLabel
+            ? `${dataDe.businessName} - ${contractLabel}`
             : "",
       },
       {

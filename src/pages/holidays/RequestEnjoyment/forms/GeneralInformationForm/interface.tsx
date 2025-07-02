@@ -116,6 +116,16 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     if (contractOptions.length === 1 && !formik.values.contractId) {
       const opt = contractOptions[0];
       formik.setFieldValue("contractId", opt.value);
+
+      const contrato = selectedEmployee.employmentContracts?.find(
+        (c) => c.contractId === opt.value,
+      );
+
+      if (contrato) {
+        formik.setFieldValue("businessName", contrato.businessName);
+        formik.setFieldValue("contractType", contrato.contractType);
+        formik.setFieldValue("contractNumber", contrato.contractNumber);
+      }
     }
   }, [contractOptions]);
 
@@ -211,6 +221,18 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 fullwidth
                 onChange={(_, v) => {
                   formik.setFieldValue("contractId", v);
+                  const contrato = selectedEmployee.employmentContracts?.find(
+                    (c) => c.contractId === v,
+                  );
+
+                  if (contrato) {
+                    formik.setFieldValue("businessName", contrato.businessName);
+                    formik.setFieldValue("contractType", contrato.contractType);
+                    formik.setFieldValue(
+                      "contractNumber",
+                      contrato.contractNumber,
+                    );
+                  }
                 }}
                 required={isRequired(props.validationSchema, "contractId")}
               />

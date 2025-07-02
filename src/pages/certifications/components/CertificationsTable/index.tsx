@@ -246,7 +246,10 @@ function CertificationsTable({
     const dataDeta = [
       {
         label: "Destinatario",
-        value: dataDe?.addressee?.trim() ? dataDe.addressee : "Sin información",
+        value:
+          typeof dataDe?.addressee === "string" && dataDe.addressee.trim()
+            ? dataDe.addressee.trim()
+            : "Sin información",
       },
       {
         label: "Contrato",
@@ -259,13 +262,18 @@ function CertificationsTable({
       },
       {
         label: "Observaciones",
-        value: dataDe.observationEmployee || "Sin observaciones",
+        value:
+          typeof dataDe?.observationEmployee === "string" &&
+          dataDe.observationEmployee.trim()
+            ? dataDe.observationEmployee.trim()
+            : "Sin observaciones",
       },
     ];
 
     setSelectedRecord(dataDeta);
     setIsModalOpen(true);
   };
+
   const renderCellContent = (
     headerKey: string,
     cellData?: {

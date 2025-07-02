@@ -146,10 +146,12 @@ function NewCertification() {
   };
 
   const handleFinishAssisted = () => {
+    updateFormValues(); // ✅ Asegura que los valores estén sincronizados antes de enviar
     openSendModal();
   };
 
   const handleConfirmSendModal = async () => {
+    updateFormValues(); // ✅ También asegura los valores antes de llamar a submit
     setShowErrorFlag(false);
     const isSuccess = await submitRequestHandler();
 
