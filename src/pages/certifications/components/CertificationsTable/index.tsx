@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { transformContractValue } from "@utils/text";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -240,21 +240,32 @@ function CertificationsTable({
 
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as CertificationsTableDataDetails;
+
+    console.log("📦 Data detalle recibida:", dataDe);
+
     const dataDeta = [
-      { label: "Destinatario", value: dataDe.addressee },
+      {
+        label: "Destinatario",
+        value: dataDe?.addressee?.trim() ? dataDe.addressee : "Sin información",
+      },
       {
         label: "Contrato",
-        value: transformContractValue(
-          dataDe.contract,
-          dataDe.businessName || "",
-        ),
+        value:
+          dataDe.businessName || dataDe.contractType
+            ? `${dataDe.businessName ?? ""} - ${
+                contractTypeLabels[dataDe.contractType] ?? ""
+              }`
+            : "Sin información",
       },
-      { label: "Observaciones", value: dataDe.description },
+      {
+        label: "Observaciones",
+        value: dataDe.observationEmployee || "Sin observaciones",
+      },
     ];
+
     setSelectedRecord(dataDeta);
     setIsModalOpen(true);
   };
-
   const renderCellContent = (
     headerKey: string,
     cellData?: {

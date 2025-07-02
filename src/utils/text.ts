@@ -21,6 +21,7 @@ const capitalizeText = (text: string) => {
 const transformContractValue = (
   contractId: string,
   businessName: string,
+  contractType: string,
 ): string => {
   if (!contractId) return `${contractId} - ${businessName}`;
 
@@ -33,7 +34,7 @@ const transformContractValue = (
     return `${label} (${contractId}) - ${businessName}`;
   }
 
-  return `${contractId} - ${businessName}`;
+  return `${contractId} - ${businessName} - ${contractType}`;
 };
 
 export { capitalizeText, transformContractValue };

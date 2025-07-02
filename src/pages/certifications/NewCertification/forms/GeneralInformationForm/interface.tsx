@@ -26,10 +26,7 @@ interface GeneralInformationFormUIProps {
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   validationSchema?: ObjectSchema<AnyObject>;
-}
-
-function getDisabledState(loading: boolean | undefined, isValid: boolean) {
-  return loading ? true : !isValid;
+  isFormValid?: boolean;
 }
 
 const GeneralInformationFormUI = ({
@@ -38,6 +35,7 @@ const GeneralInformationFormUI = ({
   withNextButton,
   handleNextStep,
   handlePreviousStep,
+  isFormValid,
 }: GeneralInformationFormUIProps) => {
   const { selectedEmployee } = useAppContext();
 
@@ -113,10 +111,10 @@ const GeneralInformationFormUI = ({
                   ? formik.errors.contractId
                   : undefined
               }
-              disabled={getDisabledState(
-                loading,
-                contractOptions.length !== 1 || !formik.values.contractId,
-              )}
+              disabled={
+                loading ??
+                (contractOptions.length !== 1 && !formik.values.contractId)
+              }
               size="compact"
               fullwidth
               onBlur={formik.handleBlur}
@@ -155,7 +153,7 @@ const GeneralInformationFormUI = ({
             </Button>
             <Button
               type="submit"
-              disabled={loading ?? !formik.isValid}
+              disabled={loading ?? !isFormValid}
               onClick={() => {
                 handleNextStep();
               }}
