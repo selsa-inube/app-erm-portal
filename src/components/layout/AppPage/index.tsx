@@ -23,6 +23,7 @@ import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 import {
   StyledAppPage,
@@ -40,13 +41,19 @@ interface AppPageProps {
   withBanner?: boolean;
 }
 
-const renderLogo = (imgUrl: string, clientName: string) => {
+const renderLogo = (
+  imgUrl: string,
+  clientName: string,
+  selectedEmployee: Employee,
+) => {
+  const redirectTo = selectedEmployee ? "/" : "/employees/select-employee";
+
   return imgUrl ? (
-    <StyledContentImg to="/">
+    <StyledContentImg to={redirectTo}>
       <StyledLogo src={imgUrl} alt={clientName} />
     </StyledContentImg>
   ) : (
-    <StyledContentImg to="/">{clientName}</StyledContentImg>
+    <StyledContentImg to={redirectTo}>{clientName}</StyledContentImg>
   );
 };
 
@@ -127,6 +134,7 @@ function AppPage(props: AppPageProps) {
           logoURL={renderLogo(
             selectedClient?.logo ?? logoUrl,
             selectedClient?.name ?? "Sin unidad seleccionada",
+            selectedEmployee,
           )}
           user={{
             username: user?.username ?? "Nombre de usuario",
