@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { spacing } from "@design/tokens/spacing";
-
 interface IStyledCollapseIcon {
   $collapse: boolean;
   $isTablet: boolean;
@@ -26,7 +24,6 @@ const StyledMain = styled.main`
   box-sizing: border-box;
   width: 100%;
   max-width: 1192px;
-  padding-bottom: ${spacing.s100};
 `;
 
 const StyledMainScroll = styled.main`
