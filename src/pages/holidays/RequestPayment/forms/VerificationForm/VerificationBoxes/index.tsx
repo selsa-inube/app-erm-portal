@@ -3,45 +3,64 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IFormsUpdateData } from "../../../types";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 
+interface IContract {
+  contractId: string;
+  businessName: string;
+  contractType: keyof typeof import("@mocks/contracts/enums").contractTypeLabels;
+}
+
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
   hasMultipleContracts: boolean,
-) => (
-  <>
-    <Grid
-      templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
-      autoRows="auto"
-      gap={spacing.s100}
-      width="100%"
-    >
-      <BoxAttribute
-        label="Días hábiles a pagar:"
-        value={values.daysToPay}
-        direction="column"
-      />
-      {hasMultipleContracts && (
+  contracts: IContract[] = [],
+) => {
+  const contractInfo = contracts.find((c) => c.contractId === values.contract);
+
+  const contractDisplay =
+    contractInfo?.contractId &&
+    contractInfo?.businessName &&
+    contractInfo?.contractType
+      ? `${contractInfo.contractId} - ${contractInfo.businessName} - ${contractTypeLabels[contractInfo.contractType]}`
+      : values.contract;
+
+  return (
+    <>
+      <Grid
+        templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
+        autoRows="auto"
+        gap={spacing.s100}
+        width="100%"
+      >
         <BoxAttribute
-          label="Contrato:"
-          value={values.contract}
+          label="Días hábiles a pagar:"
+          value={values.daysToPay}
           direction="column"
         />
-      )}
-    </Grid>
-    <Stack width="100%" direction="column">
-      <BoxAttribute
-        label="Observaciones:"
-        value={values.observations}
-        direction="column"
-      />
-    </Stack>
-  </>
-);
+        {hasMultipleContracts && (
+          <BoxAttribute
+            label="Contrato:"
+            value={contractDisplay}
+            direction="column"
+          />
+        )}
+      </Grid>
+      <Stack width="100%" direction="column">
+        <BoxAttribute
+          label="Observaciones:"
+          value={values.observations}
+          direction="column"
+        />
+      </Stack>
+    </>
+  );
+};
 
 const renderAlerts = (isTablet: boolean) => (
   <Grid
@@ -70,13 +89,14 @@ interface VerificationBoxesProps {
 
 function VerificationBoxes({
   updatedData,
-  isTablet,
   stepKey,
+  isTablet,
 }: VerificationBoxesProps) {
   const { selectedEmployee } = useAppContext();
 
-  const hasMultipleContracts =
-    (selectedEmployee.employmentContracts?.length ?? 0) > 1;
+  const contracts = selectedEmployee.employmentContracts as IContract[];
+  const hasMultipleContracts = (contracts?.length ?? 0) > 1;
+
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}
@@ -85,6 +105,7 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
           hasMultipleContracts,
+          contracts,
         )}
     </>
   );

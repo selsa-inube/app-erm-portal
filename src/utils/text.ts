@@ -18,21 +18,23 @@ const capitalizeText = (text: string) => {
   return text.charAt(0).toUpperCase() + textTowerCase.slice(1);
 };
 
-const transformContractValue = (contractValue: string): string => {
-  if (!contractValue) return contractValue;
+const transformContractValue = (
+  contractId: string,
+  businessName: string,
+  contractType: string,
+): string => {
+  if (!contractId) return `${contractId} - ${businessName}`;
 
   const contractTypeKey = Object.keys(contractTypeLabels).find((key) =>
-    contractValue.includes(key),
+    contractId.includes(key),
   );
 
   if (contractTypeKey) {
-    return contractValue.replace(
-      contractTypeKey,
-      contractTypeLabels[contractTypeKey],
-    );
+    const label = contractTypeLabels[contractTypeKey];
+    return `${label} (${contractId}) - ${businessName}`;
   }
 
-  return contractValue;
+  return `${contractId} - ${businessName} - ${contractType}`;
 };
 
 export { capitalizeText, transformContractValue };

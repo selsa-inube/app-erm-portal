@@ -5,47 +5,61 @@ import { spacing } from "@design/tokens/spacing";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
-import { IFormsUpdateData } from "../../../types";
+
+interface IContractOption {
+  id: string;
+  value: string;
+  label: string;
+}
 
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
-  contractOptions: { id: string; value: string; label: string }[],
-) => (
-  <>
-    <Grid
-      templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
-      autoRows="auto"
-      gap={spacing.s100}
-      width="100%"
-    >
-      <BoxAttribute
-        label="Tipo de solicitud:"
-        value={values.certification}
-        direction="column"
-      />
-      <BoxAttribute
-        label="Destinatario:"
-        value={values.addressee}
-        direction="column"
-      />
-      {contractOptions.length > 1 && (
+  contractOptions: IContractOption[],
+) => {
+  const selectedContract = contractOptions.find(
+    (contract) => contract.value === values.contract,
+  );
+
+  const contractLabel = selectedContract?.label ?? values.contract;
+
+  return (
+    <>
+      <Grid
+        templateColumns={`repeat(${isTablet ? 1 : 2}, 1fr)`}
+        autoRows="auto"
+        gap={spacing.s100}
+        width="100%"
+      >
         <BoxAttribute
-          label="Contrato:"
-          value={values.contract}
+          label="Tipo de solicitud:"
+          value={values.certification}
           direction="column"
         />
-      )}
-    </Grid>
-    <Stack width="100%" direction="column">
-      <BoxAttribute
-        label="Observaciones:"
-        value={values.observations}
-        direction="column"
-      />
-    </Stack>
-  </>
-);
+        <BoxAttribute
+          label="Destinatario:"
+          value={values.addressee}
+          direction="column"
+        />
+        {contractOptions.length > 1 && (
+          <BoxAttribute
+            label="Contrato:"
+            value={contractLabel}
+            direction="column"
+          />
+        )}
+      </Grid>
+
+      <Stack width="100%" direction="column">
+        <BoxAttribute
+          label="Observaciones:"
+          value={values.observations}
+          direction="column"
+        />
+      </Stack>
+    </>
+  );
+};
 
 const renderAlerts = (isTablet: boolean) => (
   <Grid
@@ -66,19 +80,23 @@ const renderAlerts = (isTablet: boolean) => (
   </Grid>
 );
 
-interface VerificationBoxesProps {
-  updatedData: IFormsUpdateData;
+interface VerificationBoxesProps<
+  T extends IGeneralInformationEntry = IGeneralInformationEntry,
+> {
+  updatedData: {
+    personalInformation: { isValid: boolean; values: T };
+  };
   stepKey: number;
   isTablet: boolean;
   contractOptions: { id: string; value: string; label: string }[];
 }
 
-function VerificationBoxes({
+function VerificationBoxes<T extends IGeneralInformationEntry>({
   updatedData,
   stepKey,
   isTablet,
   contractOptions,
-}: VerificationBoxesProps) {
+}: VerificationBoxesProps<T>) {
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}

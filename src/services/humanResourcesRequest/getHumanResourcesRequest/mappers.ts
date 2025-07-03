@@ -1,5 +1,5 @@
 import {
-  ERequestStatus,
+  HumanResourceRequestStatus,
   ERequestType,
   ETaskStatus,
   HumanResourceRequest,
@@ -16,7 +16,8 @@ const mapHumanResourceRequestApiToEntity = (
     item.humanResourceRequestDescription ?? "",
   ),
   humanResourceRequestDate: String(item.humanResourceRequestDate ?? ""),
-  humanResourceRequestStatus: item.humanResourceRequestStatus as ERequestStatus,
+  humanResourceRequestStatus:
+    item.humanResourceRequestStatus as HumanResourceRequestStatus,
   humanResourceRequestData:
     item.humanResourceRequestData ??
     ({} as HumanResourceRequest["humanResourceRequestData"]),
