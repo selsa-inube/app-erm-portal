@@ -173,7 +173,7 @@ function AppPage(props: AppPageProps) {
               <Stack width="100%">
                 {withBanner && (
                   <Stack
-                    padding={spacing.s075}
+                    padding={`${spacing.s0} ${spacing.s075}`}
                     width="100%"
                     justifyContent="center"
                     margin={
