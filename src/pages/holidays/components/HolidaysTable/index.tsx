@@ -177,6 +177,7 @@ function HolidaysTable(props: HolidaysTableProps) {
     });
     setIsInfoModalOpen(true);
   };
+
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(

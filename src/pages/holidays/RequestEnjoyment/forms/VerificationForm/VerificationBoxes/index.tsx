@@ -3,6 +3,7 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
+import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
@@ -45,7 +46,7 @@ const renderPersonalInfoVerification = (
         />
         <BoxAttribute
           label="Fecha de inicio:"
-          value={values.startDate}
+          value={formatDate(values.startDate)}
           direction="column"
         />
         {hasMultipleContracts && (
