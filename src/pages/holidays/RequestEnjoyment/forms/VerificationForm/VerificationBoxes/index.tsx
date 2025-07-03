@@ -3,11 +3,11 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
+import { contractTypeLabels } from "@mocks/contracts/enums";
 import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
-import { contractTypeLabels } from "@mocks/contracts/enums";
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 
 interface IContract {
