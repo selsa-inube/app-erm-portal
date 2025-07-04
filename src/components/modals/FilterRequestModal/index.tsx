@@ -208,7 +208,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 appearance="gray"
                 variant="outlined"
               >
-                Quitar
+                Cancelar
               </Button>
               <Button onClick={handleSubmit} loading={loading}>
                 Filtrar
