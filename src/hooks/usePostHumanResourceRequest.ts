@@ -9,6 +9,14 @@ import { useRequestNavigation } from "./useRequestNavigation";
 
 type FormValues = IUnifiedHumanResourceRequestData;
 
+function isVacationPaymentData(data: FormValues) {
+  return "daysToPay" in data;
+}
+
+function isVacationEnjoyedData(data: FormValues) {
+  return "daysOff" in data;
+}
+
 export function useRequestSubmission(
   formValues: FormValues,
   typeRequest: string,
@@ -43,7 +51,7 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (typeRequest === "VacationPayment") {
+      } else if (isVacationPaymentData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay ?? "",
           disbursementDate: "",
@@ -53,7 +61,7 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (typeRequest === "VacationEnjoyed") {
+      } else if (isVacationEnjoyedData(formValues)) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff ?? "",
           startDateEnyoment: formValues.startDateEnyoment
@@ -65,11 +73,6 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-
-        console.log(
-          "📤 Enviando VACATION ENJOYED:",
-          JSON.parse(humanResourceRequestData),
-        );
       } else {
         throw new Error("Tipo de solicitud no reconocido.");
       }
@@ -85,8 +88,6 @@ export function useRequestSubmission(
         userNameInCharge,
       };
 
-      console.log("📦 Payload final enviado:", requestBody);
-
       const { success, response } = await submitRequestToAPI(requestBody);
 
       if (success && response?.humanResourceRequestId) {
@@ -101,7 +102,7 @@ export function useRequestSubmission(
 
       return false;
     } catch (error) {
-      console.error("❌ Error en el envío de la solicitud:", error);
+      console.error("Error al enviar la solicitud:", error);
       return false;
     }
   };
