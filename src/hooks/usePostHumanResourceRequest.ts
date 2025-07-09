@@ -9,18 +9,6 @@ import { useRequestNavigation } from "./useRequestNavigation";
 
 type FormValues = IUnifiedHumanResourceRequestData;
 
-function isVacationPaymentData(data: FormValues) {
-  return "daysToPay" in data;
-}
-
-function isVacationEnjoyedData(data: FormValues) {
-  return "daysOff" in data;
-}
-
-function isCertificationData(data: FormValues) {
-  return "certificationType" in data && "addressee" in data;
-}
-
 export function useRequestSubmission(
   formValues: FormValues,
   typeRequest: string,
@@ -45,38 +33,43 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if (isVacationPaymentData(formValues)) {
+      if (typeRequest === "Certification") {
         humanResourceRequestData = JSON.stringify({
-          daysToPay: formValues.daysToPay,
-          disbursementDate: "",
-          contractId: formValues.contractId,
-          contractNumber: formValues.contractNumber,
-          businessName: formValues.businessName,
-          contractType: formValues.contractType,
-          observationEmployee: formValues.observationEmployee,
+          certificationType: formValues.certificationType ?? "",
+          addressee: formValues.addressee ?? "",
+          contractId: formValues.contractId ?? "",
+          contractNumber: formValues.contractNumber ?? "",
+          businessName: formValues.businessName ?? "",
+          contractType: formValues.contractType ?? "",
+          observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isVacationEnjoyedData(formValues)) {
+      } else if (typeRequest === "VacationPayment") {
         humanResourceRequestData = JSON.stringify({
-          daysOff: formValues.daysOff,
+          daysToPay: formValues.daysToPay ?? "",
+          disbursementDate: "",
+          contractId: formValues.contractId ?? "",
+          contractNumber: formValues.contractNumber ?? "",
+          businessName: formValues.businessName ?? "",
+          contractType: formValues.contractType ?? "",
+          observationEmployee: formValues.observationEmployee ?? "",
+        });
+      } else if (typeRequest === "VacationEnjoyed") {
+        humanResourceRequestData = JSON.stringify({
+          daysOff: formValues.daysOff ?? "",
           startDateEnyoment: formValues.startDateEnyoment
             ? formatDate(formValues.startDateEnyoment)
             : "",
-          contractId: formValues.contractId,
-          contractNumber: formValues.contractNumber,
-          businessName: formValues.businessName,
-          contractType: formValues.contractType,
-          observationEmployee: formValues.observationEmployee,
+          contractId: formValues.contractId ?? "",
+          contractNumber: formValues.contractNumber ?? "",
+          businessName: formValues.businessName ?? "",
+          contractType: formValues.contractType ?? "",
+          observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isCertificationData(formValues)) {
-        humanResourceRequestData = JSON.stringify({
-          certificationType: formValues.certificationType,
-          addressee: formValues.addressee,
-          contractId: formValues.contractId,
-          contractNumber: formValues.contractNumber,
-          businessName: formValues.businessName,
-          contractType: formValues.contractType,
-          observationEmployee: formValues.observationEmployee,
-        });
+
+        console.log(
+          "📤 Enviando VACATION ENJOYED:",
+          JSON.parse(humanResourceRequestData),
+        );
       } else {
         throw new Error("Tipo de solicitud no reconocido.");
       }
@@ -92,6 +85,8 @@ export function useRequestSubmission(
         userNameInCharge,
       };
 
+      console.log("📦 Payload final enviado:", requestBody);
+
       const { success, response } = await submitRequestToAPI(requestBody);
 
       if (success && response?.humanResourceRequestId) {
@@ -106,7 +101,7 @@ export function useRequestSubmission(
 
       return false;
     } catch (error) {
-      console.error("Error in request handler:", error);
+      console.error("❌ Error en el envío de la solicitud:", error);
       return false;
     }
   };
