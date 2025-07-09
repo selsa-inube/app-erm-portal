@@ -1,6 +1,8 @@
 import { Stack, Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
+import { contractTypeLabels } from "@mocks/contracts/enums";
+import { useAppContext } from "@context/AppContext";
 import { spacing } from "@design/tokens/spacing";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
@@ -12,16 +14,33 @@ interface IContractOption {
   label: string;
 }
 
+interface IContract {
+  contractId: string;
+  businessName: string;
+  contractType: keyof typeof contractTypeLabels;
+}
+
 const renderPersonalInfoVerification = (
   values: IGeneralInformationEntry,
   isTablet: boolean,
+  hasMultipleContracts: boolean,
   contractOptions: IContractOption[],
+  contracts: IContract[] = [],
 ) => {
   const selectedContract = contractOptions.find(
     (contract) => contract.value === values.contract,
   );
 
   const contractLabel = selectedContract?.label ?? values.contract;
+
+  const contractInfo = contracts.find((c) => c.contractId === values.contract);
+
+  const contractDisplay =
+    contractInfo?.contractId &&
+    contractInfo?.businessName &&
+    contractInfo?.contractType
+      ? `${contractInfo.contractId} - ${contractInfo.businessName} - ${contractTypeLabels[contractInfo.contractType]}`
+      : contractLabel;
 
   return (
     <>
@@ -41,10 +60,10 @@ const renderPersonalInfoVerification = (
           value={values.addressee}
           direction="column"
         />
-        {contractOptions.length > 1 && (
+        {hasMultipleContracts && (
           <BoxAttribute
             label="Contrato:"
-            value={contractLabel}
+            value={contractDisplay}
             direction="column"
           />
         )}
@@ -88,15 +107,20 @@ interface VerificationBoxesProps<
   };
   stepKey: number;
   isTablet: boolean;
-  contractOptions: { id: string; value: string; label: string }[];
+  contractOptions: IContractOption[];
 }
 
-function VerificationBoxes<T extends IGeneralInformationEntry>({
+function VerificationBoxes({
   updatedData,
   stepKey,
   isTablet,
   contractOptions,
-}: VerificationBoxesProps<T>) {
+}: VerificationBoxesProps) {
+  const { selectedEmployee } = useAppContext();
+
+  const contracts = selectedEmployee.employmentContracts as IContract[];
+  const hasMultipleContracts = (contracts?.length ?? 0) > 1;
+
   return (
     <>
       {stepKey === 1 && renderAlerts(isTablet)}
@@ -104,7 +128,9 @@ function VerificationBoxes<T extends IGeneralInformationEntry>({
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
+          hasMultipleContracts,
           contractOptions,
+          contracts,
         )}
     </>
   );
