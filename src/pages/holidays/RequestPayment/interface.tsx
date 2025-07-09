@@ -17,9 +17,10 @@ import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardStep } from "./forms/RequirementsForm";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
 interface RequestPaymentUIProps {
   appName: string;
@@ -27,8 +28,10 @@ interface RequestPaymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
-  initialGeneralInformationValues: IGeneralInformationEntry;
+  generalInformationRef: React.RefObject<
+    FormikProps<IUnifiedHumanResourceRequestData>
+  >;
+  initialGeneralInformationValues: IUnifiedHumanResourceRequestData;
   isCurrentFormValid: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,17 +58,18 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 1100px)");
-
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const generalInformationEntry: IGeneralInformationEntry = {
+    id: "",
+    contract: initialGeneralInformationValues.contractId ?? "",
+    contractDesc: initialGeneralInformationValues.contractType ?? "",
+    observations: initialGeneralInformationValues.observationEmployee ?? "",
+    daysToPay: String(initialGeneralInformationValues.daysToPay ?? ""),
   };
 
   return (
@@ -100,6 +104,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
               submitText: "Enviar",
             }}
           />
+
           <Stack direction="column">
             {currentStep === 1 && (
               <AlertCardStep handleNextStep={handleNextStep} />
@@ -119,7 +124,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
                 updatedData={{
                   personalInformation: {
                     isValid: isCurrentFormValid,
-                    values: initialGeneralInformationValues,
+                    values: generalInformationEntry,
                   },
                 }}
                 handleStepChange={(stepId) => setCurrentStep(stepId)}
@@ -130,6 +135,7 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
           </Stack>
         </Stack>
       </AppMenu>
+
       {isModalOpen && (
         <RequirementsModal
           title="Requisitos"

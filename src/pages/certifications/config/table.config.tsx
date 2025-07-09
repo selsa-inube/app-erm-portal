@@ -3,7 +3,7 @@ import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import { formatDate } from "@utils/date";
 import {
   ERequestType,
-  ERequestStatus,
+  HumanResourceRequestStatus,
   HumanResourceRequest,
 } from "@ptypes/humanResourcesRequest.types";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
@@ -28,8 +28,8 @@ export const formatHumanResourceData = (
       date: { value: formatDate(request.humanResourceRequestDate) },
       status: {
         value:
-          ERequestStatus[
-            request.humanResourceRequestStatus as unknown as keyof typeof ERequestStatus
+          HumanResourceRequestStatus[
+            request.humanResourceRequestStatus as unknown as keyof typeof HumanResourceRequestStatus
           ],
       },
       details: {

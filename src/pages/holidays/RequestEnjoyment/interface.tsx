@@ -6,15 +6,19 @@ import { MdRule } from "react-icons/md";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import {
+  ERequestType,
+  IUnifiedHumanResourceRequestData,
+} from "@ptypes/humanResourcesRequest.types";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 
 import { GeneralInformationForm } from "./forms/GeneralInformationForm";
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { VerificationForm } from "./forms/VerificationForm";
 import { AlertCardContainer } from "./forms/RequirementsForm";
+import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 
 interface RequestEnjoymentUIProps {
   appName: string;
@@ -22,7 +26,12 @@ interface RequestEnjoymentUIProps {
   navigatePage: string;
   steps: IAssistedStep[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<
+    FormikProps<IUnifiedHumanResourceRequestData>
+  >;
+  initialGeneralInformationValues: IUnifiedHumanResourceRequestData;
+  humanResourceRequestType: ERequestType;
+  humanResourceRequestDate: string;
   isCurrentFormValid: boolean;
   isTablet: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
@@ -47,11 +56,8 @@ function RequestEnjoymentUI({
   handleNextStep,
   handlePreviousStep,
   handleFinishAssisted,
-}: RequestEnjoymentUIProps & {
-  initialGeneralInformationValues: IGeneralInformationEntry;
-}) {
+}: RequestEnjoymentUIProps) {
   const shouldDisableNext = currentStep !== 1 && !isCurrentFormValid;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -60,6 +66,14 @@ function RequestEnjoymentUI({
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const generalInformationEntry: IGeneralInformationEntry = {
+    id: "",
+    startDate: initialGeneralInformationValues.startDateEnyoment ?? "",
+    contract: initialGeneralInformationValues.contractId ?? "",
+    observations: initialGeneralInformationValues.observationEmployee ?? "",
+    daysOff: String(initialGeneralInformationValues.daysOff ?? ""),
   };
 
   return (
@@ -94,10 +108,12 @@ function RequestEnjoymentUI({
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
           />
+
           <Stack direction="column">
             {currentStep === 1 && (
               <AlertCardContainer handleNextStep={handleNextStep} />
             )}
+
             {currentStep === 2 && (
               <GeneralInformationForm
                 ref={generalInformationRef}
@@ -108,12 +124,13 @@ function RequestEnjoymentUI({
                 handleNextStep={handleNextStep}
               />
             )}
+
             {currentStep === 3 && (
               <VerificationForm
                 updatedData={{
                   personalInformation: {
                     isValid: isCurrentFormValid,
-                    values: initialGeneralInformationValues,
+                    values: generalInformationEntry,
                   },
                 }}
                 handleStepChange={(stepId) => setCurrentStep(stepId)}
@@ -124,6 +141,7 @@ function RequestEnjoymentUI({
           </Stack>
         </Stack>
       </AppMenu>
+
       {isModalOpen && (
         <RequirementsModal
           title="Requisitos"
