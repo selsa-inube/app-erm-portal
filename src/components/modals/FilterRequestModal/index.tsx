@@ -204,11 +204,11 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
 
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
-                onClick={onClearFilters}
+                onClick={isMobile ? onClearFilters : onCloseModal}
                 appearance="gray"
                 variant="outlined"
               >
-                Quitar
+                {isMobile ? "Quitar" : "Cancelar"}
               </Button>
               <Button onClick={handleSubmit} loading={loading}>
                 Filtrar
