@@ -323,6 +323,7 @@ function RequestsUI(props: RequestsUIProps) {
           assignmentOptions={assignmentOptions}
           statusOptions={statusOptions}
           onCloseModal={closeFilterModal}
+          onClearFilters={() => setSelectedFilters([])}
           onSubmit={handleApplyFilters}
           selectedFilters={selectedFilters.map((filter) => ({
             ...filter,
