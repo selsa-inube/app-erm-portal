@@ -33,7 +33,6 @@ export interface FilterRequestModalProps {
   selectedFilters?: SelectedFilter[];
   onCloseModal?: () => void;
   onSubmit?: (values: object) => void;
-  onClearFilters?: () => void;
   onRemoveFilter?: (filterValue: string) => void;
 }
 
@@ -45,7 +44,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     selectedFilters = [],
     onCloseModal,
     onSubmit,
-    onClearFilters,
     onRemoveFilter,
   } = props;
 
@@ -204,7 +202,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
 
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
-                onClick={onClearFilters}
+                onClick={onCloseModal}
                 appearance="gray"
                 variant="outlined"
               >
