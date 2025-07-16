@@ -10,8 +10,8 @@ import selsaLogo from "@assets/images/selsa.png";
 import {
   IStaffPortalByBusinessManager,
   IOptionWithSubOptions,
+  IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
-import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
@@ -85,6 +85,7 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+
   const [optionForCustomerPortal, setOptionForCustomerPortal] = useState<
     IOptionWithSubOptions[] | null
   >(() => {
@@ -101,6 +102,7 @@ function AppProvider(props: AppProviderProps) {
     }
     return null;
   });
+
   useEffect(() => {
     if (optionForCustomerPortal) {
       localStorage.setItem(
@@ -167,7 +169,21 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
-  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>([]);
+  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>(() => {
+    const storedUseCasesData = localStorage.getItem("staffUseCasesData");
+    return storedUseCasesData ? JSON.parse(storedUseCasesData) : [];
+  });
+
+  useEffect(() => {
+    if (staffUseCasesData && staffUseCasesData.length > 0) {
+      localStorage.setItem(
+        "staffUseCasesData",
+        JSON.stringify(staffUseCasesData),
+      );
+    } else {
+      localStorage.removeItem("staffUseCasesData");
+    }
+  }, [staffUseCasesData]);
 
   return (
     <AppContext.Provider
