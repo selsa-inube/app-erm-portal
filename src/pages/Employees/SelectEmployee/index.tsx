@@ -8,9 +8,12 @@ import {
 } from "@inubekit/inubekit";
 import { Formik, FormikProps } from "formik";
 import { MdOutlineAdd, MdOutlineArrowForward } from "react-icons/md";
+import { useEffect } from "react";
 
 import { spacing } from "@design/tokens/spacing";
 import { SearchInput } from "@components/data/EmployeeSearchInput";
+import { useStaffUseCases } from "@hooks/useStaffUseCases";
+import { useAppContext } from "@context/AppContext";
 
 import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
 import { useSelectEmployee } from "./interface";
@@ -27,6 +30,21 @@ function SelectEmployeePage() {
     selectedEmployee,
     handleSubmit,
   } = useSelectEmployee();
+
+  const { businessManagers, selectedClient, setStaffUseCasesData } =
+    useAppContext();
+  const id = JSON.parse(
+    localStorage.getItem("staffUser") ?? "{}",
+  ).identificationDocumentNumber;
+
+  const publicCode = businessManagers?.publicCode ?? "";
+  const clientId = selectedClient?.id ?? "";
+
+  const { data } = useStaffUseCases(publicCode, clientId, id);
+
+  useEffect(() => {
+    setStaffUseCasesData(data as string[]);
+  }, [data, setStaffUseCasesData]);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 

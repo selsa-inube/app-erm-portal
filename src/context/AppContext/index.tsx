@@ -167,6 +167,22 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
+  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>(() => {
+    const storedUseCasesData = localStorage.getItem("staffUseCasesData");
+    return storedUseCasesData ? JSON.parse(storedUseCasesData) : null;
+  });
+
+  useEffect(() => {
+    if (staffUseCasesData) {
+      localStorage.setItem(
+        "staffUseCasesData",
+        JSON.stringify(staffUseCasesData),
+      );
+    } else {
+      localStorage.removeItem("staffUseCasesData");
+    }
+  }, [staffUseCasesData]);
+
   return (
     <AppContext.Provider
       value={{
@@ -195,6 +211,8 @@ function AppProvider(props: AppProviderProps) {
         setSelectedEmployee,
         optionForCustomerPortal,
         setOptionForCustomerPortal,
+        staffUseCasesData,
+        setStaffUseCasesData,
       }}
     >
       {children}

@@ -69,4 +69,6 @@ export interface IAppContextType {
   setOptionForCustomerPortal: React.Dispatch<
     React.SetStateAction<IOptionWithSubOptions[] | null>
   >;
+  staffUseCasesData: string[];
+  setStaffUseCasesData: React.Dispatch<React.SetStateAction<string[]>>;
 }
