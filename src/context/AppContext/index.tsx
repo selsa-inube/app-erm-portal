@@ -167,7 +167,21 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
-  const [staffUseCasesData, setStaffUseCasesData] = useState<object>({});
+  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>(() => {
+    const storedUseCasesData = localStorage.getItem("staffUseCasesData");
+    return storedUseCasesData ? JSON.parse(storedUseCasesData) : null;
+  });
+
+  useEffect(() => {
+    if (staffUseCasesData) {
+      localStorage.setItem(
+        "staffUseCasesData",
+        JSON.stringify(staffUseCasesData),
+      );
+    } else {
+      localStorage.removeItem("staffUseCasesData");
+    }
+  }, [staffUseCasesData]);
 
   return (
     <AppContext.Provider
