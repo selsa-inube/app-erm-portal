@@ -25,6 +25,7 @@ import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -44,8 +45,6 @@ function CertificationsTable({
   data,
   loading = false,
   disableDeleteAction = false,
-  hasViewDetailsPrivilege = false,
-  hasDeletePrivilege = false,
   handleDeleteRequest,
 }: CertificationsTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,6 +82,16 @@ function CertificationsTable({
   } = usePagination(data);
 
   const displayData = isMobile ? data : currentData;
+
+  const { staffUseCasesData } = useAppContext();
+
+  const hasViewDetailsPrivilege =
+    Array.isArray(staffUseCasesData) &&
+    staffUseCasesData.includes("CheckDetailsOfTheCertificateRequest");
+
+  const hasDeletePrivilege =
+    Array.isArray(staffUseCasesData) &&
+    staffUseCasesData.includes("DiscardCertificateRequest");
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -299,45 +308,56 @@ function CertificationsTable({
       (headerKey === "details" || headerKey === "delete")
     ) {
       if (headerKey === "details") {
+        const canView = hasViewDetailsPrivilege && rowIndex !== undefined;
+
         const iconProps: IIcon = {
           appearance: "dark",
           size: "16px",
           cursorHover: true,
-          onClick: () =>
-            rowIndex !== undefined && handleOpenDetailsModal(rowIndex),
+          onClick: canView
+            ? () => handleOpenDetailsModal(rowIndex)
+            : () =>
+                showInfoModal(
+                  "Acción inhabilitada",
+                  "No tienes permisos para ver los detalles de esta solicitud.",
+                ),
+
           icon: <MdOutlineVisibility />,
         };
+
         return (
           <TooltipWrapper>
             <Icon {...iconProps} />
-            <Tooltip
-              text={
-                hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
-              }
-            />
+            <Tooltip text={canView ? "Ver más detalles" : "Sin privilegios"} />
           </TooltipWrapper>
         );
       }
 
       if (headerKey === "delete") {
         const requestId = currentData[rowIndex!]?.requestId;
+        const canDelete =
+          hasDeletePrivilege && !disableDeleteAction && requestId;
 
         const iconProps: IIcon = {
           appearance: "danger",
           size: "16px",
-          onClick: () => requestId && handleOpenModal(requestId),
           cursorHover: true,
+          onClick: canDelete
+            ? () => handleOpenModal(requestId)
+            : () =>
+                showInfoModal(
+                  "Acción inhabilitada",
+                  "No tienes permisos para descartar esta solicitud.",
+                ),
+
           icon: <MdOutlineHighlightOff />,
         };
+
         return (
           <TooltipWrapper>
             <Icon {...iconProps} />
             <Tooltip
-              text={
-                !disableDeleteAction && hasDeletePrivilege
-                  ? "Descartar solicitud"
-                  : "Sin privilegios"
-              }
+              text={canDelete ? "Descartar solicitud" : "Sin privilegios"}
             />
           </TooltipWrapper>
         );

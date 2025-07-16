@@ -167,7 +167,7 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
-  const [staffUseCasesData, setStaffUseCasesData] = useState<object>({});
+  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>([]);
 
   return (
     <AppContext.Provider

@@ -43,7 +43,7 @@ function SelectEmployeePage() {
   const { data } = useStaffUseCases(publicCode, clientId, id);
 
   useEffect(() => {
-    setStaffUseCasesData(data);
+    setStaffUseCasesData(data as string[]);
   }, [data, setStaffUseCasesData]);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
