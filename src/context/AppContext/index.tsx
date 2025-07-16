@@ -167,6 +167,8 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
+  const [staffUseCasesData, setStaffUseCasesData] = useState<object>({});
+
   return (
     <AppContext.Provider
       value={{
@@ -195,6 +197,8 @@ function AppProvider(props: AppProviderProps) {
         setSelectedEmployee,
         optionForCustomerPortal,
         setOptionForCustomerPortal,
+        staffUseCasesData,
+        setStaffUseCasesData,
       }}
     >
       {children}
