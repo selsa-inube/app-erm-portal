@@ -14,6 +14,7 @@ import { spacing } from "@design/tokens/spacing";
 import { SearchInput } from "@components/data/EmployeeSearchInput";
 import { useStaffUseCases } from "@hooks/useStaffUseCases";
 import { useAppContext } from "@context/AppContext";
+import { IStaffUseCasesData } from "@context/AppContext/types";
 
 import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
 import { useSelectEmployee } from "./interface";
@@ -43,7 +44,13 @@ function SelectEmployeePage() {
   const { data } = useStaffUseCases(publicCode, clientId, id);
 
   useEffect(() => {
-    setStaffUseCasesData(data as string[]);
+    if (data && typeof data === "object" && "listOfUseCases" in data) {
+      setStaffUseCasesData(data as IStaffUseCasesData);
+    } else if (Array.isArray(data)) {
+      setStaffUseCasesData({ listOfUseCases: data as string[] });
+    } else {
+      setStaffUseCasesData(null);
+    }
   }, [data, setStaffUseCasesData]);
 
   const isMobile = useMediaQuery("(max-width: 768px)");
