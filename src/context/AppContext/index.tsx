@@ -6,16 +6,23 @@ import {
   ReactNode,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import selsaLogo from "@assets/images/selsa.png";
+
 import {
   IStaffPortalByBusinessManager,
   IOptionWithSubOptions,
-  IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
+import selsaLogo from "@assets/images/selsa.png";
+import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { IAppContextType, IPreferences, IClient } from "./types";
+
+import {
+  IAppContextType,
+  IPreferences,
+  IClient,
+  IStaffUseCasesData,
+} from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -40,7 +47,7 @@ function AppProvider(props: AppProviderProps) {
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: "angiepinillanova@gma",
+          id: "1234567890",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
         }
@@ -85,7 +92,6 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
-
   const [optionForCustomerPortal, setOptionForCustomerPortal] = useState<
     IOptionWithSubOptions[] | null
   >(() => {
@@ -102,7 +108,6 @@ function AppProvider(props: AppProviderProps) {
     }
     return null;
   });
-
   useEffect(() => {
     if (optionForCustomerPortal) {
       localStorage.setItem(
@@ -169,13 +174,14 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [selectedEmployee]);
 
-  const [staffUseCasesData, setStaffUseCasesData] = useState<string[]>(() => {
-    const storedUseCasesData = localStorage.getItem("staffUseCasesData");
-    return storedUseCasesData ? JSON.parse(storedUseCasesData) : [];
-  });
+  const [staffUseCasesData, setStaffUseCasesData] =
+    useState<IStaffUseCasesData | null>(() => {
+      const storedUseCasesData = localStorage.getItem("staffUseCasesData");
+      return storedUseCasesData ? JSON.parse(storedUseCasesData) : null;
+    });
 
   useEffect(() => {
-    if (staffUseCasesData && staffUseCasesData.length > 0) {
+    if (staffUseCasesData) {
       localStorage.setItem(
         "staffUseCasesData",
         JSON.stringify(staffUseCasesData),

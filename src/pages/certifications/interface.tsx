@@ -50,7 +50,8 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
   const { staffUseCasesData } = useAppContext();
 
   const hasRequestCertificatePrivilege =
-    staffUseCasesData?.includes("RequestCertificate") ?? false;
+    Array.isArray(staffUseCasesData) &&
+    staffUseCasesData.includes("RequestCertificate");
 
   const canRequestCertificate =
     hasActiveContract && hasRequestCertificatePrivilege;

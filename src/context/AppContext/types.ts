@@ -19,6 +19,10 @@ interface BusinessManager {
   customerId: string;
 }
 
+export interface IStaffUseCasesData {
+  listOfUseCases: string[];
+}
+
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -69,6 +73,6 @@ export interface IAppContextType {
   setOptionForCustomerPortal: React.Dispatch<
     React.SetStateAction<IOptionWithSubOptions[] | null>
   >;
-  staffUseCasesData: string[];
-  setStaffUseCasesData: React.Dispatch<React.SetStateAction<string[]>>;
+  staffUseCasesData: IStaffUseCasesData | null;
+  setStaffUseCasesData: (data: IStaffUseCasesData | null) => void;
 }
