@@ -86,12 +86,14 @@ function CertificationsTable({
   const { staffUseCasesData } = useAppContext();
 
   const hasViewDetailsPrivilege =
-    Array.isArray(staffUseCasesData) &&
-    staffUseCasesData.includes("CheckDetailsOfTheCertificateRequest");
+    Array.isArray(staffUseCasesData?.listOfUseCases) &&
+    staffUseCasesData.listOfUseCases.includes(
+      "CheckDetailsOfTheCertificateRequest",
+    );
 
   const hasDeletePrivilege =
-    Array.isArray(staffUseCasesData) &&
-    staffUseCasesData.includes("DiscardCertificateRequest");
+    Array.isArray(staffUseCasesData?.listOfUseCases) &&
+    staffUseCasesData.listOfUseCases.includes("DiscardCertificateRequest");
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
