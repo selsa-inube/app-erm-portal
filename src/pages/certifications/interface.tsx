@@ -81,15 +81,11 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
       <Detail
         disableEnjoyment={!canRequestCertificate}
         actionDescriptions={actionDescriptions}
-        onRequestEnjoyment={addRequest}
+        onRequestEnjoyment={canRequestCertificate ? addRequest : undefined}
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
-      <Stack
-        gap={spacing.s150}
-        justifyContent="end"
-        direction={isMobile ? "column" : "row"}
-      >
+      <Stack gap={spacing.s150} justifyContent="end" direction="row">
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
