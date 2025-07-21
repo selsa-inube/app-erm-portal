@@ -11,22 +11,29 @@ import { ModalType } from "./types";
 
 interface ContractsProps {
   hasPendingRequest?: boolean;
-  canCreateRequest?: boolean;
-  canTerminate?: boolean;
-  canRenew?: boolean;
-  canModify?: boolean;
 }
 
 function Contracts(props: ContractsProps) {
-  const {
-    hasPendingRequest = false,
-    canCreateRequest = false,
-    canTerminate = true,
-    canRenew = true,
-    canModify = true,
-  } = props;
+  const { hasPendingRequest = false } = props;
 
-  const { selectedEmployee } = useAppContext();
+  const { selectedEmployee, staffUseCasesData } = useAppContext();
+
+  const hasTerminatePrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("TerminateContract") ?? false;
+
+  const hasRenewPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("RenewContract") ?? false;
+
+  const hasModifyPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("ModifyContract") ?? false;
+
+  const hasAddEmployeeLinkPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("AddEmployeeLink") ?? false;
+
+  const hasDetailsPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("CheckContractDetails") ??
+    false;
+
   const { employee } = useEmployee(selectedEmployee.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
@@ -93,6 +100,11 @@ function Contracts(props: ContractsProps) {
   };
 
   const handleDetailsClick = (contract: ContractCardProps) => {
+    if (!hasDetailsPrivilege) {
+      openInfoModal("No tiene privilegios para ver los detalles del contrato.");
+      return;
+    }
+
     setSelectedContract(contract);
     openModal("detail");
   };
@@ -130,21 +142,23 @@ function Contracts(props: ContractsProps) {
   const getActionDescription = (action: string) => {
     switch (action) {
       case "terminate":
-        return !canTerminate
+        return !hasTerminatePrivilege
           ? "No tiene privilegios para terminar contratos."
           : "No hay contrato vigente para terminar.";
       case "renew":
-        return !canRenew
+        return !hasRenewPrivilege
           ? "No tiene privilegios para renovar contratos."
           : !hasFixedEndDate
             ? "No hay contrato a término fijo."
             : "No hay contrato vigente para renovar.";
       case "modify":
-        return !canModify
+        return !hasModifyPrivilege
           ? "No tiene privilegios para modificar contratos."
           : "No hay contrato vigente para modificar.";
       case "add":
-        return "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción.";
+        return !hasAddEmployeeLinkPrivilege
+          ? "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción."
+          : "No se puede agregar vinculación.";
       default:
         return assertNever(action);
     }
@@ -173,10 +187,10 @@ function Contracts(props: ContractsProps) {
       modifyOptions={modifyOptions}
       actionDescriptions={actionDescriptions}
       hasPendingRequest={hasPendingRequest}
-      canCreateRequest={canCreateRequest}
-      canTerminate={canTerminate}
-      canRenew={canRenew}
-      canModify={canModify}
+      canCreateRequest={hasAddEmployeeLinkPrivilege}
+      canTerminate={hasTerminatePrivilege}
+      canRenew={hasRenewPrivilege}
+      canModify={hasModifyPrivilege}
       onTerminate={handleTerminate}
       onRenew={handleRenew}
       onModify={handleModify}
