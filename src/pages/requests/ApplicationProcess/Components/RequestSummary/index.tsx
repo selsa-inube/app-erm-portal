@@ -14,14 +14,16 @@ import {
   MdOutlineCheckCircle,
   MdClose,
 } from "react-icons/md";
+import { useState } from "react";
 
 import { spacing } from "@design/tokens/spacing";
+import { InfoModal } from "@components/modals/InfoModal";
+import { useAppContext } from "@context/AppContext";
 
 import { Detail } from "../Detail";
 import { StyledRequestSummaryContainer } from "./styles";
 
 export interface RequestSummaryProps {
-  canDiscard?: boolean;
   canSeeRequirements?: boolean;
   isLoading?: boolean;
   staffName?: string;
@@ -34,7 +36,6 @@ export interface RequestSummaryProps {
 
 function RequestSummary(props: RequestSummaryProps) {
   const {
-    canDiscard = true,
     canSeeRequirements = true,
     isLoading = false,
     staffName = "",
@@ -44,7 +45,30 @@ function RequestSummary(props: RequestSummaryProps) {
     onSeeRequirements,
     onEditStaff,
   } = props;
+
+  const { staffUseCasesData } = useAppContext();
+
+  const canDiscard =
+    staffUseCasesData?.listOfUseCases?.includes("DiscardsRequestForLinkage") ??
+    false;
+
+  const [infoModal, setInfoModal] = useState<{
+    open: boolean;
+    title: string;
+    description: string;
+  }>({ open: false, title: "Información", description: "" });
+
   const isMobile = useMediaQuery("(max-width: 710px)");
+
+  const openInfoModal = (description: string) => {
+    setInfoModal({ open: true, title: "Información", description });
+  };
+
+  const actionDescriptions = {
+    Discard: "No tiene privilegios para descartar solicitudes.",
+    Requirements: "No tiene privilegios para ver requisitos.",
+  };
+
   return (
     <>
       {isMobile && (
@@ -106,9 +130,9 @@ function RequestSummary(props: RequestSummaryProps) {
                     appearance="primary"
                     size="16px"
                     cursorHover
-                    onClick={() => {
-                      /* no-op */
-                    }}
+                    onClick={() =>
+                      openInfoModal(actionDescriptions.Requirements)
+                    }
                   />
                 )}
               </Stack>
@@ -130,9 +154,7 @@ function RequestSummary(props: RequestSummaryProps) {
                     appearance="primary"
                     size="16px"
                     cursorHover
-                    onClick={() => {
-                      /* no-op */
-                    }}
+                    onClick={() => openInfoModal(actionDescriptions.Discard)}
                   />
                 )}
               </Stack>
@@ -159,6 +181,17 @@ function RequestSummary(props: RequestSummaryProps) {
           </Stack>
         </Stack>
       </StyledRequestSummaryContainer>
+
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
+        />
+      )}
     </>
   );
 }
