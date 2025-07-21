@@ -9,6 +9,7 @@ import { useDeleteValidation } from "@hooks/useDeleteValidation";
 import { InfoModal } from "@components/modals/InfoModal";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
+import { useAppContext } from "@context/AppContext";
 
 import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
@@ -19,6 +20,8 @@ function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const { staffUseCasesData } = useAppContext();
 
   const {
     data: enjoyedData,
@@ -41,8 +44,20 @@ function HolidaysOptions() {
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
 
   const hasActiveContract = true;
-  const hasEnjoymentPrivilege = true;
-  const hasPaymentPrivilege = true;
+
+  const hasEnjoymentPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("RequestToEnjoyVacationDays") ??
+    false;
+  const hasPaymentPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes(
+      "RequestPaymentForVacationDays",
+    ) ?? false;
+  const hasViewDetailsPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("VacationDetailsInProcess") ??
+    false;
+  const hasDeletePrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("DiscardVacationInProcess") ??
+    false;
 
   const { handleDelete } = useDeleteRequest((filterFn) => {
     setTableData((prev) => prev.filter(filterFn));
@@ -122,6 +137,8 @@ function HolidaysOptions() {
         isMobile={isMobile}
         hasEnjoymentPrivilege={hasEnjoymentPrivilege}
         hasPaymentPrivilege={hasPaymentPrivilege}
+        hasDeletePrivilege={hasDeletePrivilege}
+        hasViewDetailsPrivilege={hasViewDetailsPrivilege}
         handleDeleteRequest={handleDeleteRequest}
       />
       {validationModal.show && (

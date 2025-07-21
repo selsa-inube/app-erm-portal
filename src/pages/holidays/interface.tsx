@@ -31,6 +31,8 @@ interface HolidaysOptionsUIProps {
   hasEnjoymentPrivilege?: boolean;
   hasPaymentPrivilege?: boolean;
   actionDescriptions?: Record<string, string>;
+  hasViewDetailsPrivilege?: boolean;
+  hasDeletePrivilege?: boolean;
   handleDeleteRequest: (
     requestId: string,
     justification?: string,
@@ -55,6 +57,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       payment:
         "No se puede solicitar pago de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
     },
+    hasViewDetailsPrivilege = true,
+    hasDeletePrivilege = true,
     handleDeleteRequest,
   } = props;
 
@@ -239,8 +243,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 <HolidaysTable
                   data={tableData}
                   loading={isLoading}
-                  hasViewDetailsPrivilege
-                  hasDeletePrivilege
+                  hasViewDetailsPrivilege={hasViewDetailsPrivilege}
+                  hasDeletePrivilege={hasDeletePrivilege}
                   handleDeleteRequest={handleDeleteRequest}
                 />
               </StyledHolidaysContainer>
