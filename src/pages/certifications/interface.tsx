@@ -7,6 +7,7 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
+import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { Detail } from "./components/CertificationsTable/Detail";
 import { StyledCertificationsContainer } from "./styles";
@@ -38,14 +39,23 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     isLoading,
     appDescription,
     hasActiveContract = true,
-    hasPrivilege = true,
     actionDescriptions = {
-      application:
+      enjoyment:
         "No se puede solicitar la certificación, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
     },
     handleDeleteRequest,
   } = props;
+
   const navigate = useNavigate();
+  const { staffUseCasesData } = useAppContext();
+
+  const hasRequestCertificatePrivilege =
+    Array.isArray(staffUseCasesData?.listOfUseCases) &&
+    staffUseCasesData.listOfUseCases.includes("RequestCertificate");
+
+  const canRequestCertificate =
+    hasActiveContract && hasRequestCertificatePrivilege;
+
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
     title: string;
@@ -69,29 +79,25 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
   const renderActions = () =>
     isMobile ? (
       <Detail
-        disableEnjoyment={!hasPrivilege || !hasActiveContract}
+        disableEnjoyment={!canRequestCertificate}
         actionDescriptions={actionDescriptions}
-        onRequestEnjoyment={addRequest}
+        onRequestEnjoyment={canRequestCertificate ? addRequest : undefined}
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
-      <Stack
-        gap={spacing.s150}
-        justifyContent="end"
-        direction={isMobile ? "column" : "row"}
-      >
+      <Stack gap={spacing.s150} justifyContent="end" direction="row">
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
             variant="filled"
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
-            disabled={!hasActiveContract || !hasPrivilege}
-            onClick={hasActiveContract && hasPrivilege ? addRequest : undefined}
+            disabled={!canRequestCertificate}
+            onClick={canRequestCertificate ? addRequest : undefined}
           >
             Agregar solicitud
           </Button>
-          {(!hasActiveContract || !hasPrivilege) && (
+          {!canRequestCertificate && (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
