@@ -57,7 +57,6 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 message={formik.errors.names}
                 disabled={loading}
                 maxLength={40}
-                counter
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
@@ -74,7 +73,6 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 message={formik.errors.lastNames}
                 disabled={loading}
                 maxLength={40}
-                counter
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
