@@ -74,6 +74,7 @@ function RequestSummary(props: RequestSummaryProps) {
       {isMobile && (
         <Detail
           onDiscard={onDiscard}
+          onDiscardInfo={() => openInfoModal(actionDescriptions.Discard)}
           onSeeRequirements={onSeeRequirements}
           disableDiscard={!canDiscard}
           disableRequirements={!canSeeRequirements}

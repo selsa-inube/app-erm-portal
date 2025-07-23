@@ -9,12 +9,18 @@ interface DetailProps {
   disableRequirements?: boolean;
   disableDiscard?: boolean;
   onSeeRequirements?: () => void;
+  onDiscardInfo?: () => void;
   onDiscard?: () => void;
 }
 
 export function Detail(props: DetailProps) {
-  const { disableRequirements, disableDiscard, onSeeRequirements, onDiscard } =
-    props;
+  const {
+    disableRequirements,
+    disableDiscard,
+    onDiscardInfo,
+    onSeeRequirements,
+    onDiscard,
+  } = props;
   const isMobile = useMediaQuery("(max-width: 490px)");
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -33,6 +39,7 @@ export function Detail(props: DetailProps) {
             disableRequirementsAction={disableRequirements}
             disableDiscardAction={disableDiscard}
             onSeeRequirements={onSeeRequirements}
+            onDiscardInfo={onDiscardInfo}
             onDiscard={onDiscard}
             onClose={() => setModalOpen(false)}
           />
