@@ -13,24 +13,23 @@ interface ProtectedAppPageProps {
 
 function ProtectedAppPage(props: ProtectedAppPageProps) {
   const { withNav = true, withBanner = true } = props;
-  const {
-    selectedClient,
-    provisionedPortal,
-    optionForCustomerPortal,
-    setOptionForCustomerPortal,
-  } = useAppContext();
+  const { selectedClient, provisionedPortal, setOptionForCustomerPortal } =
+    useAppContext();
   const navigate = useNavigate();
 
   const publicCode = provisionedPortal.publicCode ?? "";
   const clientId = selectedClient?.id ?? "";
   const { optionData } = useOptionsMenu(publicCode, clientId);
-  setOptionForCustomerPortal(optionData);
-
+  useEffect(() => {
+    if (optionData) {
+      setOptionForCustomerPortal(optionData);
+    }
+  }, [optionData, setOptionForCustomerPortal]);
   useEffect(() => {
     if (!selectedClient) {
       navigate("/login", { replace: true });
     }
-  }, [selectedClient, navigate, optionForCustomerPortal]);
+  }, [selectedClient, navigate]);
 
   return <AppPage withNav={withNav} withBanner={withBanner} />;
 }
