@@ -7,7 +7,6 @@ const meta: Meta<typeof RequestSummary> = {
   title: "components/RequestSummary",
   component: RequestSummary,
   argTypes: {
-    canDiscard: { control: "boolean" },
     canSeeRequirements: { control: "boolean" },
     isLoading: { control: "boolean" },
     staffName: { control: "text" },

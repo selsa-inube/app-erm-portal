@@ -15,6 +15,7 @@ interface ActionModalProps {
   disableDiscardAction?: boolean;
   onSeeRequirements?: () => void;
   onDiscard?: () => void;
+  onDiscardInfo?: () => void;
   onClose?: () => void;
 }
 
@@ -24,6 +25,7 @@ export function ActionModal(props: ActionModalProps) {
     disableDiscardAction,
     onSeeRequirements,
     onDiscard,
+    onDiscardInfo,
     onClose,
   } = props;
 
@@ -80,9 +82,7 @@ export function ActionModal(props: ActionModalProps) {
                     appearance="primary"
                     size="16px"
                     cursorHover
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
+                    onClick={onDiscardInfo}
                   />
                 )}
               </StyledLi>
