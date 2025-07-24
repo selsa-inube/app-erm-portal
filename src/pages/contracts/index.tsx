@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { ContractCardProps } from "@components/cards/ContractCard";
 import { useAppContext } from "@context/AppContext";
@@ -17,6 +18,17 @@ function Contracts(props: ContractsProps) {
   const { hasPendingRequest = false } = props;
 
   const { selectedEmployee, staffUseCasesData } = useAppContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!selectedEmployee) {
+      navigate("/employees/select-employee", { replace: true });
+    }
+  }, [selectedEmployee, navigate]);
+
+  if (!selectedEmployee) {
+    return null;
+  }
 
   const hasTerminatePrivilege =
     staffUseCasesData?.listOfUseCases?.includes("TerminateContract") ?? false;
