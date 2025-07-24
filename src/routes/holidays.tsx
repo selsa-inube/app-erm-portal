@@ -1,6 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { HolidaysOptions } from "@pages/holidays";
 import { RequestEnjoyment } from "@pages/holidays/RequestEnjoyment";
@@ -15,7 +14,7 @@ function HolidaysRoutes() {
 
   useEffect(() => {
     if (!selectedEmployee) {
-      navigate("/login", { replace: true });
+      navigate("/employees/select-employee", { replace: true });
     }
   }, [selectedEmployee, navigate]);
 

@@ -1,5 +1,4 @@
-import { useState, useMemo } from "react";
-import { useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ContractCardProps } from "@components/cards/ContractCard";
@@ -23,7 +22,7 @@ function Contracts(props: ContractsProps) {
 
   useEffect(() => {
     if (!selectedEmployee) {
-      navigate("/login", { replace: true });
+      navigate("/employees/select-employee", { replace: true });
     }
   }, [selectedEmployee, navigate]);
 

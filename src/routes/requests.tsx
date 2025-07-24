@@ -1,6 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { Requests } from "@pages/requests";
 import { ApplicationProcess } from "@pages/requests/ApplicationProcess";
@@ -13,7 +12,7 @@ function RequestsRoutes() {
 
   useEffect(() => {
     if (!selectedEmployee) {
-      navigate("/login", { replace: true });
+      navigate("/employees/select-employee", { replace: true });
     }
   }, [selectedEmployee, navigate]);
 
