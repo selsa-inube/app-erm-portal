@@ -3,6 +3,7 @@ import { useCallback, useEffect } from "react";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { IClient } from "@context/AppContext/types";
+import { useSignOut } from "@hooks/useSignOut";
 
 import { SelectBusinessUnitUI } from "./interface";
 
@@ -10,6 +11,8 @@ function SelectBusinessUnit() {
   const { user, businessUnits, businessUnitsIsFetching, handleClientChange } =
     useAppContext();
   const navigate = useNavigate();
+
+  const { signOut } = useSignOut();
 
   const checkCredentials = useCallback(() => {
     try {
@@ -19,7 +22,7 @@ function SelectBusinessUnit() {
       }
 
       if (!businessUnits || businessUnits.length === 0) {
-        navigate("/login/error/not-related-clients");
+        signOut("/error?code=1003");
       } else if (businessUnits.length === 1) {
         const singleBusinessUnit = businessUnits[0];
         const selectedClient: IClient = {
