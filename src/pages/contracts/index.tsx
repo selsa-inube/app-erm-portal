@@ -4,6 +4,7 @@ import { ContractCardProps } from "@components/cards/ContractCard";
 import { useAppContext } from "@context/AppContext";
 import { useEmployee } from "@hooks/useEmployee";
 import { transformEmploymentContractsToContractCards } from "@mocks/contracts/contracts.mock";
+import { useRedirectIfNoEmployee } from "@hooks/useRedirectIfNoEmployee";
 
 import { ContractsNavConfig } from "./config/nav.config";
 import { ContractsUI } from "./interface";
@@ -16,7 +17,10 @@ interface ContractsProps {
 function Contracts(props: ContractsProps) {
   const { hasPendingRequest = false } = props;
 
-  const { selectedEmployee, staffUseCasesData } = useAppContext();
+  const { staffUseCasesData } = useAppContext();
+  const selectedEmployee = useRedirectIfNoEmployee();
+
+  if (!selectedEmployee) return null;
 
   const hasTerminatePrivilege =
     staffUseCasesData?.listOfUseCases?.includes("TerminateContract") ?? false;

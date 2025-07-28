@@ -3,8 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import { Requests } from "@pages/requests";
 import { ApplicationProcess } from "@pages/requests/ApplicationProcess";
 import { ErrorPage } from "@components/layout/ErrorPage";
+import { useRedirectIfNoEmployee } from "@hooks/useRedirectIfNoEmployee";
 
 function RequestsRoutes() {
+  const selectedEmployee = useRedirectIfNoEmployee();
+
+  if (!selectedEmployee) return null;
+
   return (
     <Routes>
       <Route path="/" element={<Requests />} />
