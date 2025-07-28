@@ -1,25 +1,15 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import { CertificationsOptions } from "@pages/certifications";
 import { NewCertification } from "@pages/certifications/NewCertification";
-import { useAppContext } from "@context/AppContext";
+import { useRedirectIfNoEmployee } from "@hooks/useRedirectIfNoEmployee";
 
 import { PrivilegedRoute } from "./privilegedRoute";
 
 function CertificationsRoutes() {
-  const { selectedEmployee } = useAppContext();
-  const navigate = useNavigate();
+  const selectedEmployee = useRedirectIfNoEmployee();
 
-  useEffect(() => {
-    if (!selectedEmployee) {
-      navigate("/employees/select-employee", { replace: true });
-    }
-  }, [selectedEmployee, navigate]);
-
-  if (!selectedEmployee) {
-    return null;
-  }
+  if (!selectedEmployee) return null;
   return (
     <Routes>
       <Route path="/" element={<CertificationsOptions />} />

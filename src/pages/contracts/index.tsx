@@ -1,10 +1,10 @@
-import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 
 import { ContractCardProps } from "@components/cards/ContractCard";
 import { useAppContext } from "@context/AppContext";
 import { useEmployee } from "@hooks/useEmployee";
 import { transformEmploymentContractsToContractCards } from "@mocks/contracts/contracts.mock";
+import { useRedirectIfNoEmployee } from "@hooks/useRedirectIfNoEmployee";
 
 import { ContractsNavConfig } from "./config/nav.config";
 import { ContractsUI } from "./interface";
@@ -17,18 +17,10 @@ interface ContractsProps {
 function Contracts(props: ContractsProps) {
   const { hasPendingRequest = false } = props;
 
-  const { selectedEmployee, staffUseCasesData } = useAppContext();
-  const navigate = useNavigate();
+  const { staffUseCasesData } = useAppContext();
+  const selectedEmployee = useRedirectIfNoEmployee();
 
-  useEffect(() => {
-    if (!selectedEmployee) {
-      navigate("/employees/select-employee", { replace: true });
-    }
-  }, [selectedEmployee, navigate]);
-
-  if (!selectedEmployee) {
-    return null;
-  }
+  if (!selectedEmployee) return null;
 
   const hasTerminatePrivilege =
     staffUseCasesData?.listOfUseCases?.includes("TerminateContract") ?? false;

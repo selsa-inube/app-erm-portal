@@ -1,24 +1,14 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import { Requests } from "@pages/requests";
 import { ApplicationProcess } from "@pages/requests/ApplicationProcess";
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { useAppContext } from "@context/AppContext";
+import { useRedirectIfNoEmployee } from "@hooks/useRedirectIfNoEmployee";
 
 function RequestsRoutes() {
-  const { selectedEmployee } = useAppContext();
-  const navigate = useNavigate();
+  const selectedEmployee = useRedirectIfNoEmployee();
 
-  useEffect(() => {
-    if (!selectedEmployee) {
-      navigate("/employees/select-employee", { replace: true });
-    }
-  }, [selectedEmployee, navigate]);
-
-  if (!selectedEmployee) {
-    return null;
-  }
+  if (!selectedEmployee) return null;
 
   return (
     <Routes>
