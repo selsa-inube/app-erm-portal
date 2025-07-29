@@ -127,6 +127,8 @@ function AppPage(props: AppPageProps) {
     }
   }, [location.pathname]);
 
+  const showBusinessUnitSelector = businessUnits.length > 1;
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -145,20 +147,22 @@ function AppPage(props: AppPageProps) {
           menu={userMenu}
         />
 
-        <StyledCollapseIcon
-          $collapse={collapse}
-          ref={collapseMenuRef}
-          $isTablet={isTablet}
-          onClick={() => setCollapse(!collapse)}
-        >
-          <Icon
-            icon={<MdOutlineChevronRight />}
-            appearance="primary"
-            size="24px"
-            cursorHover
-          />
-        </StyledCollapseIcon>
-        {collapse && (
+        {showBusinessUnitSelector && (
+          <StyledCollapseIcon
+            $collapse={collapse}
+            ref={collapseMenuRef}
+            $isTablet={isTablet}
+            onClick={() => setCollapse(!collapse)}
+          >
+            <Icon
+              icon={<MdOutlineChevronRight />}
+              appearance="primary"
+              size="24px"
+              cursorHover
+            />
+          </StyledCollapseIcon>
+        )}
+        {collapse && showBusinessUnitSelector && (
           <StyledCollapse ref={businessUnitChangeRef}>
             <BusinessUnitChange
               businessUnits={businessUnits}
