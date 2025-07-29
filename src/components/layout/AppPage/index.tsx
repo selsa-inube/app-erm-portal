@@ -39,6 +39,7 @@ import {
 interface AppPageProps {
   withNav?: boolean;
   withBanner?: boolean;
+  fullWidth?: boolean;
 }
 
 const renderLogo = (
@@ -58,7 +59,7 @@ const renderLogo = (
 };
 
 function AppPage(props: AppPageProps) {
-  const { withNav = true, withBanner = true } = props;
+  const { withNav = true, withBanner = true, fullWidth = false } = props;
   const {
     user,
     logoUrl,
@@ -230,7 +231,7 @@ function AppPage(props: AppPageProps) {
                   </Stack>
                 )}
               </Stack>
-              <StyledMain>
+              <StyledMain $fullWidth={fullWidth}>
                 <Outlet />
               </StyledMain>
             </StyledMainScroll>

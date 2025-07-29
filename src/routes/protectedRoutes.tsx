@@ -16,6 +16,7 @@ import { ProtectedAppPage } from "src/ProtectedAppPage";
 import { HolidaysRoutes } from "./holidays";
 import { CertificationsRoutes } from "./certifications";
 import { EmployeesRoutes } from "./employees";
+import { ApprovalsRoutes } from "./approvals";
 
 export const protectedRouter = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +39,14 @@ export const protectedRouter = createBrowserRouter(
         element={<ProtectedAppPage withNav={false} withBanner={false} />}
       >
         <Route path="*" element={<EmployeesRoutes />} />
+      </Route>
+      <Route
+        path="/approvals/*"
+        element={
+          <ProtectedAppPage withNav={false} withBanner={false} fullWidth />
+        }
+      >
+        <Route path="*" element={<ApprovalsRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
       <Route path="*" element={<ProtectedAppPage />} />
