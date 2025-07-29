@@ -29,6 +29,7 @@ import { ProtectedAppPage } from "./ProtectedAppPage";
 import { Contracts } from "./pages/contracts";
 import { RequestsRoutes } from "./routes/requests";
 import { LoadingAppUI } from "./pages/login/outlets/LoadingApp/interface";
+import { ApprovalsRoutes } from "./routes/approvals";
 
 function LogOut() {
   localStorage.clear();
@@ -99,6 +100,14 @@ const router = createBrowserRouter(
         element={<ProtectedAppPage withNav={false} withBanner={false} />}
       >
         <Route path="*" element={<EmployeesRoutes />} />
+      </Route>
+      <Route
+        path="/approvals/*"
+        element={
+          <ProtectedAppPage withNav={false} withBanner={false} fullWidth />
+        }
+      >
+        <Route path="*" element={<ApprovalsRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
       <Route path="*" element={<ProtectedAppPage />} />

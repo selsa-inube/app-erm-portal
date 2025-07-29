@@ -6,6 +6,10 @@ interface IStyledCollapseIcon {
   $isTablet: boolean;
 }
 
+interface IStyledMain {
+  $fullWidth: boolean;
+}
+
 const StyledAppPage = styled.div`
   display: inherit;
   box-sizing: border-box;
@@ -20,10 +24,10 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledMain = styled.main`
+const StyledMain = styled.main<IStyledMain>`
   box-sizing: border-box;
   width: 100%;
-  max-width: 1192px;
+  max-width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "1192px")};
 `;
 
 const StyledMainScroll = styled.main`
@@ -33,6 +37,7 @@ const StyledMainScroll = styled.main`
   overflow-y: auto;
   width: 100%;
 `;
+
 const StyledContentImg = styled(Link)`
   width: 100px;
   text-decoration: none;
