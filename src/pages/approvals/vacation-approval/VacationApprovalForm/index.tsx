@@ -1,5 +1,6 @@
 import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
 
 import { VacationApprovalFormUI } from "./interface";
 
@@ -27,6 +28,9 @@ const approvalOptions: ApprovalOption[] = [
 ];
 
 function VacationApprovalForm(): JSX.Element {
+  const [showModal, setShowModal] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+
   const formik: FormikProps<FormValues> = useFormik<FormValues>({
     initialValues: {
       approval: "",
@@ -35,6 +39,11 @@ function VacationApprovalForm(): JSX.Element {
     validationSchema,
     onSubmit: (values) => {
       console.log("Formulario enviado:", values);
+
+      const approved = values.approval === "approve";
+      setIsApproved(approved);
+
+      setShowModal(true);
     },
   });
 
@@ -43,11 +52,18 @@ function VacationApprovalForm(): JSX.Element {
     formik.handleSubmit();
   };
 
+  const handleCloseModal = (): void => {
+    setShowModal(false);
+  };
+
   return (
     <VacationApprovalFormUI
       formik={formik}
       approvalOptions={approvalOptions}
+      showModal={showModal}
+      isApproved={isApproved}
       onSubmit={handleSubmit}
+      onCloseModal={handleCloseModal}
     />
   );
 }
