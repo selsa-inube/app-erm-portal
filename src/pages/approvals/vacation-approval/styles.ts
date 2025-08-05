@@ -12,9 +12,6 @@ interface IStyledFooter {
   theme: typeof inube;
 }
 
-interface IStyledStaffInfoContainer {
-  theme: typeof inube;
-}
 const StyledVacationsApproval = styled.div<IStyledVacationsApproval>`
   display: flex;
   flex-direction: column;
@@ -43,18 +40,4 @@ const StyledFooter = styled.footer<IStyledFooter>`
   }
 `;
 
-const StyledStaffInfoContainer = styled.div<IStyledStaffInfoContainer>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  border-radius: 8px;
-  height: 20px;
-  padding: ${spacing.s100};
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  outline: 1px solid
-    ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
-`;
-
-export { StyledVacationsApproval, StyledFooter, StyledStaffInfoContainer };
+export { StyledVacationsApproval, StyledFooter };

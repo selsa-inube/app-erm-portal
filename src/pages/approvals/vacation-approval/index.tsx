@@ -1,22 +1,25 @@
 import { Text } from "@inubekit/inubekit";
 
-import {
-  StyledVacationsApproval,
-  StyledFooter,
-  StyledStaffInfoContainer,
-} from "./styles";
+import { StyledVacationsApproval, StyledFooter } from "./styles";
 import { VacationApprovalForm } from "./VacationApprovalForm";
+import { VacationType } from "./VacationApprovalForm/types";
 
-function VacationApproval() {
+interface VacationApprovalProps {
+  vacationType?: VacationType;
+  requestId?: string;
+}
+
+function VacationApproval({
+  vacationType = "payment",
+  requestId = "898433",
+}: VacationApprovalProps) {
   return (
     <>
       <StyledVacationsApproval>
-        <StyledStaffInfoContainer>
-          <Text type="label">
-            Hola, <b>Pedro Pablo Iregui Guerrero</b> - CC 1111111
-          </Text>
-        </StyledStaffInfoContainer>
-        <VacationApprovalForm />
+        <VacationApprovalForm
+          vacationType={vacationType}
+          requestId={requestId}
+        />
       </StyledVacationsApproval>
       <StyledFooter>
         <Text textAlign="center" size="large" appearance="gray">

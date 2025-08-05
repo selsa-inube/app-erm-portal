@@ -3,33 +3,40 @@ import * as Yup from "yup";
 import { useState } from "react";
 
 import { VacationApprovalFormUI } from "./interface";
+import { VacationType } from "./types";
 
 interface FormValues {
   approval: string;
   observation: string;
 }
 
-interface ApprovalOption {
-  id: string;
-  value: string;
-  label: string;
+interface VacationApprovalFormProps {
+  vacationType: VacationType;
+  requestId: string;
+  observationsRequired?: boolean;
 }
 
-const validationSchema = Yup.object({
-  approval: Yup.string().required("Debe seleccionar una opción de aprobación"),
-  observation: Yup.string()
-    .required("Las observaciones son obligatorias")
-    .max(500, "Las observaciones no pueden exceder 500 caracteres"),
-});
-
-const approvalOptions: ApprovalOption[] = [
-  { id: "approve", value: "approve", label: "Aprobar vacaciones" },
-  { id: "reject", value: "reject", label: "No aprobar vacaciones" },
-];
-
-function VacationApprovalForm(): JSX.Element {
+function VacationApprovalForm({
+  vacationType,
+  requestId,
+  observationsRequired = true,
+}: VacationApprovalFormProps): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
+
+  const validationSchema = Yup.object({
+    approval: Yup.string().required(
+      "Debe seleccionar una opción de aprobación",
+    ),
+    observation: observationsRequired
+      ? Yup.string()
+          .required("Las observaciones son obligatorias")
+          .max(500, "Las observaciones no pueden exceder 500 caracteres")
+      : Yup.string().max(
+          500,
+          "Las observaciones no pueden exceder 500 caracteres",
+        ),
+  });
 
   const formik: FormikProps<FormValues> = useFormik<FormValues>({
     initialValues: {
@@ -59,7 +66,9 @@ function VacationApprovalForm(): JSX.Element {
   return (
     <VacationApprovalFormUI
       formik={formik}
-      approvalOptions={approvalOptions}
+      vacationType={vacationType}
+      requestId={requestId}
+      observationsRequired={observationsRequired}
       showModal={showModal}
       isApproved={isApproved}
       onSubmit={handleSubmit}

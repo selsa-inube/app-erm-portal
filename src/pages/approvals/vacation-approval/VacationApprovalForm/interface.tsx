@@ -3,37 +3,28 @@ import {
   Text,
   Divider,
   Stack,
-  Icon,
-  Select,
   Textarea,
   Button,
+  Radio,
 } from "@inubekit/inubekit";
-import { MdOutlineBeachAccess } from "react-icons/md";
 import { FormikProps } from "formik";
 
 import { VacationApprovalModal } from "@components/modals/VacationApprovalModal";
 import { spacing } from "@design/tokens/spacing";
 
-import {
-  StyledFormContainer,
-  StyledRequestInfo,
-  StyledInputsContainer,
-} from "./styles";
+import { StyledFormContainer, StyledInputsContainer } from "./styles";
+import { VacationType } from "./types";
 
 interface FormValues {
   approval: string;
   observation: string;
 }
 
-interface ApprovalOption {
-  id: string;
-  value: string;
-  label: string;
-}
-
 interface VacationApprovalFormUIProps {
   formik: FormikProps<FormValues>;
-  approvalOptions: ApprovalOption[];
+  vacationType: VacationType;
+  requestId: string;
+  observationsRequired?: boolean;
   showModal?: boolean;
   isApproved?: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -42,7 +33,9 @@ interface VacationApprovalFormUIProps {
 
 function VacationApprovalFormUI({
   formik,
-  approvalOptions,
+  vacationType,
+  requestId,
+  observationsRequired = true,
   showModal = false,
   isApproved = false,
   onSubmit,
@@ -50,70 +43,75 @@ function VacationApprovalFormUI({
 }: VacationApprovalFormUIProps): JSX.Element {
   const isMobile = useMediaQuery("(max-width: 950px)");
 
-  const isFormValid =
-    formik.isValid && formik.values.approval && formik.values.observation;
+  const isFormValid = observationsRequired
+    ? formik.isValid && formik.values.approval && formik.values.observation
+    : formik.isValid && formik.values.approval;
+
+  const vacationConfig = {
+    payment: {
+      title: `Solicitud de pago vacaciones #${requestId}`,
+      daysLabel: "Días a pagar:",
+    },
+    enjoyment: {
+      title: `Solicitud de disfrute vacaciones #${requestId}`,
+      daysLabel: "Periodo:",
+    },
+  };
+
+  const config = vacationConfig[vacationType];
 
   return (
     <>
       <form onSubmit={onSubmit}>
         <StyledFormContainer $isMobile={isMobile}>
           <Text type="title" weight="bold" textAlign="center">
-            Formulario de aprobación de vacaciones
+            {config.title}
           </Text>
           <Divider dashed />
-          <StyledRequestInfo $isMobile={isMobile}>
-            <Stack gap={spacing.s100} alignItems="center">
-              <Icon
-                appearance="dark"
-                icon={<MdOutlineBeachAccess />}
-                size="20px"
-              />
-              <Text type="label" weight="bold">
-                Solicitud #898433
+          <Stack
+            gap={spacing.s100}
+            direction="column"
+            justifyContent="space-between"
+            width="100%"
+          >
+            <Stack>
+              <Text type="label">
+                <b>• Empleado:</b> Sergio Andrés Nieto Alba
               </Text>
             </Stack>
-            <Stack
-              justifyContent="space-between"
-              height="100%"
-              direction={isMobile ? "column" : "row"}
-            >
-              <Stack>
-                <Text size="small" appearance="gray">
-                  <b>• Empleado:</b> Sergio Andrés Nieto Alba
-                </Text>
-              </Stack>
-              <Stack>
-                <Text size="small" appearance="gray">
-                  <b>• Tipo de solicitud:</b> Pago de vacaciones
-                </Text>
-              </Stack>
-              <Stack>
-                <Text size="small" appearance="gray">
-                  <b>• Días a pagar:</b> 5 días
-                </Text>
-              </Stack>
+            <Stack>
+              <Text type="label">
+                <b>• {config.daysLabel}</b> 5 días
+              </Text>
             </Stack>
-          </StyledRequestInfo>
+          </Stack>
           <StyledInputsContainer $isMobile={isMobile}>
             <Stack direction="column" gap={spacing.s100}>
               <Text appearance="gray">
-                ¿Las vacaciones de Sergio Andrés quedan aprobadas?
+                Tu decisión sobre las vacaciones de Sergio Andrés es:
               </Text>
-              <Select
-                placeholder="Selecciona de la lista"
-                name="approval"
-                value={formik.values.approval}
-                id="approval"
-                size="compact"
-                fullwidth
-                options={approvalOptions}
-                onChange={(_, value: string) => {
-                  void formik.setFieldValue("approval", value);
-                }}
-                onBlur={() => {
-                  void formik.setFieldTouched("approval", true);
-                }}
-              />
+              <Stack direction="column" gap={spacing.s100}>
+                <Radio
+                  id="approve"
+                  name="approval"
+                  value="approve"
+                  checked={formik.values.approval === "approve"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    void formik.setFieldValue("approval", e.target.value);
+                  }}
+                  label="Aprobar"
+                />
+                <Radio
+                  id="reject"
+                  name="approval"
+                  value="reject"
+                  checked={formik.values.approval === "reject"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    void formik.setFieldValue("approval", e.target.value);
+                  }}
+                  label="Rechazar"
+                />
+              </Stack>
             </Stack>
             <Textarea
               label="Observaciones"
@@ -128,6 +126,7 @@ function VacationApprovalFormUI({
                 void formik.setFieldValue("observation", e.target.value);
               }}
               onBlur={formik.handleBlur}
+              required={observationsRequired}
             />
           </StyledInputsContainer>
           <Stack justifyContent="flex-end" width="100%">
