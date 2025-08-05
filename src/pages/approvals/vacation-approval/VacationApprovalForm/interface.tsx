@@ -36,7 +36,10 @@ function VacationApprovalFormUI({
 }: VacationApprovalFormUIProps): JSX.Element {
   const isMobile = useMediaQuery("(max-width: 950px)");
 
-  const isFormValid = observationsRequired
+  const isObservationRequired =
+    observationsRequired && formik.values.approval === "reject";
+
+  const isFormValid = isObservationRequired
     ? formik.isValid && formik.values.approval && formik.values.observation
     : formik.isValid && formik.values.approval;
 
@@ -118,7 +121,7 @@ function VacationApprovalFormUI({
               void formik.setFieldValue("observation", e.target.value);
             }}
             onBlur={formik.handleBlur}
-            required={observationsRequired}
+            required={isObservationRequired}
           />
         </StyledInputsContainer>
         <Stack justifyContent="flex-end" width="100%">

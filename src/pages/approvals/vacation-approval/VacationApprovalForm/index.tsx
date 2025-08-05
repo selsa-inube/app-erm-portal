@@ -24,14 +24,18 @@ function VacationApprovalForm({
     approval: Yup.string().required(
       "Debe seleccionar una opción de aprobación",
     ),
-    observation: observationsRequired
-      ? Yup.string()
-          .required("Las observaciones son obligatorias")
-          .max(500, "Las observaciones no pueden exceder 500 caracteres")
-      : Yup.string().max(
-          500,
-          "Las observaciones no pueden exceder 500 caracteres",
-        ),
+    observation: Yup.string()
+      .max(500, "Las observaciones no pueden exceder 500 caracteres")
+      .when("approval", {
+        is: "reject",
+        then: (schema) =>
+          observationsRequired
+            ? schema.required(
+                "Las observaciones son obligatorias al rechazar la solicitud",
+              )
+            : schema,
+        otherwise: (schema) => schema,
+      }),
   });
 
   const formik: FormikProps<FormValues> = useFormik<FormValues>({
