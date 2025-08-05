@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
 import textureBackground from "@assets/images/texturebackground.png";
+import { spacing } from "@design/tokens/spacing";
 
 interface IStyledVacationsApproval {
   theme: typeof inube;
@@ -12,13 +13,21 @@ interface IStyledFooter {
 }
 
 const StyledVacationsApproval = styled.div<IStyledVacationsApproval>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: ${spacing.s200};
   width: 100%;
   height: 89vh;
-  background-image: url(${textureBackground});
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url(${textureBackground});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 50%;
 `;
 
 const StyledFooter = styled.footer<IStyledFooter>`
