@@ -9,6 +9,7 @@ import {
 } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
+import { VacationApprovalModal } from "@components/modals/VacationApprovalModal";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledFormContainer, StyledInputsContainer } from "./styles";
@@ -24,7 +25,10 @@ interface VacationApprovalFormUIProps {
   vacationType: VacationType;
   requestId: string;
   observationsRequired?: boolean;
+  showModal?: boolean;
+  isApproved?: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onCloseModal?: () => void;
 }
 
 function VacationApprovalFormUI({
@@ -32,7 +36,10 @@ function VacationApprovalFormUI({
   vacationType,
   requestId,
   observationsRequired = true,
+  showModal = false,
+  isApproved = false,
   onSubmit,
+  onCloseModal,
 }: VacationApprovalFormUIProps): JSX.Element {
   const isMobile = useMediaQuery("(max-width: 950px)");
 
@@ -57,80 +64,90 @@ function VacationApprovalFormUI({
   const config = vacationConfig[vacationType];
 
   return (
-    <form onSubmit={onSubmit}>
-      <StyledFormContainer $isMobile={isMobile}>
-        <Text type="title" weight="bold" textAlign="center">
-          {config.title}
-        </Text>
-        <Divider dashed />
-        <Stack
-          gap={spacing.s100}
-          direction="column"
-          justifyContent="space-between"
-          width="100%"
-        >
-          <Stack>
-            <Text type="label">
-              <b>• Empleado:</b> Sergio Andrés Nieto Alba
-            </Text>
-          </Stack>
-          <Stack>
-            <Text type="label">
-              <b>• {config.daysLabel}</b> 5 días
-            </Text>
-          </Stack>
-        </Stack>
-        <StyledInputsContainer $isMobile={isMobile}>
-          <Stack direction="column" gap={spacing.s100}>
-            <Text appearance="gray">
-              Tu decisión sobre las vacaciones de Sergio Andrés es:
-            </Text>
-            <Stack direction="column" gap={spacing.s100}>
-              <Radio
-                id="approve"
-                name="approval"
-                value="approve"
-                checked={formik.values.approval === "approve"}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  void formik.setFieldValue("approval", e.target.value);
-                }}
-                label="Aprobar"
-              />
-              <Radio
-                id="reject"
-                name="approval"
-                value="reject"
-                checked={formik.values.approval === "reject"}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  void formik.setFieldValue("approval", e.target.value);
-                }}
-                label="Rechazar"
-              />
+    <>
+      <form onSubmit={onSubmit}>
+        <StyledFormContainer $isMobile={isMobile}>
+          <Text type="title" weight="bold" textAlign="center">
+            {config.title}
+          </Text>
+          <Divider dashed />
+          <Stack
+            gap={spacing.s100}
+            direction="column"
+            justifyContent="space-between"
+            width="100%"
+          >
+            <Stack>
+              <Text type="label">
+                <b>• Empleado:</b> Sergio Andrés Nieto Alba
+              </Text>
+            </Stack>
+            <Stack>
+              <Text type="label">
+                <b>• {config.daysLabel}</b> 5 días
+              </Text>
             </Stack>
           </Stack>
-          <Textarea
-            label="Observaciones"
-            placeholder="Comentarios adicionales a tener en cuenta."
-            name="observation"
-            id="observation"
-            size="compact"
-            value={formik.values.observation}
-            maxLength={500}
-            fullwidth
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              void formik.setFieldValue("observation", e.target.value);
-            }}
-            onBlur={formik.handleBlur}
-            required={isObservationRequired}
-          />
-        </StyledInputsContainer>
-        <Stack justifyContent="flex-end" width="100%">
-          <Button type="submit" appearance="primary" disabled={!isFormValid}>
-            Enviar
-          </Button>
-        </Stack>
-      </StyledFormContainer>
-    </form>
+          <StyledInputsContainer $isMobile={isMobile}>
+            <Stack direction="column" gap={spacing.s100}>
+              <Text appearance="gray">
+                Tu decisión sobre las vacaciones de Sergio Andrés es:
+              </Text>
+              <Stack direction="column" gap={spacing.s100}>
+                <Radio
+                  id="approve"
+                  name="approval"
+                  value="approve"
+                  checked={formik.values.approval === "approve"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    void formik.setFieldValue("approval", e.target.value);
+                  }}
+                  label="Aprobar"
+                />
+                <Radio
+                  id="reject"
+                  name="approval"
+                  value="reject"
+                  checked={formik.values.approval === "reject"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    void formik.setFieldValue("approval", e.target.value);
+                  }}
+                  label="Rechazar"
+                />
+              </Stack>
+            </Stack>
+            <Textarea
+              label="Observaciones"
+              placeholder="Comentarios adicionales a tener en cuenta."
+              name="observation"
+              id="observation"
+              size="compact"
+              value={formik.values.observation}
+              maxLength={500}
+              fullwidth
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                void formik.setFieldValue("observation", e.target.value);
+              }}
+              onBlur={formik.handleBlur}
+              required={isObservationRequired}
+            />
+          </StyledInputsContainer>
+          <Stack justifyContent="flex-end" width="100%">
+            <Button type="submit" appearance="primary" disabled={!isFormValid}>
+              Enviar
+            </Button>
+          </Stack>
+        </StyledFormContainer>
+      </form>
+
+      {showModal && (
+        <VacationApprovalModal
+          isApproved={isApproved}
+          onCloseModal={onCloseModal}
+          portalId="portal"
+        />
+      )}
+    </>
   );
 }
 

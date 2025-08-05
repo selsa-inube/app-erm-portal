@@ -1,5 +1,6 @@
 import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
 
 import { VacationApprovalFormUI } from "./interface";
 import { VacationType } from "./types";
@@ -20,6 +21,9 @@ function VacationApprovalForm({
   requestId,
   observationsRequired = true,
 }: VacationApprovalFormProps): JSX.Element {
+  const [showModal, setShowModal] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+
   const validationSchema = Yup.object({
     approval: Yup.string().required(
       "Debe seleccionar una opción de aprobación",
@@ -46,6 +50,11 @@ function VacationApprovalForm({
     validationSchema,
     onSubmit: (values) => {
       console.log("Formulario enviado:", values);
+
+      const approved = values.approval === "approve";
+      setIsApproved(approved);
+
+      setShowModal(true);
     },
   });
 
@@ -54,13 +63,20 @@ function VacationApprovalForm({
     formik.handleSubmit();
   };
 
+  const handleCloseModal = (): void => {
+    setShowModal(false);
+  };
+
   return (
     <VacationApprovalFormUI
       formik={formik}
       vacationType={vacationType}
       requestId={requestId}
       observationsRequired={observationsRequired}
+      showModal={showModal}
+      isApproved={isApproved}
       onSubmit={handleSubmit}
+      onCloseModal={handleCloseModal}
     />
   );
 }
