@@ -8,7 +8,22 @@ function LoadingApp() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/employees/select-employee");
+      const initialRoute =
+        sessionStorage.getItem("initialRoute") ??
+        localStorage.getItem("initialRoute");
+
+      const isVacationApprovalRoute = initialRoute?.startsWith(
+        "/approvals/vacation-approval",
+      );
+
+      if (isVacationApprovalRoute) {
+        sessionStorage.removeItem("initialRoute");
+        localStorage.removeItem("initialRoute");
+
+        navigate("/approvals/vacation-approval");
+      } else {
+        navigate("/employees/select-employee");
+      }
     }, 2000);
 
     return () => clearTimeout(timer);

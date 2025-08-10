@@ -40,6 +40,17 @@ export function ProtectedRoutes() {
   } = useBusinessManagers(portalData);
 
   useEffect(() => {
+    if (!isAuthenticated && !isLoading) {
+      const currentPath = window.location.pathname;
+      const currentSearch = window.location.search;
+      const fullPath = currentPath + currentSearch;
+
+      sessionStorage.setItem("initialRoute", fullPath);
+      localStorage.setItem("initialRoute", fullPath);
+    }
+  }, [isAuthenticated, isLoading]);
+
+  useEffect(() => {
     if (
       !isLoading &&
       !isAuthenticated &&
