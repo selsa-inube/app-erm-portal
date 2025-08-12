@@ -49,3 +49,9 @@ export const parseFormattedDate = (dateStr: string): Date => {
   const month = monthMap[monthAbbr] ?? 0;
   return new Date(year, month, day);
 };
+
+export function formatWithOffset(date: Date) {
+  const iso = new Date(date).toISOString();
+  const [datePart] = iso.split("Z");
+  return `${datePart}-05:00`;
+}

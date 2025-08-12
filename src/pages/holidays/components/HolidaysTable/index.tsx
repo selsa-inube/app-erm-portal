@@ -25,6 +25,7 @@ import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
 import { contractTypeLabels } from "@mocks/contracts/enums";
+import { formatDate } from "@utils/date";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -199,7 +200,9 @@ function HolidaysTable(props: HolidaysTableProps) {
       { label: "Días hábiles a pagar", value: String(dataDe.daysToPay ?? "") },
       {
         label: "Fecha de inicio o pago",
-        value: String(dataDe.startDateEnyoment ?? ""),
+        value: dataDe.startDateEnyoment
+          ? formatDate(dataDe.startDateEnyoment)
+          : "",
       },
       {
         label: "Contrato",
