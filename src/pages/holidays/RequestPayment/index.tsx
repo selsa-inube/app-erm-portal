@@ -125,7 +125,7 @@ function RequestPayment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "PaidVacations",
+    "paid_vacations",
     userCodeInCharge,
     userNameInCharge,
   );

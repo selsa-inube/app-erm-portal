@@ -41,7 +41,7 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if (typeRequest === "Certification") {
+      if (typeRequest === "certification") {
         humanResourceRequestData = JSON.stringify({
           certificationType: formValues.certificationType ?? "",
           addressee: formValues.addressee ?? "",

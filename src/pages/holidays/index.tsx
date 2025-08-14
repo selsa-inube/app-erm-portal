@@ -29,7 +29,7 @@ function HolidaysOptions() {
     rawData: rawEnjoyedData,
   } = useHumanResourceRequests<IHolidaysTable>(
     formatHolidaysData,
-    "VacationsEnjoyed",
+    "vacations_enjoyed",
   );
 
   const {
@@ -38,7 +38,7 @@ function HolidaysOptions() {
     rawData: rawPaidData,
   } = useHumanResourceRequests<IHolidaysTable>(
     formatHolidaysData,
-    "PaidVacations",
+    "paid_vacations",
   );
 
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
