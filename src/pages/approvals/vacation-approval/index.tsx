@@ -1,31 +1,39 @@
+import { useParams } from "react-router-dom";
 import { Text } from "@inubekit/inubekit";
+
+import { useImmediateSupervisorByRequest } from "@hooks/useImmediateSupervisorByRequest";
+import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 
 import { StyledVacationsApproval, StyledFooter } from "./styles";
 import { VacationApprovalForm } from "./VacationApprovalForm";
-import { VacationType } from "./VacationApprovalForm/types";
 
-interface VacationApprovalProps {
-  vacationType?: VacationType;
-  requestId?: string;
-}
+function VacationApproval() {
+  const { requestId } = useParams();
 
-function VacationApproval({
-  vacationType = "payment",
-  requestId = "898433",
-}: VacationApprovalProps) {
+  const { data: supervisorData, isLoading: supervisorLoading } =
+    useImmediateSupervisorByRequest(requestId);
+
   return (
     <>
-      <StyledVacationsApproval>
-        <VacationApprovalForm
-          vacationType={vacationType}
-          requestId={requestId}
-        />
-      </StyledVacationsApproval>
-      <StyledFooter>
-        <Text textAlign="center" size="large" appearance="gray">
-          © *Marca*
-        </Text>
-      </StyledFooter>
+      {supervisorLoading ? (
+        <LoadingAppUI />
+      ) : (
+        <>
+          <StyledVacationsApproval>
+            <VacationApprovalForm
+              vacationType={supervisorData?.humanResourceRequestType}
+              requestId={supervisorData?.humanResourceRequestNumber}
+              employeeName={supervisorData?.employeeName}
+              employeeSurname={supervisorData?.employeeSurname}
+            />
+          </StyledVacationsApproval>
+          <StyledFooter>
+            <Text textAlign="center" size="large" appearance="gray">
+              © *Marca*
+            </Text>
+          </StyledFooter>
+        </>
+      )}
     </>
   );
 }
