@@ -12,6 +12,7 @@ import { FormikProps } from "formik";
 import { VacationApprovalModal } from "@components/modals/VacationApprovalModal";
 import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords } from "@utils/text";
+import { formatDateNumeric } from "@utils/date";
 
 import { StyledFormContainer, StyledInputsContainer } from "./styles";
 
@@ -32,19 +33,6 @@ interface FormValues {
   observation: string;
 }
 
-interface VacationApprovalFormUIProps {
-  formik: FormikProps<FormValues>;
-  vacationType?: string;
-  requestId?: string;
-  observationsRequired?: boolean;
-  showModal?: boolean;
-  isApproved?: boolean;
-  employeeName?: string;
-  employeeSurname?: string;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  onCloseModal?: () => void;
-}
-
 const getFormTitle = (vacationType: string, requestId: string): string => {
   const isPaidVacation = vacationType === VACATION_TYPES.PAID;
   const titlePrefix = isPaidVacation
@@ -63,18 +51,60 @@ const getPeriodLabel = (vacationType: string): string => {
   return vacationType === VACATION_TYPES.PAID ? "Días a pagar: " : "Periodo: ";
 };
 
-function VacationApprovalFormUI({
-  formik,
-  vacationType = "",
-  requestId = "",
-  observationsRequired = true,
-  showModal = false,
-  isApproved = false,
-  employeeName,
-  employeeSurname,
-  onSubmit,
-  onCloseModal,
-}: VacationApprovalFormUIProps): JSX.Element {
+const getPeriodValue = (
+  vacationType: string,
+  daysRequested?: number,
+  periodFrom?: string,
+  periodTo?: string,
+): string => {
+  const isPaidVacation = vacationType === VACATION_TYPES.PAID;
+
+  if (isPaidVacation) {
+    return daysRequested ? `${daysRequested} días` : "No especificado";
+  }
+
+  if (periodFrom && periodTo) {
+    const fromDate = formatDateNumeric(periodFrom);
+    const toDate = formatDateNumeric(periodTo);
+    return `De ${fromDate} a ${toDate}`;
+  }
+
+  return "No especificado";
+};
+
+interface VacationApprovalFormUIProps {
+  formik: FormikProps<FormValues>;
+  vacationType?: string;
+  requestId?: string;
+  observationsRequired?: boolean;
+  showModal?: boolean;
+  isApproved?: boolean;
+  employeeName?: string;
+  employeeSurname?: string;
+  daysRequested?: number;
+  periodFrom?: string;
+  periodTo?: string;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onCloseModal?: () => void;
+}
+
+function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
+  const {
+    formik,
+    vacationType = "",
+    requestId = "",
+    observationsRequired = true,
+    showModal = false,
+    isApproved = false,
+    employeeName,
+    employeeSurname,
+    daysRequested,
+    periodFrom,
+    periodTo,
+    onSubmit,
+    onCloseModal,
+  } = props;
+
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
 
   const isObservationRequired =
@@ -90,6 +120,12 @@ function VacationApprovalFormUI({
     employeeSurname,
   );
   const periodLabel = getPeriodLabel(vacationType);
+  const periodValue = getPeriodValue(
+    vacationType,
+    daysRequested,
+    periodFrom,
+    periodTo,
+  );
 
   const handleApprovalChange = (value: string) => {
     void formik.setFieldValue("approval", value);
@@ -123,7 +159,8 @@ function VacationApprovalFormUI({
             </Stack>
             <Stack>
               <Text type="label">
-                <b>• {periodLabel}</b>5 días
+                <b>• {periodLabel}</b>
+                {periodValue}
               </Text>
             </Stack>
           </Stack>

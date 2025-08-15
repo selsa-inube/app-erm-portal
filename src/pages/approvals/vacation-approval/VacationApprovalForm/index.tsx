@@ -15,15 +15,23 @@ interface VacationApprovalFormProps {
   employeeName?: string;
   employeeSurname?: string;
   observationsRequired?: boolean;
+  daysRequested?: number;
+  periodFrom?: string;
+  periodTo?: string;
 }
 
-function VacationApprovalForm({
-  vacationType,
-  requestId,
-  employeeName,
-  employeeSurname,
-  observationsRequired = true,
-}: VacationApprovalFormProps): JSX.Element {
+function VacationApprovalForm(props: VacationApprovalFormProps) {
+  const {
+    vacationType,
+    requestId,
+    employeeName,
+    employeeSurname,
+    observationsRequired = true,
+    daysRequested,
+    periodFrom,
+    periodTo,
+  } = props;
+
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
 
@@ -80,6 +88,9 @@ function VacationApprovalForm({
       isApproved={isApproved}
       employeeName={employeeName}
       employeeSurname={employeeSurname}
+      daysRequested={daysRequested}
+      periodFrom={periodFrom}
+      periodTo={periodTo}
       onSubmit={handleSubmit}
       onCloseModal={handleCloseModal}
     />

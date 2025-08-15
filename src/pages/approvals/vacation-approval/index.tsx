@@ -25,6 +25,9 @@ function VacationApproval() {
               requestId={supervisorData?.humanResourceRequestNumber}
               employeeName={supervisorData?.employeeName}
               employeeSurname={supervisorData?.employeeSurname}
+              daysRequested={supervisorData?.daysRequested}
+              periodFrom={supervisorData?.periodFrom}
+              periodTo={supervisorData?.periodTo}
             />
           </StyledVacationsApproval>
           <StyledFooter>
