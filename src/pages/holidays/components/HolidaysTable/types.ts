@@ -32,8 +32,8 @@ export interface HolidayTableDataDetails {
   daysOff: string;
   daysToPay: string;
   startDateEnyoment: string;
-  contractId: string;
+  contract_id: string;
   observationEmployee: string;
-  businessName: string;
-  contractType: string;
+  business_name: string;
+  contract_type: string;
 }

@@ -14,20 +14,6 @@ export const RequestStatusLabel: Record<RequestStatus, string> = {
   [RequestStatus.CANCELED]: "Cancelada",
 };
 
-export enum HumanResourceRequestType {
-  onboarding = "Vinculación",
-  vacations = "Vacaciones",
-  certification = "Certificacion",
-  disability = "Incapacidad",
-  leave = "Permiso",
-  unpaid_Leave = "Licencia no remunerada",
-  leaving_the_Job = "Retiro",
-  salary_increase = "Ascenso salarial",
-  position_transfer = "Traslado de cargo",
-  Absence = "Ausencia",
-  pqr = "PQR",
-}
-
 export interface IRequestBody {
   requestId?: string;
   humanResourceRequestNumber?: string;

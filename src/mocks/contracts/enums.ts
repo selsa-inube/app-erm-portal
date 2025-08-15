@@ -1,10 +1,10 @@
 export const contractTypeLabels: Record<string, string> = {
-  Apprentice: "Aprendiz",
-  ByWorkOrLabor: "Por obra o labor",
-  CivilContract: "Contrato civil",
-  ContingentWorker: "Trabajador eventual",
-  FixedTermContract: "Termino Fijo",
-  PermanentJob: "Trabajo permanente",
+  apprentice: "Aprendiz",
+  by_work_or_labor: "Por obra o labor",
+  civil_contract: "Contrato civil",
+  contingent_worker: "Trabajador eventual",
+  fixed_term_contract: "Termino Fijo",
+  permanent_job: "Trabajo permanente",
 };
 
 export const workScheduleLabels: Record<string, string> = {
@@ -22,33 +22,33 @@ export const workplaceLabels: Record<string, string> = {
 };
 
 export enum EDetailedRequestStatus {
-  Closed = "closed",
-  Rejected = "rejected",
-  Canceled = "canceled",
-  SupervisorApproval = "supervisor_approval",
-  HRComplianceVerification = "HR_compliance_verification",
-  ConfirmationOfVacationTaken = "confirmation_of_vacation_taken",
-  SuccessfullyProcessed = "successfully_processed",
-  CertificationGeneration = "certification_generation",
-  OnboardingInProgress = "onboarding_in_progress",
+  closed = "closed",
+  rejected = "rejected",
+  canceled = "canceled",
+  supervisor_approval = "supervisor_approval",
+  HR_compliance_verification = "HR_compliance_verification",
+  confirmation_of_vacation_taken = "confirmation_of_vacation_taken",
+  successfully_processed = "successfully_processed",
+  certification_generation = "certification_generation",
+  onboarding_in_progress = "onboarding_in_progress",
 }
 
 export const getDetailedStatusLabel = (
   status: EDetailedRequestStatus,
 ): string => {
   const statusMap: Record<EDetailedRequestStatus, string> = {
-    [EDetailedRequestStatus.Closed]: "Cerrada",
-    [EDetailedRequestStatus.Rejected]: "Rechazada",
-    [EDetailedRequestStatus.Canceled]: "Cancelada",
-    [EDetailedRequestStatus.SupervisorApproval]: "Aprobación Jefe Inmediato",
-    [EDetailedRequestStatus.HRComplianceVerification]:
+    [EDetailedRequestStatus.closed]: "Cerrada",
+    [EDetailedRequestStatus.rejected]: "Rechazada",
+    [EDetailedRequestStatus.canceled]: "Cancelada",
+    [EDetailedRequestStatus.supervisor_approval]: "Aprobación Jefe Inmediato",
+    [EDetailedRequestStatus.HR_compliance_verification]:
       "Verificación en Gestión Humana",
-    [EDetailedRequestStatus.ConfirmationOfVacationTaken]:
+    [EDetailedRequestStatus.confirmation_of_vacation_taken]:
       "Confirmación Disfrute de Vacaciones",
-    [EDetailedRequestStatus.SuccessfullyProcessed]: "Tramitada con Éxito",
-    [EDetailedRequestStatus.CertificationGeneration]:
+    [EDetailedRequestStatus.successfully_processed]: "Tramitada con Éxito",
+    [EDetailedRequestStatus.certification_generation]:
       "Generación de la Certificación",
-    [EDetailedRequestStatus.OnboardingInProgress]: "Vinculación en Progreso",
+    [EDetailedRequestStatus.onboarding_in_progress]: "Vinculación en Progreso",
   };
 
   return statusMap[status] ?? "Estado desconocido";
