@@ -16,11 +16,27 @@ function LoadingApp() {
         "/approvals/vacation-approval",
       );
 
-      if (isVacationApprovalRoute) {
+      if (isVacationApprovalRoute && initialRoute) {
         sessionStorage.removeItem("initialRoute");
         localStorage.removeItem("initialRoute");
 
-        navigate("/approvals/vacation-approval");
+        const urlParts = initialRoute.split("/");
+        const requestIdIndex =
+          urlParts.findIndex((part) => part === "vacation-approval") + 1;
+
+        if (requestIdIndex < urlParts.length && urlParts[requestIdIndex]) {
+          const requestIdWithQuery = urlParts[requestIdIndex];
+
+          const requestId = requestIdWithQuery.split("?")[0];
+
+          if (requestId && requestId.trim() !== "") {
+            navigate(`/approvals/vacation-approval/${requestId}`);
+          } else {
+            navigate("/approvals/vacation-approval");
+          }
+        } else {
+          navigate("/approvals/vacation-approval");
+        }
       } else {
         navigate("/employees/select-employee");
       }

@@ -6,7 +6,10 @@ import { VacationApproval } from "@pages/approvals/vacation-approval";
 function ApprovalsRoutes() {
   return (
     <Routes>
-      <Route path="vacation-approval" element={<VacationApproval />} />
+      <Route
+        path="vacation-approval/:requestId"
+        element={<VacationApproval />}
+      />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
