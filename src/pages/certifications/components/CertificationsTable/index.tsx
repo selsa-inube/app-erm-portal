@@ -252,9 +252,6 @@ function CertificationsTable({
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as CertificationsTableDataDetails;
 
-    console.log("Valor recibido en contractType:", dataDe?.contractType);
-    console.log("Objeto completo dataDe:", dataDe);
-
     const dataDeta = [
       {
         label: "Tipo de certificación",

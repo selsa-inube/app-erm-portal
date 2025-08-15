@@ -31,11 +31,11 @@ export enum HumanResourceRequestStatus {
 }
 
 export enum ERequestStatus {
-  Canceled = "Cancelado",
-  Closed = "Cerrado",
+  canceled = "Cancelado",
+  closed = "Cerrado",
   finalized = "Finalizado",
   supervisor_approval = "En progreso",
-  Rejected = "Rechazado",
+  rejected = "Rechazado",
 }
 
 export interface IUnifiedHumanResourceRequestData {
