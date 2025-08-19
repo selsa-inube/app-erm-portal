@@ -9,6 +9,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 import { RequestPaymentUI } from "./interface";
 import { requestPaymentSteps } from "./config/assisted.config";
@@ -125,7 +126,7 @@ function RequestPayment() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "paid_vacations",
+    ERequestType.paid_vacations,
     userCodeInCharge,
     userNameInCharge,
   );

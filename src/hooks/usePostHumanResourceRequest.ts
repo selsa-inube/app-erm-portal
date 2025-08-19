@@ -3,10 +3,10 @@ import { useState } from "react";
 import { formatWithOffset } from "@utils/date";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
-
 type FormValues = IUnifiedHumanResourceRequestData;
 
 function isVacationPaymentData(data: FormValues) {
@@ -19,12 +19,11 @@ function isVacationEnjoyedData(data: FormValues) {
 
 export function useRequestSubmission(
   formValues: FormValues,
-  typeRequest: string,
+  typeRequest: ERequestType,
   userCodeInCharge: string,
   userNameInCharge: string,
 ) {
   const [requestNum, setRequestNum] = useState("");
-
   const { selectedEmployee } = useAppContext();
 
   const {
@@ -41,7 +40,7 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if (typeRequest === "certification") {
+      if (typeRequest === ERequestType.certification) {
         humanResourceRequestData = JSON.stringify({
           certificationType: formValues.certificationType ?? "",
           addressee: formValues.addressee ?? "",
@@ -51,7 +50,10 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isVacationPaymentData(formValues)) {
+      } else if (
+        typeRequest === ERequestType.paid_vacations &&
+        isVacationPaymentData(formValues)
+      ) {
         humanResourceRequestData = JSON.stringify({
           daysToPay: formValues.daysToPay ?? "",
           disbursementDate: "",
@@ -61,7 +63,10 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
-      } else if (isVacationEnjoyedData(formValues)) {
+      } else if (
+        typeRequest === ERequestType.vacations_enjoyed &&
+        isVacationEnjoyedData(formValues)
+      ) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff ?? "",
           startDateEnyoment: formValues.startDateEnyoment

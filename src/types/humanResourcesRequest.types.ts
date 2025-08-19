@@ -8,7 +8,7 @@ export enum ERequestType {
   paid_vacations = "Vacaciones Pagadas",
   position_transfer = "Traslado de cargo",
   pqr = "PQR",
-  alary_increase = "Ascenso salarial",
+  salary_increase = "Ascenso salarial",
   unpaid_leave = "Licencia no remunerada",
   vacations_enjoyed = "Vacaciones Disfrutadas",
 }

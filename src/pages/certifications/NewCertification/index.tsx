@@ -7,6 +7,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
@@ -125,7 +126,7 @@ function NewCertification() {
     setShowErrorFlag,
   } = useRequestSubmission(
     formValues,
-    "certification",
+    ERequestType.certification,
     userCodeInCharge,
     userNameInCharge,
   );

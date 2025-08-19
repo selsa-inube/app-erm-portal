@@ -8,11 +8,9 @@ import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
 import { useErrorFlag } from "./useErrorFlag";
 
-type RequestType = keyof typeof ERequestType;
-
 export const useHumanResourceRequests = <T>(
   formatData: (data: HumanResourceRequest[]) => T[],
-  typeRequest?: RequestType,
+  typeRequest?: ERequestType,
   employeeId?: string,
 ) => {
   const [data, setData] = useState<T[]>([]);
@@ -29,7 +27,7 @@ export const useHumanResourceRequests = <T>(
   useErrorFlag(
     flagShown,
     typeRequest
-      ? `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`
+      ? `Error al obtener solicitudes de tipo "${typeRequest}"`
       : "Error al obtener solicitudes",
     "Error en la solicitud",
     false,

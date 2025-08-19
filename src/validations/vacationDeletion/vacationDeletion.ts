@@ -1,5 +1,4 @@
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
-
 import { IVacationDeletion } from "./types";
 
 export const validateBeforeDelete = (
@@ -15,14 +14,14 @@ export const validateBeforeDelete = (
 };
 
 export const validateVacationDeletion = (
-  requestType: string,
+  requestType: ERequestType,
   disbursementDate: string | null | undefined,
   startDateEnment: string | null | undefined,
 ): IVacationDeletion => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  if (requestType === "vacations_enjoyed" && disbursementDate) {
+  if (requestType === ERequestType.vacations_enjoyed && disbursementDate) {
     return {
       canDelete: false,
       title: "No se puede eliminar la solicitud",
@@ -31,7 +30,7 @@ export const validateVacationDeletion = (
     };
   }
 
-  if (requestType === "paid_vacations" && disbursementDate) {
+  if (requestType === ERequestType.paid_vacations && disbursementDate) {
     return {
       canDelete: false,
       title: "No se puede eliminar la solicitud",
@@ -40,7 +39,7 @@ export const validateVacationDeletion = (
     };
   }
 
-  if (requestType === "vacations_enjoyed" && startDateEnment) {
+  if (requestType === ERequestType.vacations_enjoyed && startDateEnment) {
     const startDate = new Date(startDateEnment);
     startDate.setHours(0, 0, 0, 0);
 

@@ -1,3 +1,5 @@
+import { ERequestType } from "@ptypes/humanResourcesRequest.types";
+
 export enum RequestStatus {
   IN_PROGRESS = "in_progress",
   FINISHED = "finished",
@@ -22,7 +24,7 @@ export interface IRequestBody {
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;
   humanResourceRequestStatus: string;
-  humanResourceRequestType: string;
+  humanResourceRequestType: ERequestType;
   userCodeInCharge: string;
   userNameInCharge: string;
 }
@@ -34,7 +36,7 @@ export interface IHumanResourceRequest {
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;
   humanResourceRequestStatus: string;
-  humanResourceRequestType: string;
+  humanResourceRequestType: ERequestType;
   userCodeInCharge: string;
   userNameInCharge: string;
 }
@@ -56,7 +58,7 @@ export interface IHumanResourceResponse {
     transactionOperation: string;
     userWhoExecutedAction: string;
   }[];
-  humanResourceRequestType: string;
+  humanResourceRequestType: ERequestType;
   tasksToManageTheHumanResourcesRequests: {
     description: string;
     humanResourceRequestId: string;
