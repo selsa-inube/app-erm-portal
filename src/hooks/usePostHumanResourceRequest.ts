@@ -1,12 +1,14 @@
 import { useState } from "react";
-
 import { formatWithOffset } from "@utils/date";
-import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import {
+  IUnifiedHumanResourceRequestData,
+  ERequestType,
+} from "@ptypes/humanResourcesRequest.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
+
 type FormValues = IUnifiedHumanResourceRequestData;
 
 function isVacationPaymentData(data: FormValues) {
@@ -82,13 +84,17 @@ export function useRequestSubmission(
         throw new Error("Tipo de solicitud no reconocido.");
       }
 
+      const typeRequestKey = Object.keys(ERequestType).find(
+        (key) => ERequestType[key as keyof typeof ERequestType] === typeRequest,
+      ) as keyof typeof ERequestType;
+
       const requestBody = {
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observationEmployee ?? "",
         humanResourceRequestStatus: "supervisor_approval",
-        humanResourceRequestType: typeRequest,
+        humanResourceRequestType: typeRequestKey as ERequestType,
         userCodeInCharge,
         userNameInCharge,
       };
@@ -99,7 +105,7 @@ export function useRequestSubmission(
         setRequestNum(response.humanResourceRequestNumber);
 
         if (humanResourceRequestId) {
-          navigateAfterSubmission(typeRequest);
+          navigateAfterSubmission(typeRequestKey);
         }
 
         return true;
