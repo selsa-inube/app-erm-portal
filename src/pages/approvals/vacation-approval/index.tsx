@@ -3,6 +3,7 @@ import { Text } from "@inubekit/inubekit";
 
 import { useImmediateSupervisorByRequest } from "@hooks/useImmediateSupervisorByRequest";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
+import { ErrorPage } from "@components/layout/ErrorPage";
 
 import { StyledVacationsApproval, StyledFooter } from "./styles";
 import { VacationApprovalForm } from "./VacationApprovalForm";
@@ -10,13 +11,18 @@ import { VacationApprovalForm } from "./VacationApprovalForm";
 function VacationApproval() {
   const { requestId } = useParams();
 
-  const { data: supervisorData, isLoading: supervisorLoading } =
-    useImmediateSupervisorByRequest(requestId);
+  const {
+    data: supervisorData,
+    isLoading: supervisorLoading,
+    error,
+  } = useImmediateSupervisorByRequest(requestId);
 
   return (
     <>
       {supervisorLoading ? (
         <LoadingAppUI />
+      ) : error ? (
+        <ErrorPage errorCode={500}></ErrorPage>
       ) : (
         <>
           <StyledVacationsApproval>

@@ -49,8 +49,6 @@ export const useImmediateSupervisorByRequest = (
       const errorInstance = err instanceof Error ? err : new Error(String(err));
       setError(errorInstance);
       setFlagShown(true);
-
-      signOut("/error/not-available");
     } finally {
       setIsLoading(false);
     }
