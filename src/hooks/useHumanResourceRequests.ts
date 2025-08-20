@@ -3,6 +3,7 @@ import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHum
 import {
   HumanResourceRequest,
   ERequestType,
+  requestTypeMap,
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
@@ -37,13 +38,17 @@ export const useHumanResourceRequests = <T>(
     if (!effectiveEmployeeId) return;
     setIsLoading(true);
     setFlagShown(false);
+
     try {
       const headers = await getHeaders();
+      const backendType = typeRequest ? requestTypeMap[typeRequest] : undefined;
+
       const requests = await getHumanResourceRequests(
         effectiveEmployeeId,
         headers,
-        typeRequest,
+        backendType,
       );
+
       const requestsData = requests ?? [];
       setRawData(requestsData);
       setData(formatData(requestsData));
