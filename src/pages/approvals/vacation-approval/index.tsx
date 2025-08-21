@@ -22,7 +22,7 @@ function VacationApproval() {
       {supervisorLoading ? (
         <LoadingAppUI />
       ) : error ? (
-        <ErrorPage errorCode={500}></ErrorPage>
+        <ErrorPage errorCode={500} />
       ) : (
         <>
           <StyledVacationsApproval>

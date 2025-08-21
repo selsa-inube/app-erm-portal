@@ -23,6 +23,7 @@ export const useImmediateSupervisorByRequest = (
     "Error al obtener el supervisor inmediato",
     "Error en la solicitud",
     false,
+    5000,
   );
 
   const fetchData = async () => {
@@ -49,6 +50,10 @@ export const useImmediateSupervisorByRequest = (
       const errorInstance = err instanceof Error ? err : new Error(String(err));
       setError(errorInstance);
       setFlagShown(true);
+
+      setTimeout(() => {
+        signOut("/error?code=500");
+      }, 5000);
     } finally {
       setIsLoading(false);
     }
