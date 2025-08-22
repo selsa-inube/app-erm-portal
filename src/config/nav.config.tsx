@@ -1,22 +1,14 @@
-import {
-  MdLogout,
-  MdOutlinePersonOff,
-  MdOutlineFilePresent,
-  MdOutlineBeachAccess,
-  MdOutlinePersonalInjury,
-  MdOutlineHistoryEdu,
-  MdOutlineBadge,
-  MdPendingActions,
-} from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
+import { ReactNode } from "react";
+
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 
 const baseNavLinks = [
   {
     id: "vacacionesPortalErm",
     label: "Vacaciones",
-    icon: <MdOutlineBeachAccess />,
     path: "/holidays",
     description:
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
@@ -24,7 +16,6 @@ const baseNavLinks = [
   {
     id: "incapacidadesPortalErm",
     label: "Incapacidades",
-    icon: <MdOutlinePersonalInjury />,
     path: "/disability",
     description:
       "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
@@ -32,7 +23,6 @@ const baseNavLinks = [
   {
     id: "ausenciasPortalErm",
     label: "Ausencias",
-    icon: <MdOutlinePersonOff />,
     path: "/absences",
     description:
       "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
@@ -40,7 +30,6 @@ const baseNavLinks = [
   {
     id: "certificacionPortalErm",
     label: "Certificaciones",
-    icon: <MdOutlineFilePresent />,
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
@@ -48,7 +37,6 @@ const baseNavLinks = [
   {
     id: "contratoPortalErm",
     label: "Contratos",
-    icon: <MdOutlineHistoryEdu />,
     path: "/contracts",
     description:
       "Son acuerdos legales entre el empleador y el empleado que establecen los términos de trabajo.",
@@ -56,7 +44,6 @@ const baseNavLinks = [
   {
     id: "cargoPortalErm",
     label: "Cargos",
-    icon: <MdOutlineBadge />,
     path: "/charges",
     description:
       "Se refiere a las posiciones o roles que ocupan los empleados dentro de la estructura organizacional de la empresa.",
@@ -64,7 +51,6 @@ const baseNavLinks = [
   {
     id: "solTramitePortalErm",
     label: "Solicitudes en tramite",
-    icon: <MdPendingActions />,
     path: "/requests",
     description:
       "Son trámites o gestiones que están en proceso de ser aprobadas o completadas.",
@@ -83,6 +69,34 @@ const actions = [
     },
   },
 ];
+
+const getIcon = (iconReference?: string): ReactNode => {
+  if (iconReference && iconReference.trim() !== "") {
+    return (
+      <img
+        src={iconReference}
+        alt="icon"
+        style={{ width: 24, height: 24, objectFit: "contain" }}
+      />
+    );
+  }
+  return <div style={{ width: 24, height: 24 }} />;
+};
+
+const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
+  return baseNavLinks.map((link) => {
+    const option = optionForCustomerPortal.find(
+      (option) => option.publicCode === link.id,
+    );
+
+    return {
+      ...link,
+      label: option?.abbreviatedName ?? link.label,
+      icon: getIcon(option?.iconReference),
+      isEnabled: !!option,
+    };
+  });
+};
 
 const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const location = useLocation();
@@ -109,19 +123,6 @@ const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   };
 
   return nav;
-};
-
-const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
-  return baseNavLinks.map((link) => {
-    const option = optionForCustomerPortal.find(
-      (option) => option.publicCode === link.id,
-    );
-    return {
-      ...link,
-      label: option?.abbreviatedName ?? link.label,
-      isEnabled: !!option,
-    };
-  });
 };
 
 const useConfigHeader = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
