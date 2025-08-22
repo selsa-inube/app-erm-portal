@@ -28,7 +28,8 @@ function VacationApproval() {
           <StyledVacationsApproval>
             <VacationApprovalForm
               vacationType={supervisorData?.humanResourceRequestType}
-              requestId={supervisorData?.humanResourceRequestNumber}
+              requestNumber={supervisorData?.humanResourceRequestNumber}
+              requestId={requestId}
               employeeName={supervisorData?.employeeName}
               employeeSurname={supervisorData?.employeeSurname}
               daysRequested={supervisorData?.daysRequested}

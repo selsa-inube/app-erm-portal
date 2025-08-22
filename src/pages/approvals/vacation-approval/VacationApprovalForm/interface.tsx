@@ -75,7 +75,7 @@ const getPeriodValue = (
 interface VacationApprovalFormUIProps {
   formik: FormikProps<FormValues>;
   vacationType?: string;
-  requestId?: string;
+  requestNumber?: string;
   observationsRequired?: boolean;
   showModal?: boolean;
   isApproved?: boolean;
@@ -84,6 +84,7 @@ interface VacationApprovalFormUIProps {
   daysRequested?: number;
   periodFrom?: string;
   periodTo?: string;
+  isLoading: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onCloseModal?: () => void;
 }
@@ -92,7 +93,7 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
   const {
     formik,
     vacationType = "",
-    requestId = "",
+    requestNumber = "",
     observationsRequired = true,
     showModal = false,
     isApproved = false,
@@ -101,6 +102,7 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
     daysRequested,
     periodFrom,
     periodTo,
+    isLoading,
     onSubmit,
     onCloseModal,
   } = props;
@@ -114,7 +116,7 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
     ? formik.isValid && formik.values.approval && formik.values.observation
     : formik.isValid && formik.values.approval;
 
-  const formTitle = getFormTitle(vacationType, requestId);
+  const formTitle = getFormTitle(vacationType, requestNumber);
   const employeeDisplayName = getEmployeeDisplayName(
     employeeName,
     employeeSurname,
@@ -213,7 +215,12 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
           </StyledInputsContainer>
 
           <Stack justifyContent="flex-end" width="100%">
-            <Button type="submit" appearance="primary" disabled={!isFormValid}>
+            <Button
+              type="submit"
+              appearance="primary"
+              loading={isLoading}
+              disabled={!isFormValid}
+            >
               Enviar
             </Button>
           </Stack>
