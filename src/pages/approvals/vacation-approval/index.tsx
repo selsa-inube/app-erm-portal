@@ -15,7 +15,15 @@ function VacationApproval() {
     data: supervisorData,
     isLoading: supervisorLoading,
     error,
-  } = useImmediateSupervisorByRequest(requestId);
+  } = useImmediateSupervisorByRequest(requestId, {
+    showFlag: true,
+    flagOptions: {
+      flagMessage: "Error al obtener el supervisor inmediato",
+      flagTitle: "Error en la solicitud",
+      flagIsSuccess: false,
+      flagDuration: 8000,
+    },
+  });
 
   return (
     <>
