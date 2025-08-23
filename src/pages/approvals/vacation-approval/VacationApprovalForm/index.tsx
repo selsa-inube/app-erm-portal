@@ -2,8 +2,10 @@ import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 
+import { usePatchHumanResourceRequest } from "@hooks/usePatchHumanResourceRequest";
+import { useAppContext } from "@context/AppContext";
+
 import { VacationApprovalFormUI } from "./interface";
-import { VacationType } from "./types";
 
 interface FormValues {
   approval: string;
@@ -11,18 +13,36 @@ interface FormValues {
 }
 
 interface VacationApprovalFormProps {
-  vacationType: VacationType;
-  requestId: string;
+  vacationType?: string;
+  requestNumber?: string;
+  requestId?: string;
+  employeeName?: string;
+  employeeSurname?: string;
   observationsRequired?: boolean;
+  daysRequested?: number;
+  periodFrom?: string;
+  periodTo?: string;
 }
 
-function VacationApprovalForm({
-  vacationType,
-  requestId,
-  observationsRequired = true,
-}: VacationApprovalFormProps): JSX.Element {
+function VacationApprovalForm(props: VacationApprovalFormProps) {
+  const {
+    vacationType,
+    requestNumber,
+    requestId,
+    employeeName,
+    employeeSurname,
+    observationsRequired = true,
+    daysRequested,
+    periodFrom,
+    periodTo,
+  } = props;
+
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
+
+  const { updateRequest, reset, isLoading } = usePatchHumanResourceRequest();
+
+  const { staffUser } = useAppContext();
 
   const validationSchema = Yup.object({
     approval: Yup.string().required(
@@ -48,13 +68,33 @@ function VacationApprovalForm({
       observation: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Formulario enviado:", values);
+    onSubmit: async (values) => {
+      try {
+        const currentDate = new Date().toISOString();
 
-      const approved = values.approval === "approve";
-      setIsApproved(approved);
+        const requestBody = {
+          humanResourceRequestId: requestId,
+          modifyJustification: values.observation || "Sin observaciones",
+          humanResourceRequestDate: currentDate,
+          humanResourceRequestTraceabilities: [
+            {
+              actionExecuted: values.approval,
+              description: values.observation || "Sin observaciones",
+              executionDate: currentDate,
+              transactionOperation: "Insert",
+              userWhoExecutedAction: staffUser.staffId,
+            },
+          ],
+        };
 
-      setShowModal(true);
+        await updateRequest(requestBody);
+
+        const approved = values.approval === "approve";
+        setIsApproved(approved);
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
+      }
     },
   });
 
@@ -65,16 +105,23 @@ function VacationApprovalForm({
 
   const handleCloseModal = (): void => {
     setShowModal(false);
+    reset();
   };
 
   return (
     <VacationApprovalFormUI
       formik={formik}
       vacationType={vacationType}
-      requestId={requestId}
+      requestNumber={requestNumber}
       observationsRequired={observationsRequired}
       showModal={showModal}
       isApproved={isApproved}
+      employeeName={employeeName}
+      employeeSurname={employeeSurname}
+      daysRequested={daysRequested}
+      periodFrom={periodFrom}
+      periodTo={periodTo}
+      isLoading={isLoading}
       onSubmit={handleSubmit}
       onCloseModal={handleCloseModal}
     />
