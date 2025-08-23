@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import { useState } from "react";
 
 import { VacationApprovalFormUI } from "./interface";
-import { VacationType } from "./types";
 
 interface FormValues {
   approval: string;
@@ -11,16 +10,28 @@ interface FormValues {
 }
 
 interface VacationApprovalFormProps {
-  vacationType: VacationType;
-  requestId: string;
+  vacationType?: string;
+  requestId?: string;
+  employeeName?: string;
+  employeeSurname?: string;
   observationsRequired?: boolean;
+  daysRequested?: number;
+  periodFrom?: string;
+  periodTo?: string;
 }
 
-function VacationApprovalForm({
-  vacationType,
-  requestId,
-  observationsRequired = true,
-}: VacationApprovalFormProps): JSX.Element {
+function VacationApprovalForm(props: VacationApprovalFormProps) {
+  const {
+    vacationType,
+    requestId,
+    employeeName,
+    employeeSurname,
+    observationsRequired = true,
+    daysRequested,
+    periodFrom,
+    periodTo,
+  } = props;
+
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
 
@@ -75,6 +86,11 @@ function VacationApprovalForm({
       observationsRequired={observationsRequired}
       showModal={showModal}
       isApproved={isApproved}
+      employeeName={employeeName}
+      employeeSurname={employeeSurname}
+      daysRequested={daysRequested}
+      periodFrom={periodFrom}
+      periodTo={periodTo}
       onSubmit={handleSubmit}
       onCloseModal={handleCloseModal}
     />
