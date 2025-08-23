@@ -5,32 +5,71 @@ import type { ImmediateSupervisorByRequest } from "@services/humanResourcesReque
 import { useHeaders } from "@hooks/useHeaders";
 import { useSignOut } from "@hooks/useSignOut";
 
-import { useErrorFlag } from "./useErrorFlag";
+interface FlagOptions {
+  flagMessage?: string;
+  flagTitle?: string;
+  flagIsSuccess?: boolean;
+  flagDuration?: number;
+}
+
+interface UseImmediateSupervisorByRequestOptions {
+  showFlag?: boolean;
+  flagOptions?: FlagOptions;
+}
 
 export const useImmediateSupervisorByRequest = (
   humanResourceRequestId?: string,
+  options?: UseImmediateSupervisorByRequestOptions,
 ) => {
   const [data, setData] = useState<ImmediateSupervisorByRequest>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
   const { signOut } = useSignOut();
 
-  useErrorFlag(
-    flagShown,
-    "Error al obtener el supervisor inmediato",
-    "Error en la solicitud",
-    false,
-    5000,
-  );
+  const defaultFlagOptions: FlagOptions = {
+    flagMessage: "Error interno del servidor",
+    flagTitle: "Error de Sistema",
+    flagIsSuccess: false,
+    flagDuration: 10000,
+  };
+
+  const buildErrorUrl = (
+    code: number,
+    shouldShowFlag: boolean,
+    flagConfig?: FlagOptions,
+  ) => {
+    const params = new URLSearchParams();
+    params.append("code", code.toString());
+
+    if (shouldShowFlag && flagConfig) {
+      params.append("showFlag", "true");
+
+      if (flagConfig.flagMessage) {
+        params.append(
+          "flagMessage",
+          encodeURIComponent(flagConfig.flagMessage),
+        );
+      }
+      if (flagConfig.flagTitle) {
+        params.append("flagTitle", encodeURIComponent(flagConfig.flagTitle));
+      }
+      if (flagConfig.flagIsSuccess !== undefined) {
+        params.append("flagIsSuccess", flagConfig.flagIsSuccess.toString());
+      }
+      if (flagConfig.flagDuration !== undefined) {
+        params.append("flagDuration", flagConfig.flagDuration.toString());
+      }
+    }
+
+    return `/error?${params.toString()}`;
+  };
 
   const fetchData = async () => {
     if (!humanResourceRequestId) return;
 
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = await getHeaders();
@@ -49,11 +88,15 @@ export const useImmediateSupervisorByRequest = (
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
       setError(errorInstance);
-      setFlagShown(true);
 
-      setTimeout(() => {
-        signOut("/error?code=500");
-      }, 5000);
+      const shouldShowFlag = options?.showFlag !== false;
+
+      const finalFlagOptions = shouldShowFlag
+        ? { ...defaultFlagOptions, ...options?.flagOptions }
+        : undefined;
+
+      const errorUrl = buildErrorUrl(500, shouldShowFlag, finalFlagOptions);
+      signOut(errorUrl);
     } finally {
       setIsLoading(false);
     }

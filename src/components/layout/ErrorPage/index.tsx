@@ -11,6 +11,7 @@ import { spacing } from "@design/tokens/spacing";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 import { errorCodes } from "@config/errorCodes.tsx";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import {
   StyledCompanyLogo,
@@ -31,6 +32,11 @@ interface ErrorPageProps {
   imageAlt?: string;
   nameButton?: string;
   errorCode?: number;
+  showFlag?: boolean;
+  flagMessage?: string;
+  flagTitle?: string;
+  flagIsSuccess?: boolean;
+  flagDuration?: number;
   onClick?: () => void;
 }
 
@@ -51,6 +57,11 @@ function ErrorPage(props: ErrorPageProps) {
     imageAlt = "Ha surgido un error. Revisa la descripción",
     nameButton = "Regresar",
     errorCode = 0,
+    showFlag = false,
+    flagMessage = "Se ha detectado un error en la página",
+    flagTitle = "Error de Sistema",
+    flagIsSuccess = false,
+    flagDuration = 10000,
     onClick,
   } = props;
 
@@ -62,6 +73,8 @@ function ErrorPage(props: ErrorPageProps) {
     whatWentWrong: ["No se proporcionó información sobre el error."],
     howToFix: ["Intenta nuevamente más tarde."],
   };
+
+  useErrorFlag(showFlag, flagMessage, flagTitle, flagIsSuccess, flagDuration);
 
   return (
     <StyledContainer>
