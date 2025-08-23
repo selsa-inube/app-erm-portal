@@ -4,33 +4,36 @@ import { getImmediateSupervisorByRequest } from "@services/humanResourcesRequest
 import type { ImmediateSupervisorByRequest } from "@services/humanResourcesRequest/getImmediateSupervisorByRequest/mappers";
 import { useHeaders } from "@hooks/useHeaders";
 import { useSignOut } from "@hooks/useSignOut";
+import { useErrorNavigation } from "@hooks/useErrorNavigation";
 
-import { useErrorFlag } from "./useErrorFlag";
+interface FlagOptions {
+  flagMessage?: string;
+  flagTitle?: string;
+  flagIsSuccess?: boolean;
+  flagDuration?: number;
+}
+
+interface UseImmediateSupervisorByRequestOptions {
+  showFlag?: boolean;
+  flagOptions?: FlagOptions;
+}
 
 export const useImmediateSupervisorByRequest = (
   humanResourceRequestId?: string,
+  options?: UseImmediateSupervisorByRequestOptions,
 ) => {
   const [data, setData] = useState<ImmediateSupervisorByRequest>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
   const { signOut } = useSignOut();
-
-  useErrorFlag(
-    flagShown,
-    "Error al obtener el supervisor inmediato",
-    "Error en la solicitud",
-    false,
-    5000,
-  );
+  const { buildErrorUrl } = useErrorNavigation();
 
   const fetchData = async () => {
     if (!humanResourceRequestId) return;
 
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = await getHeaders();
@@ -49,11 +52,13 @@ export const useImmediateSupervisorByRequest = (
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
       setError(errorInstance);
-      setFlagShown(true);
 
-      setTimeout(() => {
-        signOut("/error?code=500");
-      }, 5000);
+      const errorUrl = buildErrorUrl(500, {
+        showFlag: options?.showFlag,
+        flagOptions: options?.flagOptions,
+      });
+
+      signOut(errorUrl);
     } finally {
       setIsLoading(false);
     }
