@@ -4,6 +4,7 @@ import {
   HumanResourceRequest,
   ERequestType,
   requestTypeMap,
+  requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
@@ -25,10 +26,11 @@ export const useHumanResourceRequests = <T>(
 
   const effectiveEmployeeId = employeeId ?? selectedEmployee?.employeeId;
 
+  // ✅ Usamos labels en español
   useErrorFlag(
     flagShown,
     typeRequest
-      ? `Error al obtener solicitudes de tipo "${typeRequest}"`
+      ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
       : "Error al obtener solicitudes",
     "Error en la solicitud",
     false,
@@ -41,6 +43,8 @@ export const useHumanResourceRequests = <T>(
 
     try {
       const headers = await getHeaders();
+
+      // ✅ Backend solo recibe el slug en inglés
       const backendType = typeRequest ? requestTypeMap[typeRequest] : undefined;
 
       const requests = await getHumanResourceRequests(
