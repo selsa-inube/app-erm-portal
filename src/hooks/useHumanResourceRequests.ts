@@ -26,7 +26,6 @@ export const useHumanResourceRequests = <T>(
 
   const effectiveEmployeeId = employeeId ?? selectedEmployee?.employeeId;
 
-  // ✅ Usamos labels en español
   useErrorFlag(
     flagShown,
     typeRequest
@@ -43,8 +42,6 @@ export const useHumanResourceRequests = <T>(
 
     try {
       const headers = await getHeaders();
-
-      // ✅ Backend solo recibe el slug en inglés
       const backendType = typeRequest ? requestTypeMap[typeRequest] : undefined;
 
       const requests = await getHumanResourceRequests(
