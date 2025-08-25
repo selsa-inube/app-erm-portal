@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";

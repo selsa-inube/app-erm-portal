@@ -3,7 +3,7 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IFormsUpdateData } from "../../../types";
@@ -12,7 +12,7 @@ import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 interface IContract {
   contractId: string;
   businessName: string;
-  contractType: keyof typeof import("@mocks/contracts/enums").contractTypeLabels;
+  contractType: keyof typeof import("@ptypes/labels.types").contractTypeLabels;
 }
 
 const renderPersonalInfoVerification = (

@@ -24,7 +24,7 @@ import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
 import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 import { formatDate } from "@utils/date";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
@@ -191,8 +191,8 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataSource = isMobile ? data : currentData;
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
-    const contractLabel = dataDe.contractType
-      ? contractTypeLabels[dataDe.contractType]
+    const contractLabel = dataDe.contract_type
+      ? contractTypeLabels[dataDe.contract_type]
       : "";
 
     const dataDeta = [
@@ -207,8 +207,8 @@ function HolidaysTable(props: HolidaysTableProps) {
       {
         label: "Contrato",
         value:
-          dataDe.businessName && contractLabel
-            ? `${dataDe.businessName} - ${contractLabel}`
+          dataDe.business_name && contractLabel
+            ? `${dataDe.business_name} - ${contractLabel}`
             : "",
       },
       {

@@ -1,7 +1,7 @@
 import { Stack, Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@components/cards/BoxAttribute";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 import { useAppContext } from "@context/AppContext";
 import { spacing } from "@design/tokens/spacing";
 

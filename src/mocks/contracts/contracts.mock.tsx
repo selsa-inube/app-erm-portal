@@ -12,7 +12,7 @@ import {
   contractTypeLabels,
   workScheduleLabels,
   workplaceLabels,
-} from "./enums";
+} from "@ptypes/labels.types";
 
 const FORMALIZED_STATUS = "Formalized";
 const IN_PROCESS_OF_ENDING_STATUS = "InTheProcessOfEnding";
