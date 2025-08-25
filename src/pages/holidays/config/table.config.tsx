@@ -18,8 +18,7 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
     const parsedData = parseDataSafely(holiday.humanResourceRequestData);
 
     const isPaidVacation =
-      holiday.humanResourceRequestType ===
-      requestTypeMap[ERequestType.paid_vacations];
+      holiday.humanResourceRequestType === ERequestType.paid_vacations;
 
     const daysValue = (getValueFromData(parsedData, "daysToPay", null) ??
       getValueFromData(parsedData, "daysOff", 0)) as number;
@@ -89,8 +88,13 @@ export const formatVacationHistory = (
     businessName: string;
     contractType: string;
   })[] = [];
-
   employees.forEach((employee) => {
+    if (
+      !employee.employmentContracts ||
+      employee.employmentContracts.length === 0
+    ) {
+      return;
+    }
     employee.employmentContracts.forEach((contract) => {
       contract.vacationsHistory.forEach((vacation) => {
         allVacations.push({

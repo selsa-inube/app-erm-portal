@@ -3,8 +3,9 @@ export const contractTypeLabels: Record<string, string> = {
   by_work_or_labor: "Por obra o labor",
   civil_contract: "Contrato civil",
   contingent_worker: "Trabajador eventual",
-  fixed_term_contract: "Termino Fijo",
+  fixed_term_contract: "Término fijo",
   permanent_job: "Trabajo permanente",
+  indefinite: "Indefinido",
 };
 
 export const workScheduleLabels: Record<string, string> = {
@@ -13,12 +14,19 @@ export const workScheduleLabels: Record<string, string> = {
   NightWork: "Trabajo nocturno",
   PartTimeJob: "Medio tiempo",
   Shift: "Por turnos",
+  tuesday_to_sunday: "Martes a domingo",
+  monday_to_friday: "Lunes a viernes",
+  weekend: "Fin de semana",
 };
 
 export const workplaceLabels: Record<string, string> = {
   HibridWork: "Trabajo híbrido",
   OnSiteWork: "Trabajo presencial",
   Telecommuting: "Teletrabajo",
+
+  telecommuting: "Teletrabajo",
+  on_site: "Trabajo presencial",
+  hybrid: "Trabajo híbrido",
 };
 
 export enum EDetailedRequestStatus {
