@@ -9,7 +9,7 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
 import { capitalizeWords } from "@utils/text";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 import { useEmployee } from "@hooks/useEmployee";
 
 import { StyledHolidaysContainer } from "./styles";

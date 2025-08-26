@@ -3,16 +3,16 @@ import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHum
 import {
   HumanResourceRequest,
   ERequestType,
+  requestTypeMap,
+  requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
 import { useErrorFlag } from "./useErrorFlag";
 
-type RequestType = keyof typeof ERequestType;
-
 export const useHumanResourceRequests = <T>(
   formatData: (data: HumanResourceRequest[]) => T[],
-  typeRequest?: RequestType,
+  typeRequest?: ERequestType,
   employeeId?: string,
 ) => {
   const [data, setData] = useState<T[]>([]);
@@ -29,7 +29,7 @@ export const useHumanResourceRequests = <T>(
   useErrorFlag(
     flagShown,
     typeRequest
-      ? `Error al obtener solicitudes de tipo "${ERequestType[typeRequest]}"`
+      ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
       : "Error al obtener solicitudes",
     "Error en la solicitud",
     false,
@@ -39,13 +39,17 @@ export const useHumanResourceRequests = <T>(
     if (!effectiveEmployeeId) return;
     setIsLoading(true);
     setFlagShown(false);
+
     try {
       const headers = await getHeaders();
+      const backendType = typeRequest ? requestTypeMap[typeRequest] : undefined;
+
       const requests = await getHumanResourceRequests(
         effectiveEmployeeId,
         headers,
-        typeRequest,
+        backendType,
       );
+
       const requestsData = requests ?? [];
       setRawData(requestsData);
       setData(formatData(requestsData));

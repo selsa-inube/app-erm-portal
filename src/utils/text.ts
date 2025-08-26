@@ -1,4 +1,4 @@
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 
 export function truncateText(text: string, maxLength: number): string {
   return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;

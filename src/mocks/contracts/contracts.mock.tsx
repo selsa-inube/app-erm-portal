@@ -12,7 +12,7 @@ import {
   contractTypeLabels,
   workScheduleLabels,
   workplaceLabels,
-} from "./enums";
+} from "@ptypes/labels.types";
 
 const FORMALIZED_STATUS = "Formalized";
 const IN_PROCESS_OF_ENDING_STATUS = "InTheProcessOfEnding";
@@ -78,7 +78,11 @@ const getLocalizedLabel = (
   value: string,
   labelMap: Record<string, string>,
 ): string => {
-  return labelMap[value] ?? value;
+  if (!value) return "";
+  const lower = value.toLowerCase();
+  const snake = value.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+
+  return labelMap[value] ?? labelMap[lower] ?? labelMap[snake] ?? value;
 };
 
 export const transformEmploymentContractsToContractCards = (
