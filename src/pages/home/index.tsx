@@ -69,7 +69,7 @@ function Home() {
       isEnabled: boolean;
       id: string;
       label: string;
-      icon: React.ReactElement;
+      icon: React.ReactNode;
       path: string;
       description: string;
     }[]
