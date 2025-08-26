@@ -1,8 +1,9 @@
+import * as MdIcons from "react-icons/md";
+import { IconType } from "react-icons";
 import { MdLogout } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
 import { ReactNode } from "react";
-
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 
 const baseNavLinks = [
@@ -72,13 +73,12 @@ const actions = [
 
 const getIcon = (iconReference?: string): ReactNode => {
   if (iconReference && iconReference.trim() !== "") {
-    return (
-      <img
-        src={iconReference}
-        alt="icon"
-        style={{ width: 24, height: 24, objectFit: "contain" }}
-      />
-    );
+    const IconComponent: IconType | undefined = (
+      MdIcons as Record<string, IconType>
+    )[iconReference];
+    if (IconComponent) {
+      return <IconComponent size={24} />;
+    }
   }
   return <div style={{ width: 24, height: 24 }} />;
 };
@@ -101,6 +101,7 @@ const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
 const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const location = useLocation();
   const baseNav = navConfig(optionForCustomerPortal);
+
   const nav = {
     reactPortalId: "portals",
     title: "MENU",
@@ -162,6 +163,7 @@ const userMenu = [
 
 export {
   useNavConfig,
+  getIcon,
   useConfigHeader,
   baseNavLinks,
   userMenu,
