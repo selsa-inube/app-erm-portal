@@ -1,28 +1,24 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { useFlagParams } from "@hooks/useFlagParams";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 export function ErrorPageContainer() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+
   const flagParams = useFlagParams();
 
-  const errorCode = parseInt(searchParams.get("code") ?? "0", 10);
+  const codeError = searchParams.get("code");
+  const errorCode = codeError ? parseInt(codeError, 10) : 404;
 
-  const handleGoBack = () => {
-    navigate("/");
-  };
-
-  return (
-    <ErrorPage
-      errorCode={errorCode}
-      onClick={handleGoBack}
-      showFlag={flagParams.showFlag}
-      flagMessage={flagParams.flagMessage}
-      flagTitle={flagParams.flagTitle}
-      flagIsSuccess={flagParams.flagIsSuccess}
-      flagDuration={flagParams.flagDuration}
-    />
+  useErrorFlag(
+    flagParams.showFlag,
+    flagParams.flagMessage,
+    flagParams.flagTitle,
+    flagParams.flagIsSuccess,
+    flagParams.flagDuration,
   );
+
+  return <ErrorPage errorCode={errorCode} />;
 }
