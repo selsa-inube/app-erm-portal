@@ -13,7 +13,7 @@ import {
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { StyledContainer } from "./styles";

@@ -4,7 +4,7 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { formatDate } from "@utils/date";
 import { capitalizeWords } from "@utils/text";
-import { contractTypeLabels } from "@mocks/contracts/enums";
+import { contractTypeLabels } from "@ptypes/labels.types";
 
 import { PendingUsedDaysTable } from "../PendingUsedDaysTable";
 import { paymentTableHeaders } from "../PendingUsedDaysTable/tableConfig";
