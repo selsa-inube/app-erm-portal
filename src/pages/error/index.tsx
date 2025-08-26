@@ -1,10 +1,24 @@
+import { useSearchParams } from "react-router-dom";
+
 import { ErrorPage } from "@components/layout/ErrorPage";
+import { useFlagParams } from "@hooks/useFlagParams";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
-const ErrorPageContainer = () => {
-  const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.search);
-  const codeError = params.get("code");
-  return <ErrorPage errorCode={codeError ? Number(codeError) : 404} />;
-};
+export function ErrorPageContainer() {
+  const [searchParams] = useSearchParams();
 
-export { ErrorPageContainer };
+  const flagParams = useFlagParams();
+
+  const codeError = searchParams.get("code");
+  const errorCode = codeError ? parseInt(codeError, 10) : 404;
+
+  useErrorFlag(
+    flagParams.showFlag,
+    flagParams.flagMessage,
+    flagParams.flagTitle,
+    flagParams.flagIsSuccess,
+    flagParams.flagDuration,
+  );
+
+  return <ErrorPage errorCode={errorCode} />;
+}
