@@ -18,6 +18,8 @@ import { CertificationsRoutes } from "./certifications";
 import { EmployeesRoutes } from "./employees";
 import { ApprovalsRoutes } from "./approvals";
 
+import { ProtectedRoute } from "@pages/protectedRoutes/ProtectedRouteUrl";
+
 export const protectedRouter = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -28,11 +30,58 @@ export const protectedRouter = createBrowserRouter(
       />
       <Route path="/" element={<Home />} />
       <Route path="/login/*" element={<LoginRoutes />} />
+
       <Route path="/*" element={<ProtectedAppPage />}>
-        <Route path="holidays/*" element={<HolidaysRoutes />} />
-        <Route path="certifications/*" element={<CertificationsRoutes />} />
-        <Route path="contracts/*" element={<Contracts />} />
-        <Route path="requests/*" element={<RequestsRoutes />} />
+        <Route
+          path="holidays/*"
+          element={
+            <ProtectedRoute
+              element={<HolidaysRoutes />}
+              optionCode="holidays"
+            />
+          }
+        />
+        <Route
+          path="certifications/*"
+          element={
+            <ProtectedRoute
+              element={<CertificationsRoutes />}
+              optionCode="certifications"
+            />
+          }
+        />
+        <Route
+          path="contracts/*"
+          element={
+            <ProtectedRoute element={<Contracts />} optionCode="contracts" />
+          }
+        />
+        <Route
+          path="requests/*"
+          element={
+            <ProtectedRoute
+              element={<RequestsRoutes />}
+              optionCode="requests"
+            />
+          }
+        />
+        <Route
+          path="absences/*"
+          element={<ProtectedRoute element={<></>} optionCode="absences" />}
+        />
+        <Route
+          path="disability/*"
+          element={<ProtectedRoute element={<></>} optionCode="disability" />}
+        />
+        <Route
+          path="charges/*"
+          element={<ProtectedRoute element={<></>} optionCode="charges" />}
+        />
+
+        <Route
+          path="*"
+          element={<ProtectedRoute element={<></>} enforcePrivilegeCheck />}
+        />
       </Route>
       <Route
         path="/employees/*"
@@ -40,6 +89,7 @@ export const protectedRouter = createBrowserRouter(
       >
         <Route path="*" element={<EmployeesRoutes />} />
       </Route>
+
       <Route
         path="/approvals/*"
         element={
@@ -48,8 +98,12 @@ export const protectedRouter = createBrowserRouter(
       >
         <Route path="*" element={<ApprovalsRoutes />} />
       </Route>
+
       <Route path="logout" element={<LogOut />} />
-      <Route path="*" element={<ProtectedAppPage />} />
+      <Route
+        path="*"
+        element={<ProtectedRoute element={<ProtectedAppPage />} />}
+      />
     </>,
   ),
 );
