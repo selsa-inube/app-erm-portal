@@ -2,15 +2,15 @@ import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 
-import { VacationApprovalFormUI } from "./interface";
+import { usePatchHumanResourceRequest } from "@hooks/usePatchHumanResourceRequest";
+import { useAppContext } from "@context/AppContext";
 
-interface FormValues {
-  approval: string;
-  observation: string;
-}
+import { VacationApprovalFormUI } from "./interface";
+import { ApprovalOptions, IFormValues } from "./types";
 
 interface VacationApprovalFormProps {
   vacationType?: string;
+  requestNumber?: string;
   requestId?: string;
   employeeName?: string;
   employeeSurname?: string;
@@ -23,6 +23,7 @@ interface VacationApprovalFormProps {
 function VacationApprovalForm(props: VacationApprovalFormProps) {
   const {
     vacationType,
+    requestNumber,
     requestId,
     employeeName,
     employeeSurname,
@@ -35,6 +36,10 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
 
+  const { updateRequest, reset, isLoading } = usePatchHumanResourceRequest();
+
+  const { staffUser } = useAppContext();
+
   const validationSchema = Yup.object({
     approval: Yup.string().required(
       "Debe seleccionar una opción de aprobación",
@@ -42,7 +47,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     observation: Yup.string()
       .max(500, "Las observaciones no pueden exceder 500 caracteres")
       .when("approval", {
-        is: "reject",
+        is: ApprovalOptions.REJECT,
         then: (schema) =>
           observationsRequired
             ? schema.required(
@@ -53,19 +58,39 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
       }),
   });
 
-  const formik: FormikProps<FormValues> = useFormik<FormValues>({
+  const formik: FormikProps<IFormValues> = useFormik<IFormValues>({
     initialValues: {
       approval: "",
       observation: "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Formulario enviado:", values);
+    onSubmit: async (values) => {
+      try {
+        const currentDate = new Date().toISOString();
 
-      const approved = values.approval === "approve";
-      setIsApproved(approved);
+        const requestBody = {
+          humanResourceRequestId: requestId,
+          modifyJustification: values.observation || "Sin observaciones",
+          humanResourceRequestDate: currentDate,
+          humanResourceRequestTraceabilities: [
+            {
+              actionExecuted: values.approval,
+              description: values.observation || "Sin observaciones",
+              executionDate: currentDate,
+              transactionOperation: "Insert",
+              userWhoExecutedAction: staffUser.staffId,
+            },
+          ],
+        };
 
-      setShowModal(true);
+        await updateRequest(requestBody);
+
+        const approved = values.approval === ApprovalOptions.APPROVE;
+        setIsApproved(approved);
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
+      }
     },
   });
 
@@ -76,13 +101,14 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
 
   const handleCloseModal = (): void => {
     setShowModal(false);
+    reset();
   };
 
   return (
     <VacationApprovalFormUI
       formik={formik}
       vacationType={vacationType}
-      requestId={requestId}
+      requestNumber={requestNumber}
       observationsRequired={observationsRequired}
       showModal={showModal}
       isApproved={isApproved}
@@ -91,6 +117,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
       daysRequested={daysRequested}
       periodFrom={periodFrom}
       periodTo={periodTo}
+      isLoading={isLoading}
       onSubmit={handleSubmit}
       onCloseModal={handleCloseModal}
     />

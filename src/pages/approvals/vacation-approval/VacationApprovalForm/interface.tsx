@@ -14,27 +14,14 @@ import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords } from "@utils/text";
 import { formatDateNumeric } from "@utils/date";
 
+import { ApprovalOptions, IFormValues, VacationTypes } from "./types";
 import { StyledFormContainer, StyledInputsContainer } from "./styles";
-
-const APPROVAL_OPTIONS = {
-  APPROVE: "approve",
-  REJECT: "reject",
-} as const;
-
-const VACATION_TYPES = {
-  PAID: "paid_vacations",
-} as const;
 
 const MAX_OBSERVATION_LENGTH = 500;
 const MOBILE_BREAKPOINT = "(max-width: 950px)";
 
-interface FormValues {
-  approval: string;
-  observation: string;
-}
-
 const getFormTitle = (vacationType: string, requestId: string): string => {
-  const isPaidVacation = vacationType === VACATION_TYPES.PAID;
+  const isPaidVacation = vacationType === VacationTypes.PAID;
   const titlePrefix = isPaidVacation
     ? "Solicitud de pago vacaciones"
     : "Solicitud de disfrute vacaciones";
@@ -48,7 +35,7 @@ const getEmployeeDisplayName = (name?: string, surname?: string): string => {
 };
 
 const getPeriodLabel = (vacationType: string): string => {
-  return vacationType === VACATION_TYPES.PAID ? "Días a pagar: " : "Periodo: ";
+  return vacationType === VacationTypes.PAID ? "Días a pagar: " : "Periodo: ";
 };
 
 const getPeriodValue = (
@@ -57,7 +44,7 @@ const getPeriodValue = (
   periodFrom?: string,
   periodTo?: string,
 ): string => {
-  const isPaidVacation = vacationType === VACATION_TYPES.PAID;
+  const isPaidVacation = vacationType === VacationTypes.PAID;
 
   if (isPaidVacation) {
     return daysRequested ? `${daysRequested} días` : "No especificado";
@@ -73,9 +60,9 @@ const getPeriodValue = (
 };
 
 interface VacationApprovalFormUIProps {
-  formik: FormikProps<FormValues>;
+  formik: FormikProps<IFormValues>;
   vacationType?: string;
-  requestId?: string;
+  requestNumber?: string;
   observationsRequired?: boolean;
   showModal?: boolean;
   isApproved?: boolean;
@@ -84,6 +71,7 @@ interface VacationApprovalFormUIProps {
   daysRequested?: number;
   periodFrom?: string;
   periodTo?: string;
+  isLoading: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onCloseModal?: () => void;
 }
@@ -92,7 +80,7 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
   const {
     formik,
     vacationType = "",
-    requestId = "",
+    requestNumber = "",
     observationsRequired = true,
     showModal = false,
     isApproved = false,
@@ -101,6 +89,7 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
     daysRequested,
     periodFrom,
     periodTo,
+    isLoading,
     onSubmit,
     onCloseModal,
   } = props;
@@ -108,13 +97,13 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
 
   const isObservationRequired =
-    observationsRequired && formik.values.approval === APPROVAL_OPTIONS.REJECT;
+    observationsRequired && formik.values.approval === ApprovalOptions.REJECT;
 
   const isFormValid = isObservationRequired
     ? formik.isValid && formik.values.approval && formik.values.observation
     : formik.isValid && formik.values.approval;
 
-  const formTitle = getFormTitle(vacationType, requestId);
+  const formTitle = getFormTitle(vacationType, requestNumber);
   const employeeDisplayName = getEmployeeDisplayName(
     employeeName,
     employeeSurname,
@@ -175,8 +164,8 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
                 <Radio
                   id="approve"
                   name="approval"
-                  value={APPROVAL_OPTIONS.APPROVE}
-                  checked={formik.values.approval === APPROVAL_OPTIONS.APPROVE}
+                  value={ApprovalOptions.APPROVE}
+                  checked={formik.values.approval === ApprovalOptions.APPROVE}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleApprovalChange(e.target.value);
                   }}
@@ -185,8 +174,8 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
                 <Radio
                   id="reject"
                   name="approval"
-                  value={APPROVAL_OPTIONS.REJECT}
-                  checked={formik.values.approval === APPROVAL_OPTIONS.REJECT}
+                  value={ApprovalOptions.REJECT}
+                  checked={formik.values.approval === ApprovalOptions.REJECT}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleApprovalChange(e.target.value);
                   }}
@@ -213,7 +202,12 @@ function VacationApprovalFormUI(props: VacationApprovalFormUIProps) {
           </StyledInputsContainer>
 
           <Stack justifyContent="flex-end" width="100%">
-            <Button type="submit" appearance="primary" disabled={!isFormValid}>
+            <Button
+              type="submit"
+              appearance="primary"
+              loading={isLoading}
+              disabled={!isFormValid}
+            >
               Enviar
             </Button>
           </Stack>
