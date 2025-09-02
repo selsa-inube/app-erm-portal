@@ -6,11 +6,7 @@ import { usePatchHumanResourceRequest } from "@hooks/usePatchHumanResourceReques
 import { useAppContext } from "@context/AppContext";
 
 import { VacationApprovalFormUI } from "./interface";
-
-interface FormValues {
-  approval: string;
-  observation: string;
-}
+import { ApprovalOptions, IFormValues } from "./types";
 
 interface VacationApprovalFormProps {
   vacationType?: string;
@@ -51,7 +47,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     observation: Yup.string()
       .max(500, "Las observaciones no pueden exceder 500 caracteres")
       .when("approval", {
-        is: "reject",
+        is: ApprovalOptions.REJECT,
         then: (schema) =>
           observationsRequired
             ? schema.required(
@@ -62,7 +58,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
       }),
   });
 
-  const formik: FormikProps<FormValues> = useFormik<FormValues>({
+  const formik: FormikProps<IFormValues> = useFormik<IFormValues>({
     initialValues: {
       approval: "",
       observation: "",
@@ -89,7 +85,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
 
         await updateRequest(requestBody);
 
-        const approved = values.approval === "approve";
+        const approved = values.approval === ApprovalOptions.APPROVE;
         setIsApproved(approved);
         setShowModal(true);
       } catch (error) {
