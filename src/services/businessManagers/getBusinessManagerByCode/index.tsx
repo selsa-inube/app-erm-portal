@@ -49,7 +49,6 @@ const getBusinessManagerByCode = async (
         };
       }
 
-      // si el servicio devuelve un array, tomar el primero
       const businessManager =
         Array.isArray(data) && data.length > 0 ? data[0] : data;
 
