@@ -91,7 +91,7 @@ const optionMenuStaff = [
     publicCode: "PortalErm",
     abbreviatedName: "Portal ERM Gestion humanas",
     descriptionUse: "A traves de este portal se gestionan los empleados",
-    businessManagerId: "598a8ec2-8725-48ac-b592-b23cdd54ec30",
+    businessManagerCode: "598a8ec2-8725-48ac-b592-b23cdd54ec30",
     staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
     url: "https://images.jpg",
     optionsByStaffPortalBusinessManager: [

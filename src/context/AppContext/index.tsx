@@ -86,7 +86,7 @@ function AppProvider(props: AppProviderProps) {
 
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
-  const [businessManagers, setBusinessManagers] =
+  const [businessManager, setBusinessManager] =
     useState<IBusinessManager>(businessManagersData);
   const [businessUnits, setBusinessUnits] =
     useState<IBusinessUnit[]>(businessUnitsData);
@@ -205,8 +205,8 @@ function AppProvider(props: AppProviderProps) {
         setProvisionedPortal,
         staffUser,
         setStaffUser,
-        businessManagers,
-        setBusinessManagers,
+        businessManager,
+        setBusinessManager,
         businessUnits,
         setBusinessUnits,
         businessUnitsIsFetching,

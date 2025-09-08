@@ -5,19 +5,9 @@ import {
   IStaffPortalByBusinessManager,
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
+import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-
-interface BusinessManager {
-  id: string;
-  publicCode: string;
-  language: string;
-  abbreviatedName: string;
-  description: string;
-  urlBrand: string;
-  urlLogo: string;
-  customerId: string;
-}
 
 export interface IStaffUseCasesData {
   listOfUseCases: string[];
@@ -57,8 +47,8 @@ export interface IAppContextType {
   >;
   staffUser: IStaffUserAccount;
   setStaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount>>;
-  businessManagers: BusinessManager | null;
-  setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
+  businessManager: IBusinessManager;
+  setBusinessManager: React.Dispatch<React.SetStateAction<IBusinessManager>>;
   businessUnits: IBusinessUnit[];
   setBusinessUnits: React.Dispatch<React.SetStateAction<IBusinessUnit[]>>;
   businessUnitsIsFetching: boolean;

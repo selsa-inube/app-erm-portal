@@ -32,13 +32,13 @@ function SelectEmployeePage() {
     handleSubmit,
   } = useSelectEmployee();
 
-  const { businessManagers, selectedClient, setStaffUseCasesData } =
+  const { businessManager, selectedClient, setStaffUseCasesData } =
     useAppContext();
   const id = JSON.parse(
     localStorage.getItem("staffUser") ?? "{}",
   ).identificationDocumentNumber;
 
-  const publicCode = businessManagers?.publicCode ?? "";
+  const publicCode = businessManager?.publicCode ?? "";
   const clientId = selectedClient?.id ?? "";
 
   const { data } = useStaffUseCases(publicCode, clientId, id);
