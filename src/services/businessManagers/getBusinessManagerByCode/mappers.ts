@@ -11,11 +11,8 @@ const mapBusinessManagerApiToEntity = (
     return "";
   };
 
-  const clientId = toStringSafe(businessManager.clientId);
-  const clientSecret = toStringSafe(businessManager.clientSecret);
-
   const business: IBusinessManager = {
-    id: toStringSafe(businessManager.businessManagerId),
+    businessManagerCode: toStringSafe(businessManager.businessManagerCode),
     publicCode: toStringSafe(businessManager.publicCode),
     language: toStringSafe(businessManager.languageId),
     abbreviatedName: toStringSafe(businessManager.abbreviatedName),
@@ -23,9 +20,10 @@ const mapBusinessManagerApiToEntity = (
     urlBrand: toStringSafe(businessManager.urlBrand),
     urlLogo: toStringSafe(businessManager.urlLogo),
     customerId: toStringSafe(businessManager.customerId),
-    clientId: clientId ? encrypt(clientId) : "",
-    clientSecret: clientSecret ? encrypt(clientSecret) : "",
+    clientId: encrypt(toStringSafe(businessManager.clientId)),
+    clientSecret: encrypt(toStringSafe(businessManager.clientSecret)),
   };
+
   return business;
 };
 

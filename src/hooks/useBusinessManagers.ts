@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
-import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerById";
+import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerByCode";
 
 import { useErrorFlag } from "./useErrorFlag";
 

@@ -9,7 +9,7 @@ import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagerByCode = async (
-  publicCode: string,
+  businessManagerCode: string,
 ): Promise<IBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -29,7 +29,7 @@ const getBusinessManagerByCode = async (
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/portal-staff/${publicCode}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/portal-staff/${businessManagerCode}`,
         options,
       );
 
@@ -49,7 +49,10 @@ const getBusinessManagerByCode = async (
         };
       }
 
-      return mapBusinessManagerApiToEntity(data);
+      const businessManager =
+        Array.isArray(data) && data.length > 0 ? data[0] : data;
+
+      return mapBusinessManagerApiToEntity(businessManager);
     } catch (error) {
       if (attempt === maxRetries) {
         throw new Error(
@@ -58,7 +61,6 @@ const getBusinessManagerByCode = async (
           }`,
         );
       }
-
       continue;
     }
   }
