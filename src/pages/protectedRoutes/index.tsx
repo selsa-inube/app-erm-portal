@@ -8,6 +8,7 @@ import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 import { protectedRouter } from "@routes/protectedRoutes";
+import { useSignOut } from "@hooks/useSignOut";
 
 import { BusinessUnitsLoader } from "src/BusinessUnitsLoader";
 
@@ -23,7 +24,13 @@ export function ProtectedRoutes() {
     businessManagersData,
   } = usePortalAuth();
 
-  const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();
+  const { signOut } = useSignOut();
+
+  const { loginWithRedirect, isAuthenticated, isLoading, error } = useIAuth();
+
+  if (error) {
+    signOut("/error?code=1008");
+  }
 
   if (!portalCode) {
     return <ErrorPage errorCode={1001} />;
