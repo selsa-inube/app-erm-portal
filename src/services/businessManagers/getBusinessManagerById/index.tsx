@@ -8,8 +8,8 @@ import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
-const getBusinessManagerById = async (
-  businessManagerId: string,
+const getBusinessManagerByCode = async (
+  publicCode: string,
 ): Promise<IBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -22,14 +22,14 @@ const getBusinessManagerById = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchByIdBusinessManager",
+          "X-Action": "SearchBusinessManagerByPortalStaff",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/${businessManagerId}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/portal-staff/${publicCode}`,
         options,
       );
 
@@ -66,4 +66,4 @@ const getBusinessManagerById = async (
   return {} as IBusinessManager;
 };
 
-export { getBusinessManagerById };
+export { getBusinessManagerByCode };

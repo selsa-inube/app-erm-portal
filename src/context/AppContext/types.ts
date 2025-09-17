@@ -17,6 +17,8 @@ interface BusinessManager {
   urlBrand: string;
   urlLogo: string;
   customerId: string;
+  clientId: string;
+  clientSecret: string;
 }
 
 export interface IStaffUseCasesData {

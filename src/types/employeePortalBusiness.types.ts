@@ -33,6 +33,8 @@ interface IBusinessManager {
   urlBrand: string;
   urlLogo: string;
   customerId: string;
+  clientId: string;
+  clientSecret: string;
 }
 
 export enum EContractStatus {

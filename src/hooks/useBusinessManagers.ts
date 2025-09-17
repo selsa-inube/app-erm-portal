@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 
-import {
-  IBusinessManager,
-  IEmployeePortalByBusinessManager,
-} from "@ptypes/employeePortalBusiness.types";
-import { getBusinessManagerById } from "@services/businessManagers/getBusinessManagerById";
+import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerById";
 
 import { useErrorFlag } from "./useErrorFlag";
 
 export const useBusinessManagers = (
-  portalPublicCode: IEmployeePortalByBusinessManager,
+  portalPublicCode: IStaffPortalByBusinessManager,
 ) => {
   const [businessManagersData, setBusinessManagersData] =
     useState<IBusinessManager>({} as IBusinessManager);
@@ -22,12 +20,12 @@ export const useBusinessManagers = (
 
   useEffect(() => {
     const fetchBusinessManagers = async () => {
-      if (!portalPublicCode?.businessManagerId) return;
+      if (!portalPublicCode?.publicCode) return;
 
       setIsFetching(true);
       try {
-        const fetchedBusinessManagers = await getBusinessManagerById(
-          portalPublicCode.businessManagerId,
+        const fetchedBusinessManagers = await getBusinessManagerByCode(
+          portalPublicCode.publicCode,
         );
 
         if (

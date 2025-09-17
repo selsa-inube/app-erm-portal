@@ -23,6 +23,8 @@ export const mockBusinessManagersData: IBusinessManager = {
   urlBrand: "https://example.com/brand.png",
   urlLogo: "https://example.com/logo.png",
   customerId: "C001",
+  clientId: "",
+  clientSecret: "",
 };
 
 export const mockBusinessUnitsData = [
