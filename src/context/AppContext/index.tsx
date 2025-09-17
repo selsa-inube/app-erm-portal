@@ -47,9 +47,10 @@ function AppProvider(props: AppProviderProps) {
 
   useEffect(() => {
     if (IAuthUser) {
+      console.log("IAuthUser cambiado:", IAuthUser);
       setUser({
         username: IAuthUser.username,
-        id: "1234567890",
+        id: "1062905485",
         company: IAuthUser.company,
         urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
       });

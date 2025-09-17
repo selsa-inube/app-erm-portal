@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { getOptionForCustomerPortal } from "@services/staffPortal/getOptionForCustomerPortal";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
-import { mapOptionForCustomerPortalApiToEntities } from "@services/staffPortal/getOptionForCustomerPortal/mappers";
-import { environment } from "@config/environment";
-import { optionDescriptionStaff } from "@mocks/staff/staff.mock";
 
 import { useErrorFlag } from "./useErrorFlag";
 
@@ -32,13 +29,10 @@ export function useOptionsMenu(
         return;
       }
       try {
-        const staffoptionData =
-          environment.IVITE_VERCEL === "Y"
-            ? mapOptionForCustomerPortalApiToEntities(optionDescriptionStaff)
-            : await getOptionForCustomerPortal(
-                staffPortalPublicCode,
-                businessUnit,
-              );
+        const staffoptionData = await getOptionForCustomerPortal(
+          staffPortalPublicCode,
+          businessUnit,
+        );
         if (staffoptionData.length === 0) {
           setHasError(1005);
           setFlagShown(true);

@@ -13,7 +13,6 @@ interface Environment {
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: string;
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
   IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE: string;
-  IVITE_VERCEL?: string;
   ORIGINATOR_ID: string;
   IAUTH_URL: string;
 }
@@ -28,7 +27,6 @@ const environment: Environment = {
     .VITE_IHUREM_PERSISTENCE_PROCESS_SERVICE as string,
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
-  IVITE_VERCEL: import.meta.env.VITE_VERCEL as string,
   ORIGINATOR_ID: import.meta.env.VITE_ORIGINATOR_ID as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
 };
