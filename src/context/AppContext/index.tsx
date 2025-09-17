@@ -5,7 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useIAuth } from "@inube/iauth-react";
 
 import {
   IStaffPortalByBusinessManager,
@@ -36,23 +36,28 @@ interface AppProviderProps {
 function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
-  const { user: auth0User } = useAuth0();
+  const { user: IAuthUser } = useIAuth();
 
   const [user, setUser] = useState<{
     username: string;
     id: string;
     company: string;
     urlImgPerfil: string;
-  } | null>(
-    auth0User
-      ? {
-          username: auth0User.name ?? "",
-          id: "1234567890",
-          company: "Company Name",
-          urlImgPerfil: auth0User.picture ?? "",
-        }
-      : null,
-  );
+  } | null>(null);
+
+  useEffect(() => {
+    if (IAuthUser) {
+      console.log("IAuthUser cambiado:", IAuthUser);
+      setUser({
+        username: IAuthUser.username,
+        id: "1062905485",
+        company: IAuthUser.company,
+        urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+      });
+    } else {
+      setUser(null);
+    }
+  }, [IAuthUser]);
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);

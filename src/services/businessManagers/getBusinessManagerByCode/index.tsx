@@ -22,14 +22,14 @@ const getBusinessManagerByCode = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
-          "X-Action": "SearchAllBusinessManager",
+          "X-Action": "SearchBusinessManagerByPortalStaff",
           "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers?businessManagerCode=${businessManagerCode}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/business-managers/portal-staff/${businessManagerCode}`,
         options,
       );
 

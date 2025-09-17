@@ -85,55 +85,6 @@ const dataStaff = {
   ],
 };
 
-const optionMenuStaff = [
-  {
-    staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-    publicCode: "PortalErm",
-    abbreviatedName: "Portal ERM Gestion humanas",
-    descriptionUse: "A traves de este portal se gestionan los empleados",
-    businessManagerCode: "598a8ec2-8725-48ac-b592-b23cdd54ec30",
-    staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-    url: "https://images.jpg",
-    optionsByStaffPortalBusinessManager: [
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "5dcf4327-88e2-4053-bd1a-acaa3f41672c",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "08489ba9-2484-4549-ab52-f0f11a4b7ccd",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "ca9d5183-7249-4374-ae49-c5424eabaf58",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "002e13ba-37cf-4ec9-ac2b-1f2d7cf89b6b",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "4deb1d13-7433-4ba4-b958-a9de025a5b50",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "235126e1-7c13-4ce5-abba-a63e4e14abb6",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-      {
-        staffPortalId: "49ff6546-ab8b-488f-9df4-3a4879a03cdb",
-        optionStaffId: "2573cf2a-0b0d-4558-a275-dd5eed87c0e5",
-        staffPortalCatalogId: "d70c5ddc-02c1-443d-970b-e3913ffe6458",
-      },
-    ],
-  },
-];
-
 const optionDescriptionStaff = [
   {
     optionStaffId: "08489ba9-2484-4549-ab52-f0f11a4b7ccd",
@@ -183,6 +134,5 @@ export {
   mockStaffMembers,
   businessUnitStaff,
   dataStaff,
-  optionMenuStaff,
   optionDescriptionStaff,
 };
