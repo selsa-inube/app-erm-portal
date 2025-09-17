@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { MdOutlineBeachAccess, MdOutlineChevronRight } from "react-icons/md";
 import {
   Text,
@@ -12,13 +11,10 @@ import {
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
-import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
-import { userMenu, useConfigHeader, navConfig } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext";
+import { userMenu } from "@config/nav.config";
 import { VinculationBanner } from "@components/layout/Banner";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
-import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 
 import {
   StyledAppPage,
@@ -30,14 +26,13 @@ import {
   StyledCollapseIcon,
   StyledCollapse,
 } from "./styles";
+import { useHome } from "./interface";
 
-const renderLogo = (imgUrl: string, altText: string) => {
-  return (
-    <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} alt={altText} />
-    </StyledContentImg>
-  );
-};
+const renderLogo = (imgUrl: string, altText: string) => (
+  <StyledContentImg to="/">
+    <StyledLogo src={imgUrl} alt={altText} />
+  </StyledContentImg>
+);
 
 function Home() {
   const {
@@ -45,83 +40,22 @@ function Home() {
     logoUrl,
     selectedClient,
     businessUnits,
-    setSelectedClient,
     selectedEmployee,
-    optionForCustomerPortal,
-  } = useAppContext();
+    configHeader,
+    collapse,
+    setCollapse,
+    isModalOpen,
+    toggleModal,
+    collapseMenuRef,
+    businessUnitChangeRef,
+    dataOptions,
+    totalDays,
+    loadingDays,
+    handleLogoClick,
+    showBusinessUnitSelector,
+  } = useHome();
 
-  const { vacationDays, loadingDays } = useEmployeeVacationDays(
-    selectedEmployee?.employeeId ?? null,
-  );
-  const totalDays =
-    vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
-
-  const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
   const isTablet = useMediaQuery("(max-width: 944px)");
-  const navigate = useNavigate();
-
-  const [collapse, setCollapse] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const collapseMenuRef = useRef<HTMLDivElement>(null);
-  const businessUnitChangeRef = useRef<HTMLDivElement>(null);
-  const [dataOptions, setDataOptions] = useState<
-    {
-      isEnabled: boolean;
-      id: string;
-      label: string;
-      icon: React.ReactNode;
-      path: string;
-      description: string;
-    }[]
-  >();
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      collapseMenuRef.current &&
-      !collapseMenuRef.current.contains(event.target as Node) &&
-      businessUnitChangeRef.current &&
-      !businessUnitChangeRef.current.contains(event.target as Node)
-    ) {
-      setCollapse(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!selectedClient) {
-      navigate("/login", { replace: true });
-    }
-  }, [selectedClient, navigate]);
-
-  useEffect(() => {
-    if (optionForCustomerPortal) {
-      setDataOptions(navConfig(optionForCustomerPortal));
-    }
-  }, [optionForCustomerPortal]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleLogoClick = (businessUnit: IBusinessUnit) => {
-    setSelectedClient({
-      id: businessUnit.businessUnitPublicCode,
-      name: businessUnit.descriptionUse,
-      sigla: businessUnit.abbreviatedName,
-      logo: businessUnit.urlLogo,
-    });
-
-    setCollapse(false);
-    navigate("/employees/select-employee");
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const showBusinessUnitSelector = businessUnits.length > 1;
 
   return (
     <StyledAppPage>
@@ -139,6 +73,7 @@ function Home() {
           }}
           menu={userMenu}
         />
+
         {showBusinessUnitSelector && (
           <StyledCollapseIcon
             $collapse={collapse}
@@ -154,6 +89,7 @@ function Home() {
             />
           </StyledCollapseIcon>
         )}
+
         {collapse && showBusinessUnitSelector && (
           <StyledCollapse ref={businessUnitChangeRef}>
             <BusinessUnitChange
@@ -163,9 +99,12 @@ function Home() {
             />
           </StyledCollapse>
         )}
+
         <StyledContainer>
           <Stack
-            padding={`${isTablet ? spacing.s100 : spacing.s400} ${isTablet ? spacing.s200 : spacing.s800} ${isTablet ? spacing.s400 : spacing.s200}`}
+            padding={`${isTablet ? spacing.s100 : spacing.s400} ${
+              isTablet ? spacing.s200 : spacing.s800
+            } ${isTablet ? spacing.s400 : spacing.s200}`}
             justifyContent="center"
           >
             <VinculationBanner
@@ -203,6 +142,7 @@ function Home() {
               expandedWidth
             />
           </Stack>
+
           <StyledMain $isTablet={isTablet}>
             <Grid
               templateColumns={isTablet ? "1fr" : "auto 1fr"}
@@ -239,6 +179,7 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
+
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
       )}
