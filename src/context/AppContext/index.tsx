@@ -16,6 +16,7 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 
 import {
   IAppContextType,
@@ -36,7 +37,7 @@ interface AppProviderProps {
 function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
-  const { user: IAuthUser } = useIAuth();
+  const { user: IAuthUser, isLoading: isIAuthLoading } = useIAuth();
 
   const [user, setUser] = useState<{
     username: string;
@@ -46,18 +47,19 @@ function AppProvider(props: AppProviderProps) {
   } | null>(null);
 
   useEffect(() => {
-    if (IAuthUser) {
-      console.log("IAuthUser cambiado:", IAuthUser);
-      setUser({
-        username: IAuthUser.username,
-        id: "1062905485",
-        company: IAuthUser.company,
-        urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
-      });
-    } else {
-      setUser(null);
+    if (!isIAuthLoading) {
+      if (IAuthUser) {
+        setUser({
+          username: IAuthUser.username,
+          id: IAuthUser.id,
+          company: IAuthUser.company,
+          urlImgPerfil: IAuthUser.urlImgPerfil ?? "",
+        });
+      } else {
+        setUser(null);
+      }
     }
-  }, [IAuthUser]);
+  }, [IAuthUser, isIAuthLoading]);
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
@@ -195,6 +197,10 @@ function AppProvider(props: AppProviderProps) {
       localStorage.removeItem("staffUseCasesData");
     }
   }, [staffUseCasesData]);
+
+  if (isIAuthLoading) {
+    return <LoadingAppUI />;
+  }
 
   return (
     <AppContext.Provider
