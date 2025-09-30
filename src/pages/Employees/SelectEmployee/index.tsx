@@ -32,8 +32,14 @@ function SelectEmployeePage() {
     handleSubmit,
   } = useSelectEmployee();
 
-  const { businessManager, selectedClient, setStaffUseCasesData } =
-    useAppContext();
+  const {
+    businessManager,
+    selectedClient,
+    staffUseCasesData,
+    setStaffUseCasesData,
+  } = useAppContext();
+  const hasAddEmployeeLinkPrivilege =
+    staffUseCasesData?.listOfUseCases?.includes("AddEmployeeLink") ?? false;
   const id = JSON.parse(
     localStorage.getItem("staffUser") ?? "{}",
   ).identificationDocumentNumber;
@@ -159,18 +165,19 @@ function SelectEmployeePage() {
                 </form>
               </Stack>
             </StyledQuickAccessContainer>
-
-            <Stack justifyContent="end">
-              <Button
-                appearance="primary"
-                iconBefore={<MdOutlineAdd />}
-                variant="none"
-                spacing="wide"
-                onClick={handleOpenNewEmployeePage}
-              >
-                Vincular nuevo empleado
-              </Button>
-            </Stack>
+            {hasAddEmployeeLinkPrivilege && (
+              <Stack justifyContent="end">
+                <Button
+                  appearance="primary"
+                  iconBefore={<MdOutlineAdd />}
+                  variant="none"
+                  spacing="wide"
+                  onClick={handleOpenNewEmployeePage}
+                >
+                  Vincular nuevo empleado
+                </Button>
+              </Stack>
+            )}
           </Stack>
         </StyledAppPage>
       )}

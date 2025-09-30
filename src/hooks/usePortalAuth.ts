@@ -48,7 +48,7 @@ export function usePortalAuth() {
   }, [businessManagersData, hasPortalError, hasManagersError]);
 
   const hasAuthError = hasPortalError ?? hasManagersError ?? !authConfig;
-  const errorCode = BusinessManagersCode;
+  const errorCode = BusinessManagersCode ?? hasPortalError;
 
   return {
     portalCode,
