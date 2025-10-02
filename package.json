@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@inube/iauth-react": "^1.0.2",
-    "@inubekit/inubekit": "^6.0.0",
+    "@inubekit/inubekit": "^6.2.0",
     "@storybook/react": "^8.4.7",
     "crypto-js": "^4.2.0",
     "date-holidays": "^3.24.2",
