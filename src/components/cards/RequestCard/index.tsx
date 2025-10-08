@@ -1,4 +1,5 @@
-import { Stack, Text, Divider } from "@inubekit/inubekit";
+import { Stack, Text, Divider, Icon, useMediaQuery } from "@inubekit/inubekit";
+import { MdOutlinePerson } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
 
@@ -8,8 +9,10 @@ interface RequestCardProps {
   id: string;
   title: string;
   requestDate: string;
-  responsible?: string;
-  hasResponsible?: boolean;
+  employeeName: string;
+  employeeSurnames?: string;
+  taskName?: string;
+  responsible: string;
   onclick?: () => void;
 }
 
@@ -18,52 +21,75 @@ const RequestCard = (props: RequestCardProps) => {
     id,
     title,
     requestDate,
-    responsible = "Sin responsable",
-    hasResponsible = false,
+    employeeName,
+    employeeSurnames,
+    taskName,
+    responsible,
     onclick,
   } = props;
 
+  const isMobile = useMediaQuery("(max-width: 600px)");
+
   return (
-    <Stack direction="column" width="280px">
-      <StyledRequestCard onClick={onclick}>
+    <Stack direction="column" width={isMobile ? "100%" : "280px"}>
+      <StyledRequestCard onClick={onclick} $isMobile={isMobile}>
         <StyledTitle>
-          <Stack justifyContent="center">
-            <Text
-              type="label"
-              size="small"
-              appearance="primary"
-              textAlign="center"
-              weight="bold"
-              padding={spacing.s050}
-            >
-              {title}
-            </Text>
-          </Stack>
+          <Text
+            type="label"
+            size="small"
+            appearance="primary"
+            textAlign="center"
+            weight="bold"
+          >
+            {title}
+          </Text>
         </StyledTitle>
+
         <Divider dashed />
+
+        <Stack justifyContent="center" gap={spacing.s050}>
+          <Icon icon={<MdOutlinePerson />} size="16px" appearance="primary" />
+          <Text size="small" type="label">
+            {employeeName?.trim()
+              ? `${employeeName} ${employeeSurnames ?? ""}`.trim()
+              : "Sin nombre de empleado"}
+          </Text>
+        </Stack>
+
         <Stack direction="column" gap={spacing.s100}>
           <Stack direction="column" gap={spacing.s050}>
             <Text type="title" weight="bold" size="small">
-              ID.
+              Número
             </Text>
             <Text size="medium" appearance="gray">
               {id}
             </Text>
           </Stack>
+
           <Stack direction="column" gap={spacing.s050}>
             <Text type="title" weight="bold" size="small">
-              Fecha de solicitud
+              Tiempo de solicitud
             </Text>
             <Text size="medium" appearance="gray">
               {requestDate}
             </Text>
           </Stack>
+
+          <Stack direction="column" gap={spacing.s050}>
+            <Text type="title" weight="bold" size="small">
+              Estado
+            </Text>
+            <Text size="medium" appearance="gray">
+              {taskName ?? "Sin tareas"}
+            </Text>
+          </Stack>
+
           <Stack direction="column" gap={spacing.s050}>
             <Text type="title" weight="bold" size="small">
               Responsable
             </Text>
             <Text size="medium" appearance="gray">
-              {hasResponsible ? responsible : "Sin responsable"}
+              {responsible}
             </Text>
           </Stack>
         </Stack>

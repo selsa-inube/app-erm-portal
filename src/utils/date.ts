@@ -63,3 +63,33 @@ export const formatDateNumeric = (dateString: string): string => {
   const year = date.getUTCFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export const formatRequestTime = (
+  dateString: string | undefined | null,
+): string => {
+  if (!dateString) return "Fecha desconocida";
+
+  const requestDate = parseFormattedDate(dateString);
+  if (isNaN(requestDate.getTime())) return "Fecha desconocida";
+
+  const now = new Date();
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const requestDay = new Date(
+    requestDate.getFullYear(),
+    requestDate.getMonth(),
+    requestDate.getDate(),
+  );
+
+  const diffDays = Math.floor(
+    (today.getTime() - requestDay.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (diffDays === 0) {
+    return "Hoy";
+  } else if (diffDays === 1) {
+    return "Ayer";
+  } else {
+    return `Hace ${diffDays} día${diffDays === 1 ? "" : "s"}`;
+  }
+};

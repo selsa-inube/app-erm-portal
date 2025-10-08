@@ -10,9 +10,10 @@ interface IRequest {
   id: string;
   title: string;
   requestDate: string;
-  responsible: string;
-  hasResponsible: boolean;
-  status: "pending" | "supervisor_approval" | "completed";
+  employeeName: string;
+  hasEmployeeName?: boolean;
+  status: Status;
+  responsible?: string;
 }
 
 interface IMockRequests {
@@ -32,12 +33,16 @@ interface RequestItem {
   id: string;
   title: string;
   requestDate: string;
-  responsible: string;
-  hasResponsible?: boolean;
-  status: string;
+  employeeName: string;
+  surnames?: string;
+  hasEmployeeName?: boolean;
+  status: Status;
+  employeeId?: string;
+  responsible?: string;
+  taskName?: string;
 }
 
-type Status = "pending" | "supervisor_approval" | "completed";
+type Status = "noResponsible" | "blocked" | "inProgress" | "completed";
 
 export type {
   IRoute,

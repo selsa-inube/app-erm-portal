@@ -22,13 +22,11 @@ Default.args = {
   id: "XXXXXX",
   title: "Incapacidad",
   requestDate: "25/Jul/2024",
-  responsible: "Sin responsable",
 };
 
 export const WithResponsible = Template.bind({});
 WithResponsible.args = {
   ...Default.args,
-  responsible: "Juan Pérez",
 };
 
 export default meta;

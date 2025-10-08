@@ -14,7 +14,10 @@ import { RequestCard } from "@components/cards/RequestCard";
 import { FilterRequestModal } from "@components/modals/FilterRequestModal";
 import { SelectedFilters } from "@components/cards/SelectedFilters";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
+import { formatRequestTime } from "@utils/date";
+import { capitalizeWords } from "@utils/text";
 
+import { RequestsNav } from "./config/nav.config";
 import { IRoute, BoardSections, RequestItem } from "./types";
 
 import {
@@ -25,13 +28,13 @@ import {
   StyledMenuButton,
   StyledMenuIconContainer,
 } from "./styles";
+
 import { useNavigate } from "react-router-dom";
-import { RequestsNav } from "./config/nav.config";
 
 export interface RequestsUIProps {
-  appName: string;
-  appRoute: IRoute[];
-  navigatePage: string;
+  appName?: string;
+  appRoute?: IRoute[];
+  navigatePage?: string;
   isFilterModalOpen: boolean;
   isMenuOpen: boolean;
   isMobile: boolean;
@@ -43,6 +46,7 @@ export interface RequestsUIProps {
   debouncedSearchTerm: string;
   selectedFilters: IOption[];
   boardSections: BoardSections[];
+  isLoadingRequests: boolean;
   openFilterModal: () => void;
   closeFilterModal: () => void;
   setIsMenuOpen: (isOpen: boolean) => void;
@@ -70,7 +74,10 @@ function RequestsUI(props: RequestsUIProps) {
     openFilterModal,
     closeFilterModal,
     setIsMenuOpen,
+    isLoadingRequests,
   } = props;
+
+  const navigate = useNavigate();
 
   function getRequestTypeTitle(type: string): string {
     if (type in ERequestType) {
@@ -78,8 +85,6 @@ function RequestsUI(props: RequestsUIProps) {
     }
     return "Tipo desconocido";
   }
-
-  const navigate = useNavigate();
 
   const handleRemove = (filterIdToRemove: string) => {
     setSelectedFilters(
@@ -129,14 +134,14 @@ function RequestsUI(props: RequestsUIProps) {
     selectedStatusFilters: { value: string }[],
   ) => {
     return sectionInformation.filter(
-      ({ id, title, requestDate, responsible }) => {
+      ({ id, title, requestDate, employeeName }) => {
         const titleTransformed = getRequestTypeTitle(title);
 
         const matchesSearch = [
           id,
           titleTransformed,
           requestDate,
-          responsible,
+          employeeName,
         ].some((field) =>
           field?.toString().toLowerCase().includes(debouncedSearchTerm),
         );
@@ -195,15 +200,14 @@ function RequestsUI(props: RequestsUIProps) {
 
   return (
     <AppMenu
-      appName={appName}
-      appRoute={appRoute}
-      navigatePage={navigatePage}
+      appName={appName ?? ""}
+      appRoute={appRoute ?? []}
+      navigatePage={navigatePage ?? ""}
       isMobile={isMobile}
     >
       <SearchContainer $isTablet={isTablet}>
         <Stack gap={spacing.s150} direction="column" width="100%">
           <Stack
-            direction="row"
             gap={spacing.s150}
             padding={
               isTablet
@@ -343,6 +347,7 @@ function RequestsUI(props: RequestsUIProps) {
               selectedAssignmentFilters,
               selectedStatusFilters,
             );
+
             return (
               <BoardSection
                 key={sectionTitle}
@@ -353,6 +358,7 @@ function RequestsUI(props: RequestsUIProps) {
                 errorLoadingPins={false}
                 searchRequestValue={debouncedSearchTerm}
                 selectedFilters={selectedFilters}
+                isLoading={isLoadingRequests}
               >
                 {filteredRequests.length > 0 ? (
                   filteredRequests.map(
@@ -360,29 +366,43 @@ function RequestsUI(props: RequestsUIProps) {
                       id,
                       title,
                       requestDate,
+                      employeeName,
+                      surnames,
                       responsible,
-                      hasResponsible,
-                    }) => (
-                      <RequestCard
-                        key={id}
-                        id={id}
-                        title={getRequestTypeTitle(title)}
-                        requestDate={requestDate}
-                        responsible={responsible}
-                        hasResponsible={hasResponsible}
-                        onclick={() => {
-                          const requestTypeTitle = getRequestTypeTitle(title);
-                          if (RequestsNav[requestTypeTitle]) {
-                            navigate(
-                              `${RequestsNav[requestTypeTitle].path}/${id}`,
-                              {
-                                state: { section: value },
-                              },
-                            );
-                          }
-                        }}
-                      />
-                    ),
+                      taskName,
+                    }) => {
+                      const requestTypeTitle = getRequestTypeTitle(title);
+
+                      return (
+                        <RequestCard
+                          key={id}
+                          id={id}
+                          title={requestTypeTitle}
+                          requestDate={formatRequestTime(requestDate)}
+                          employeeName={capitalizeWords(employeeName)}
+                          employeeSurnames={capitalizeWords(surnames ?? "")}
+                          taskName={taskName}
+                          responsible={responsible ?? ""}
+                          onclick={() => {
+                            if (RequestsNav[requestTypeTitle]) {
+                              navigate(
+                                `${RequestsNav[requestTypeTitle].path}/${id}`,
+                                {
+                                  state: {
+                                    requestNumber: id,
+                                    requestDate,
+                                    fullStaffName: `${capitalizeWords(employeeName)} ${capitalizeWords(surnames ?? "")}`,
+                                    title: requestTypeTitle,
+                                    status: taskName,
+                                    statusOptions,
+                                  },
+                                },
+                              );
+                            }
+                          }}
+                        />
+                      );
+                    },
                   )
                 ) : (
                   <Text>
