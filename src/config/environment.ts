@@ -3,7 +3,7 @@ const AUTH_REDIRECT_URI: string = import.meta.env
   .VITE_AUTH_REDIRECT_URI as string;
 
 const maxRetriesServices = 5;
-const fetchTimeoutServices = 3000;
+const fetchTimeoutServices = 30000;
 
 const secretKeyPortalId = import.meta.env.VITE_SECRET_KEY_PORTAL_ID as string;
 
@@ -15,6 +15,7 @@ interface Environment {
   IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE: string;
   ORIGINATOR_ID: string;
   IAUTH_URL: string;
+  IAUTH_SERVICE_URL: string;
 }
 
 const environment: Environment = {
@@ -29,6 +30,7 @@ const environment: Environment = {
     .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
   ORIGINATOR_ID: import.meta.env.VITE_ORIGINATOR_ID as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
+  IAUTH_SERVICE_URL: import.meta.env.VITE_IAUTH_SERVICE_URL as string,
 };
 
 export {
