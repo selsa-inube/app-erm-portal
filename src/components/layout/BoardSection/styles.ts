@@ -31,11 +31,14 @@ const StyledBoardSection = styled.div<IStyledBoardSection>`
       ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
       : theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
 
+  min-height: ${({ $isTablet }) => ($isTablet ? "auto" : "585px")};
+
   & > div:nth-child(1) {
     justify-content: space-between;
     margin-right: ${({ $isTablet }) => ($isTablet ? "20px" : "0px")};
   }
 `;
+
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
