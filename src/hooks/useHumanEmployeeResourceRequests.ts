@@ -14,11 +14,13 @@ export const useHumanEmployeeResourceRequests = <T>(
 
   const { getHeaders } = useHeaders();
   const { selectedClient, selectedEmployee } = useAppContext();
-  if (!selectedEmployee?.employeeId) {
-    console.error("No employee ID selected");
-    return;
-  }
+
   const fetchData = async () => {
+    if (!selectedEmployee?.employeeId) {
+      console.error("No employee ID selected");
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     try {
       const headers = await getHeaders();
