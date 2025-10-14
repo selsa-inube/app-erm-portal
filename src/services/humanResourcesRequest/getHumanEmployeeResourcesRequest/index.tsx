@@ -1,12 +1,17 @@
-import { maxRetriesServices, environment } from "@config/environment";
+import {
+  maxRetriesServices,
+  environment,
+  fetchTimeoutServices,
+} from "@config/environment";
 
 import { mapHumanEmployeeResourceRequestApiToEntity } from "./mappers";
 
 const getHumanEmployeeResourceRequests = async (
   headers: Record<string, string>,
+  employeeId: string,
 ) => {
   const maxRetries = maxRetriesServices;
-  const fetchTimeout = 10000;
+  const fetchTimeout = fetchTimeoutServices;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -15,8 +20,9 @@ const getHumanEmployeeResourceRequests = async (
 
       const queryParameters = new URLSearchParams({
         page: "1",
-        per_page: "374",
+        per_page: "500",
         sort: "desc.humanResourceRequestDate",
+        employeeId: employeeId,
       });
 
       const res = await fetch(

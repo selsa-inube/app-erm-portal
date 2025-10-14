@@ -13,13 +13,19 @@ export const useHumanEmployeeResourceRequests = <T>(
   const [error, setError] = useState<Error | null>(null);
 
   const { getHeaders } = useHeaders();
-  const { selectedClient } = useAppContext();
-
+  const { selectedClient, selectedEmployee } = useAppContext();
+  if (!selectedEmployee?.employeeId) {
+    console.error("No employee ID selected");
+    return;
+  }
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const headers = await getHeaders();
-      const requests = await getHumanEmployeeResourceRequests(headers);
+      const requests = await getHumanEmployeeResourceRequests(
+        headers,
+        selectedEmployee?.employeeId ?? "",
+      );
       setData(formatData(requests ?? []));
       setError(null);
     } catch (err) {
