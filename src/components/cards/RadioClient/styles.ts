@@ -9,6 +9,7 @@ interface IStyledRadioClient {
 
 const StyledRadioClient = styled.label<IStyledRadioClient>`
   & div {
+    overflow: hidden;
     box-sizing: border-box;
     min-height: 58px;
     max-height: 72px;
@@ -35,7 +36,7 @@ const StyledRadio = styled.input`
 `;
 
 const StyledImage = styled.img`
-  width: 80%;
+  width: 60%;
   transition: filter 500ms ease-out;
   filter: grayscale(100%);
 
