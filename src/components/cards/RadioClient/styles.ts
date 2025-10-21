@@ -39,6 +39,8 @@ const StyledImage = styled.img`
   width: 60%;
   transition: filter 500ms ease-out;
   filter: grayscale(100%);
+  display: block;
+  margin-left: auto;
 
   @media screen and (max-width: 460px) {
     display: none;
