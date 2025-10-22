@@ -13,6 +13,7 @@ const baseNavLinks = [
     path: "/holidays",
     description:
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
+    order: 1,
   },
   {
     id: "certificacionPortalErm",
@@ -20,6 +21,7 @@ const baseNavLinks = [
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
+    order: 2,
   },
   {
     id: "contratoPortalErm",
@@ -27,6 +29,7 @@ const baseNavLinks = [
     path: "/contracts",
     description:
       "Son acuerdos legales entre el empleador y el empleado que establecen los términos de trabajo.",
+    order: 3,
   },
   {
     id: "cargoPortalErm",
@@ -34,13 +37,15 @@ const baseNavLinks = [
     path: "/charges",
     description:
       "Se refiere a las posiciones o roles que ocupan los empleados dentro de la estructura organizacional de la empresa.",
+    order: 4,
   },
   {
     id: "solTramitePortalErm",
-    label: "Solicitudes en tramite",
+    label: "Solicitudes en trámite",
     path: "/requests",
     description:
       "Son trámites o gestiones que están en proceso de ser aprobadas o completadas.",
+    order: 5,
   },
 ];
 
@@ -70,18 +75,20 @@ const getIcon = (iconReference?: string): ReactNode => {
 };
 
 const navConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
-  return baseNavLinks.map((link) => {
-    const option = optionForCustomerPortal.find(
-      (option) => option.publicCode === link.id,
-    );
+  return baseNavLinks
+    .sort((a, b) => a.order - b.order)
+    .map((link) => {
+      const option = optionForCustomerPortal.find(
+        (option) => option.publicCode === link.id,
+      );
 
-    return {
-      ...link,
-      label: option?.abbreviatedName ?? link.label,
-      icon: getIcon(option?.iconReference),
-      isEnabled: !!option,
-    };
-  });
+      return {
+        ...link,
+        label: option?.abbreviatedName ?? link.label,
+        icon: getIcon(option?.iconReference),
+        isEnabled: !!option,
+      };
+    });
 };
 
 const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
