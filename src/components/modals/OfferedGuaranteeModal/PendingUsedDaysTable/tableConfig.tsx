@@ -26,4 +26,4 @@ export const paymentTableColumns = [
   { span: 1, style: { width: "20%" } },
 ];
 
-export const pageLength = 5;
+export const pageLength = 10;
