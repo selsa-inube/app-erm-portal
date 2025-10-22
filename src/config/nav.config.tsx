@@ -16,28 +16,12 @@ const baseNavLinks = [
     order: 1,
   },
   {
-    id: "incapacidadesPortalErm",
-    label: "Incapacidades",
-    path: "/disability",
-    description:
-      "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
-    order: 2,
-  },
-  {
-    id: "ausenciasPortalErm",
-    label: "Ausencias",
-    path: "/absences",
-    description:
-      "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
-    order: 3,
-  },
-  {
     id: "certificacionPortalErm",
     label: "Certificaciones",
     path: "/certifications",
     description:
       "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
-    order: 4,
+    order: 2,
   },
   {
     id: "contratoPortalErm",
@@ -45,7 +29,7 @@ const baseNavLinks = [
     path: "/contracts",
     description:
       "Son acuerdos legales entre el empleador y el empleado que establecen los términos de trabajo.",
-    order: 5,
+    order: 3,
   },
   {
     id: "cargoPortalErm",
@@ -53,7 +37,7 @@ const baseNavLinks = [
     path: "/charges",
     description:
       "Se refiere a las posiciones o roles que ocupan los empleados dentro de la estructura organizacional de la empresa.",
-    order: 6,
+    order: 4,
   },
   {
     id: "solTramitePortalErm",
@@ -61,7 +45,7 @@ const baseNavLinks = [
     path: "/requests",
     description:
       "Son trámites o gestiones que están en proceso de ser aprobadas o completadas.",
-    order: 7,
+    order: 5,
   },
 ];
 
