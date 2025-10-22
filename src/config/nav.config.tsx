@@ -15,20 +15,6 @@ const baseNavLinks = [
       "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
   },
   {
-    id: "incapacidadesPortalErm",
-    label: "Incapacidades",
-    path: "/disability",
-    description:
-      "Son períodos en los que el trabajador no puede laborar debido a una enfermedad o accidente, y está respaldado por un certificado médico.",
-  },
-  {
-    id: "ausenciasPortalErm",
-    label: "Ausencias",
-    path: "/absences",
-    description:
-      "Son períodos en los que el trabajador no se presenta a laborar, ya sea de forma justificada o injustificada.",
-  },
-  {
     id: "certificacionPortalErm",
     label: "Certificaciones",
     path: "/certifications",
