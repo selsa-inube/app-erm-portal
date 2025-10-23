@@ -92,8 +92,14 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     },
   ];
 
-  const handleRequestEnjoyment = () => navigate("/holidays/request-enjoyment");
-  const handleRequestPayment = () => navigate("/holidays/request-payment");
+  // ✅ Corregido: funciones explícitamente void
+  const handleRequestEnjoyment = (): void => {
+    void navigate("/holidays/request-enjoyment");
+  };
+
+  const handleRequestPayment = (): void => {
+    void navigate("/holidays/request-payment");
+  };
 
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
@@ -110,8 +116,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         disablePayment={!hasPaymentPrivilege || !hasActiveContract}
         actionDescriptions={actionDescriptions}
         hasTableData={tableData && tableData.length > 0}
-        onRequestEnjoyment={handleRequestEnjoyment}
-        onRequestPayment={handleRequestPayment}
+        onRequestEnjoyment={() => handleRequestEnjoyment()}
+        onRequestPayment={() => handleRequestPayment()}
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
@@ -129,11 +135,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             disabled={!hasActiveContract || !hasEnjoymentPrivilege}
             onClick={
               hasActiveContract && hasEnjoymentPrivilege
-                ? handleRequestEnjoyment
+                ? () => handleRequestEnjoyment()
                 : undefined
             }
           >
-            Solicitar disfrute
+            Agregar solicitud de disfrute
           </Button>
           {(!hasActiveContract || !hasEnjoymentPrivilege) && (
             <Icon
@@ -154,11 +160,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             disabled={!hasActiveContract || !hasPaymentPrivilege}
             onClick={
               hasActiveContract && hasPaymentPrivilege
-                ? handleRequestPayment
+                ? () => handleRequestPayment()
                 : undefined
             }
           >
-            Solicitar pago
+            Agregar solicitud de pago
           </Button>
           {(!hasActiveContract || !hasPaymentPrivilege) && (
             <Icon

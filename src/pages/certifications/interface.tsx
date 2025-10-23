@@ -66,7 +66,9 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     description: "",
   });
 
-  const addRequest = () => navigate("/certifications/new-certification");
+  const addRequest = (): void => {
+    void navigate("/certifications/new-certification");
+  };
 
   const onOpenInfoModal = (description: string) => {
     setInfoModal({
@@ -81,7 +83,9 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
       <Detail
         disableEnjoyment={!canRequestCertificate}
         actionDescriptions={actionDescriptions}
-        onRequestEnjoyment={canRequestCertificate ? addRequest : undefined}
+        onRequestEnjoyment={
+          canRequestCertificate ? () => addRequest() : undefined
+        }
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
@@ -93,9 +97,9 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
             disabled={!canRequestCertificate}
-            onClick={canRequestCertificate ? addRequest : undefined}
+            onClick={canRequestCertificate ? () => addRequest() : undefined}
           >
-            Agregar solicitud
+            Agregar solicitud de certificación
           </Button>
           {!canRequestCertificate && (
             <Icon
