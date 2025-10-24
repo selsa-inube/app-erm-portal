@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 
 import { getStaffUseCases } from "@services/staffPortal/getStaffUseCases";
 import { useHeaders } from "@hooks/useHeaders";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
-import { useErrorFlag } from "./useErrorFlag";
+const ERROR_CODE_FETCH_STAFF_USE_CASES_FAILED = 1017;
 
 export const useStaffUseCases = <T>(
   businessManagerCode: string,
@@ -15,22 +17,14 @@ export const useStaffUseCases = <T>(
   const [rawData, setRawData] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
-
-  useErrorFlag(
-    flagShown,
-    "Error al obtener los casos de uso del staff",
-    "Error en la solicitud",
-    false,
-  );
+  const { showErrorModal } = useErrorModal();
 
   const fetchData = async () => {
     if (!businessManagerCode || !businessUnitCode) return;
 
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = await getHeaders();
@@ -52,10 +46,19 @@ export const useStaffUseCases = <T>(
 
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const errorInstance = err instanceof Error ? err : new Error(String(err));
+
+      console.error("Error al obtener los casos de uso del staff:", err);
+      setError(errorInstance);
       setData([]);
       setRawData([]);
-      setFlagShown(true);
+
+      const errorConfig =
+        modalErrorConfig[ERROR_CODE_FETCH_STAFF_USE_CASES_FAILED];
+      showErrorModal({
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+        solutionText: errorConfig.solutionText,
+      });
     } finally {
       setIsLoading(false);
     }
