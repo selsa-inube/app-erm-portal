@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { getEmployeeById } from "@services/employeeConsultation/getEmployeeById";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
 
 interface UseEmployeeResult {
@@ -12,6 +13,8 @@ interface UseEmployeeResult {
   refetch: (id?: string) => void;
 }
 
+const ERROR_CODE_FETCH_EMPLOYEE_FAILED = 1010;
+
 export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
   const [employee, setEmployee] = useState<Employee>({} as Employee);
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +22,7 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
   const [employeeId, setEmployeeId] = useState<string>(initialEmployeeId);
   const { getHeaders } = useHeaders();
 
-  useErrorFlag(!!error, error ?? undefined);
+  const { showErrorModal } = useErrorModal();
 
   const fetchEmployee = useCallback(
     async (id = employeeId) => {
@@ -36,6 +39,11 @@ export const useEmployee = (initialEmployeeId: string): UseEmployeeResult => {
             ? err.message
             : "Ocurrió un error desconocido al obtener el empleado";
         setError(errorMessage);
+        const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_EMPLOYEE_FAILED];
+        showErrorModal({
+          descriptionText: errorConfig.descriptionText,
+          solutionText: errorConfig.solutionText,
+        });
       } finally {
         setLoading(false);
       }

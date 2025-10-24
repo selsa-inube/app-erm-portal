@@ -8,7 +8,10 @@ import {
 } from "@ptypes/humanResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
 import { useAppContext } from "@context/AppContext";
-import { useErrorFlag } from "./useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
+
+const ERROR_CODE_FETCH_HR_REQUESTS_FAILED = 1013;
 
 export const useHumanResourceRequests = <T>(
   formatData: (data: HumanResourceRequest[]) => T[],
@@ -19,26 +22,16 @@ export const useHumanResourceRequests = <T>(
   const [rawData, setRawData] = useState<HumanResourceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
   const { selectedEmployee } = useAppContext();
+  const { showErrorModal } = useErrorModal();
 
   const effectiveEmployeeId = employeeId ?? selectedEmployee?.employeeId;
-
-  useErrorFlag(
-    flagShown,
-    typeRequest
-      ? `Error al obtener solicitudes de tipo "${requestTypeLabels[typeRequest]}"`
-      : "Error al obtener solicitudes",
-    "Error en la solicitud",
-    false,
-  );
 
   const fetchData = async () => {
     if (!effectiveEmployeeId) return;
     setIsLoading(true);
-    setFlagShown(false);
 
     try {
       const headers = await getHeaders();
@@ -55,10 +48,22 @@ export const useHumanResourceRequests = <T>(
       setData(formatData(requestsData));
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const errorInstance = err instanceof Error ? err : new Error(String(err));
+
+      console.error("Error al obtener solicitudes de recursos humanos:", err);
+      setError(errorInstance);
       setData([]);
       setRawData([]);
-      setFlagShown(true);
+
+      const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_HR_REQUESTS_FAILED];
+      const descriptionText = typeRequest
+        ? `${errorConfig.descriptionText} (Tipo: "${requestTypeLabels[typeRequest]}")`
+        : errorConfig.descriptionText;
+
+      showErrorModal({
+        descriptionText,
+        solutionText: errorConfig.solutionText,
+      });
     } finally {
       setIsLoading(false);
     }

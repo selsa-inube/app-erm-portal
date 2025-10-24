@@ -6,27 +6,21 @@ import {
 } from "@services/humanResourcesRequest/patchHumanResourceRequest/types";
 import { patchHumanResourceRequest } from "@services/humanResourcesRequest/patchHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
-import { useErrorFlag } from "./useErrorFlag";
+const ERROR_CODE_PATCH_REQUEST_FAILED = 1015;
 
 export const usePatchHumanResourceRequest = () => {
   const [data, setData] = useState<IPatchHumanResourceResponse>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [flagShown, setFlagShown] = useState(false);
 
   const { getHeaders } = useHeaders();
-
-  useErrorFlag(
-    flagShown,
-    "Error al actualizar la solicitud de recursos humanos",
-    "Error en la actualización",
-    false,
-  );
+  const { showErrorModal } = useErrorModal();
 
   const updateRequest = async (requestBody: IPatchRequestBody) => {
     setIsLoading(true);
-    setFlagShown(false);
     setError(null);
 
     try {
@@ -36,8 +30,19 @@ export const usePatchHumanResourceRequest = () => {
       return response;
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
+
+      console.error(
+        "Error al actualizar la solicitud de recursos humanos:",
+        err,
+      );
       setError(errorInstance);
-      setFlagShown(true);
+
+      const errorConfig = modalErrorConfig[ERROR_CODE_PATCH_REQUEST_FAILED];
+      showErrorModal({
+        descriptionText: errorConfig.descriptionText,
+        solutionText: errorConfig.solutionText,
+      });
+
       throw errorInstance;
     } finally {
       setIsLoading(false);
@@ -46,7 +51,6 @@ export const usePatchHumanResourceRequest = () => {
 
   const reset = () => {
     setError(null);
-    setFlagShown(false);
   };
 
   return {

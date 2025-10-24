@@ -2,8 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 
 import { getAllEmployees } from "@services/employeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
+
+const ERROR_CODE_FETCH_EMPLOYEES_FAILED = 1011;
 
 interface UseAllEmployeesResult {
   employees: Employee[];
@@ -22,8 +25,7 @@ export const useAllEmployees = (
   const [page, setPage] = useState<number>(initialPage);
   const [perPage, setPerPage] = useState<number>(initialPerPage);
   const { getHeaders } = useHeaders();
-
-  useErrorFlag(!!error, error ?? undefined);
+  const { showErrorModal } = useErrorModal();
 
   const fetchEmployees = useCallback(
     async (fetchPage = page, fetchPerPage = perPage) => {
@@ -40,12 +42,19 @@ export const useAllEmployees = (
             ? err.message
             : "Ocurrió un error desconocido al obtener la lista de empleados";
 
+        console.error("Error al obtener la lista de empleados:", err);
         setError(errorMessage);
+
+        const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_EMPLOYEES_FAILED];
+        showErrorModal({
+          descriptionText: errorConfig.descriptionText,
+          solutionText: errorConfig.solutionText,
+        });
       } finally {
         setLoading(false);
       }
     },
-    [page, perPage],
+    [page, perPage, getHeaders, showErrorModal],
   );
 
   useEffect(() => {
