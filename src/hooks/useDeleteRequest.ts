@@ -45,7 +45,7 @@ export function useDeleteRequest<T extends { requestId?: string }>(
 
       const errorConfig = modalErrorConfig[ERROR_CODE_DELETE_FAILED];
       showErrorModal({
-        descriptionText: errorConfig.descriptionText,
+        descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
         solutionText: errorConfig.solutionText,
       });
 

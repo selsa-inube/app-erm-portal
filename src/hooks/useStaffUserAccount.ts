@@ -50,7 +50,7 @@ export const useStaffUserAccount = ({
         const errorConfig =
           modalErrorConfig[ERROR_CODE_FETCH_USER_ACCOUNT_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

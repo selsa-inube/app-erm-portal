@@ -66,7 +66,7 @@ export const useEmployeeVacationDays = (
         const errorConfig =
           modalErrorConfig[ERROR_CODE_FETCH_VACATION_DAYS_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

@@ -33,7 +33,7 @@ export const useAssignmentOptions = () => {
         const errorConfig =
           modalErrorConfig[ERROR_CODE_FETCH_ASSIGNMENT_OPTIONS_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

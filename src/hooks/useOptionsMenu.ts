@@ -63,7 +63,7 @@ export function useOptionsMenu(
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_OPTIONS_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

@@ -19,8 +19,10 @@ export const useBusinessUnits = (
   const [hasError, setHasError] = useState(false);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
   const { getHeaders } = useHeaders();
-
   const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
@@ -31,6 +33,8 @@ export const useBusinessUnits = (
         setBusinessUnitsData([]);
         setHasError(false);
         setIsFetching(false);
+        setErrorMessage(undefined);
+        setCodeError(undefined);
       }
       return;
     }
@@ -52,17 +56,22 @@ export const useBusinessUnits = (
             setHasError(true);
             setCodeError(ERROR_CODE_EMPTY_DATA);
             setBusinessUnitsData([]);
+            setErrorMessage(undefined);
           } else {
             setHasError(false);
             setBusinessUnitsData(fetchedBusinessUnits);
+            setErrorMessage(undefined);
+            setCodeError(undefined);
           }
         }
-      } catch (error) {
-        console.error("Error al obtener las unidades de negocio:", error);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error("Error al obtener las unidades de negocio:", err);
         if (isMounted) {
           setHasError(true);
           setCodeError(ERROR_CODE_FETCH_FAILED);
           setBusinessUnitsData([]);
+          setErrorMessage(msg);
         }
       } finally {
         if (isMounted) {
@@ -81,12 +90,13 @@ export const useBusinessUnits = (
   useEffect(() => {
     if (!isFetching && hasError) {
       const errorConfig = modalErrorConfig[Number(codeError)];
+      const extra = errorMessage ? ` ${errorMessage}` : "";
       showErrorModal({
-        descriptionText: errorConfig.descriptionText,
+        descriptionText: `${errorConfig.descriptionText} ${extra}`,
         solutionText: errorConfig.solutionText,
       });
     }
-  }, [isFetching, hasError, codeError]);
+  }, [isFetching, hasError, codeError, errorMessage, showErrorModal]);
 
-  return { businessUnitsData, hasError, codeError, isFetching };
+  return { businessUnitsData, hasError, codeError, isFetching, errorMessage };
 };

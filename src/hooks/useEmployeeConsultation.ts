@@ -47,7 +47,7 @@ export const useAllEmployees = (
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_EMPLOYEES_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

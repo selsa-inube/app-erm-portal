@@ -39,7 +39,7 @@ export const usePatchHumanResourceRequest = () => {
 
       const errorConfig = modalErrorConfig[ERROR_CODE_PATCH_REQUEST_FAILED];
       showErrorModal({
-        descriptionText: errorConfig.descriptionText,
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
         solutionText: errorConfig.solutionText,
       });
 

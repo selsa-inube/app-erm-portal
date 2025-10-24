@@ -57,7 +57,7 @@ export const useHumanResourceRequests = <T>(
 
       const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_HR_REQUESTS_FAILED];
       const descriptionText = typeRequest
-        ? `${errorConfig.descriptionText} (Tipo: "${requestTypeLabels[typeRequest]}")`
+        ? `${errorConfig.descriptionText} (Tipo: "${requestTypeLabels[typeRequest]}") ${String(err)}`
         : errorConfig.descriptionText;
 
       showErrorModal({

@@ -56,7 +56,7 @@ export const useStaffUseCases = <T>(
       const errorConfig =
         modalErrorConfig[ERROR_CODE_FETCH_STAFF_USE_CASES_FAILED];
       showErrorModal({
-        descriptionText: errorConfig.descriptionText,
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
         solutionText: errorConfig.solutionText,
       });
     } finally {

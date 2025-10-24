@@ -43,7 +43,7 @@ export const useBusinessManagers = (
 
           const errorConfig = modalErrorConfig[1002];
           showErrorModal({
-            descriptionText: errorConfig.descriptionText,
+            descriptionText: `${errorConfig.descriptionText}: ${codeError}`,
             solutionText: errorConfig.solutionText,
           });
           return;
@@ -61,7 +61,7 @@ export const useBusinessManagers = (
 
         const errorConfig = modalErrorConfig[1007];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {

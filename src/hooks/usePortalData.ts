@@ -45,7 +45,7 @@ export const usePortalData = (codeParame: string) => {
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_PORTAL_FAILED];
         showErrorModal({
-          descriptionText: errorConfig.descriptionText,
+          descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
           solutionText: errorConfig.solutionText,
         });
       } finally {
