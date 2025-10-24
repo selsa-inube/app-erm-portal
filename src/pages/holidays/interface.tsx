@@ -92,7 +92,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     },
   ];
 
-  // ✅ Corregido: funciones explícitamente void
   const handleRequestEnjoyment = (): void => {
     void navigate("/holidays/request-enjoyment");
   };

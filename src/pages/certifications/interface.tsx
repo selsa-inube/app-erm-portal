@@ -89,7 +89,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
-      <Stack gap={spacing.s150} justifyContent="end" direction="row">
+      <Stack gap={spacing.s150} justifyContent="end">
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             spacing="wide"
