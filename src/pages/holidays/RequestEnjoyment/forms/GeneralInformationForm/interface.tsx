@@ -142,14 +142,19 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               name="observationEmployee"
               id="observationEmployee"
               value={formik.values.observationEmployee}
-              maxLength={1000}
+              maxLength={120}
               disabled={loading}
               status={getFieldState(formik, "observationEmployee")}
               message={formik.errors.observationEmployee}
               fullwidth
-              required={isRequired(validationSchema, "observationEmployee")}
+              required
               onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 120) {
+                  formik.setFieldValue("observationEmployee", value);
+                }
+              }}
             />
           </Stack>
         </StyledContainer>

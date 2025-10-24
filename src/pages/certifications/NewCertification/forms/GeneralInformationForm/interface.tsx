@@ -146,8 +146,14 @@ const GeneralInformationFormUI = ({
                 : undefined
             }
             fullwidth
+            required={true}
             onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length <= 1000) {
+                formik.setFieldValue("observationEmployee", value);
+              }
+            }}
           />
         </StyledContainer>
 
