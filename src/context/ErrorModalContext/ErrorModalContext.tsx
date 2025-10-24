@@ -105,7 +105,6 @@ export const ErrorModalProvider: React.FC<ErrorModalProviderProps> = ({
           appearance={options.appearance}
           onCloseModal={closeErrorModal}
           onSubmitButtonClick={() => {
-            options.onSubmitButtonClick!();
             closeErrorModal();
           }}
         />
