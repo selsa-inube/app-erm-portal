@@ -151,7 +151,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value.length <= 120) {
+                if (value.length <= 1000) {
                   formik.setFieldValue("observationEmployee", value);
                 }
               }}
