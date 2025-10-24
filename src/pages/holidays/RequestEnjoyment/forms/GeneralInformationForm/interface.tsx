@@ -142,7 +142,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               name="observationEmployee"
               id="observationEmployee"
               value={formik.values.observationEmployee}
-              maxLength={120}
+              maxLength={1000}
               disabled={loading}
               status={getFieldState(formik, "observationEmployee")}
               message={formik.errors.observationEmployee}
