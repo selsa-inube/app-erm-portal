@@ -137,7 +137,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               status={getFieldState(formik, "observationEmployee")}
               message={formik.errors.observationEmployee}
               fullwidth
-              required={true}
+              required={isRequired(validationSchema, "observationEmployee")}
               onBlur={formik.handleBlur}
               onChange={(e) => {
                 const value = e.target.value;

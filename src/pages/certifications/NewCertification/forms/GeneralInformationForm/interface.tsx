@@ -15,8 +15,9 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 import { contractTypeLabels } from "@ptypes/labels.types";
-
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+
+import { generalInformationRequiredFields } from "./config/formConfig";
 import { StyledContainer } from "./styles";
 
 interface GeneralInformationFormUIProps {
@@ -146,7 +147,7 @@ const GeneralInformationFormUI = ({
                 : undefined
             }
             fullwidth
-            required={true}
+            required={generalInformationRequiredFields.observations}
             onBlur={formik.handleBlur}
             onChange={(e) => {
               const value = e.target.value;
