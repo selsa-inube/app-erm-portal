@@ -94,6 +94,7 @@ export const useBusinessUnits = (
       showErrorModal({
         descriptionText: `${errorConfig.descriptionText} ${extra}`,
         solutionText: errorConfig.solutionText,
+        redirectOnClose: true,
       });
     }
   }, [isFetching, hasError, codeError, errorMessage, showErrorModal]);
