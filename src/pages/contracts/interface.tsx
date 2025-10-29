@@ -300,7 +300,7 @@ function ContractsUI(props: ContractsUIProps) {
 
       {modals.detail && selectedContract && (
         <RequestComponentDetail
-          title="Detalles"
+          title="Detalles de consulta de contrato"
           buttonLabel="Cerrar"
           modalContent={[
             { label: "Sitio de trabajo", value: selectedContract.workplace },

@@ -191,8 +191,9 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataSource = isMobile ? data : currentData;
     const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
-    const contractLabel = dataDe.contract_type
-      ? contractTypeLabels[dataDe.contract_type]
+
+    const contractLabel = dataDe.contractType
+      ? contractTypeLabels[dataDe.contractType]
       : "";
 
     const dataDeta = [
@@ -207,8 +208,8 @@ function HolidaysTable(props: HolidaysTableProps) {
       {
         label: "Contrato",
         value:
-          dataDe.business_name && contractLabel
-            ? `${dataDe.business_name} - ${contractLabel}`
+          dataDe.businessName && contractLabel
+            ? `${dataDe.businessName} - ${contractLabel}`
             : "",
       },
       {
@@ -483,7 +484,7 @@ function HolidaysTable(props: HolidaysTableProps) {
           handleClose={handleClose}
           modalContent={selectedRecord}
           requirements={mockRequirements}
-          title="Detalles"
+          title="Detalles de solicitudes de vacaciones"
           buttonLabel="Cerrar"
           showRequirementsTable
         />
