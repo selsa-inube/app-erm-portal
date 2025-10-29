@@ -36,9 +36,11 @@ const getRemunerationProfiles = async (
       clearTimeout(timeoutId);
 
       if (!res.ok) {
-        throw new Error(
-          `Error al obtener los perfiles de remuneración (Status: ${res.status})`,
-        );
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessage =
+          errorData?.message ??
+          `Error al obtener los perfiles de remuneración (Status: ${res.status})`;
+        throw new Error(errorMessage);
       }
 
       const data = await res.json();
@@ -47,6 +49,9 @@ const getRemunerationProfiles = async (
     } catch (error) {
       if (attempt === maxRetries) {
         console.error("Error al obtener los perfiles de remuneración:", error);
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener los perfiles de remuneración.",
         );

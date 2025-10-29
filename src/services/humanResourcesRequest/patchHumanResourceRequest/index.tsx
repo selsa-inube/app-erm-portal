@@ -20,14 +20,19 @@ export async function patchHumanResourceRequest(
   );
 
   if (!response.ok) {
-    const errorText = await response.text();
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage =
+      errorData?.message ?? `HTTP ${response.status}: ${response.statusText}`;
+
     console.error("Error response:", {
       status: response.status,
       statusText: response.statusText,
-      body: errorText,
+      message: errorMessage,
+      body: errorData,
       headers: Object.fromEntries(response.headers.entries()),
     });
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+
+    throw new Error(errorMessage);
   }
 
   const result = await response.json();
