@@ -29,6 +29,8 @@ const mapStaffUserAccountApiToEntity = (
     missionName: typeof data.missionName === "string" ? data.missionName : "",
     staffId: typeof data.staffId === "string" ? data.staffId : "",
     staffName: typeof data.staffName === "string" ? data.staffName : "",
+    staffLastName:
+      typeof data.staffLastName === "string" ? data.staffLastName : "",
     userAccount:
       typeof data.identificationDocumentNumber === "string"
         ? data.identificationDocumentNumber

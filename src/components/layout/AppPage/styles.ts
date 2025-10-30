@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import { spacing } from "@design/tokens/spacing";
+
 interface IStyledCollapseIcon {
   $collapse: boolean;
   $isTablet: boolean;
@@ -66,6 +68,12 @@ const StyledCollapse = styled.div`
   z-index: 1;
 `;
 
+const StyledFinalLogo = styled.img`
+  width: ${spacing.s400};
+  height: ${spacing.s400};
+  height: auto;
+`;
+
 export {
   StyledAppPage,
   StyledContainer,
@@ -75,4 +83,5 @@ export {
   StyledCollapse,
   StyledCollapseIcon,
   StyledMainScroll,
+  StyledFinalLogo,
 };
