@@ -33,6 +33,7 @@ interface IStaffUserAccount {
   staffByBusinessUnitAndRole?: IStaffByBusinessUnitAndRole[];
   staffId: string;
   staffName: string;
+  staffLastName: string;
   userAccount: string;
 }
 

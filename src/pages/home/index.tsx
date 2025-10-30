@@ -25,6 +25,7 @@ import {
   StyledQuickAccessContainer,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledFinalLogo,
 } from "./styles";
 import { useHome } from "./interface";
 
@@ -43,7 +44,9 @@ function Home() {
     selectedEmployee,
     configHeader,
     collapse,
+    staffUser,
     setCollapse,
+    businessManager,
     isModalOpen,
     toggleModal,
     collapseMenuRef,
@@ -57,6 +60,12 @@ function Home() {
 
   const isTablet = useMediaQuery("(max-width: 944px)");
 
+  const finalLogo = businessManager?.urlLogo ?? logoUrl;
+
+  const headerUsername = staffUser
+    ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
+    : "Nombre de usuario";
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
@@ -67,7 +76,7 @@ function Home() {
             selectedClient?.name ?? "Sin unidad seleccionada",
           )}
           user={{
-            username: user?.username ?? "Nombre de usuario",
+            username: headerUsername,
             client: selectedClient?.name ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
@@ -179,6 +188,7 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
+      <StyledFinalLogo src={finalLogo} />
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />

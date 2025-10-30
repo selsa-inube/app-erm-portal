@@ -1,5 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
+import { IAuthProvider } from "@inube/iauth-react";
+import { FlagProvider } from "@inubekit/inubekit";
 
 import { AppPage } from ".";
 import { AppProvider } from "@context/AppContext";
@@ -10,18 +12,29 @@ import {
 } from "./config";
 
 const meta: Meta<typeof AppPage> = {
-  title: "layout/appPage",
+  title: "layout/AppPage",
   component: AppPage,
   decorators: [
     (Story: StoryFn) => (
       <BrowserRouter>
-        <AppProvider
-          dataPortal={mockDataPortal}
-          businessManagersData={mockBusinessManagersData}
-          businessUnitsData={mockBusinessUnitsData}
+        <IAuthProvider
+          clientId="storybook-client"
+          clientSecret="fake-secret"
+          originatorId="storybook-origin"
+          callbackUrl="http://localhost:6006"
+          iAuthUrl="https://fake-iauth.inube.dev"
+          serviceUrl="https://fake-service.inube.dev"
         >
-          <Story />
-        </AppProvider>
+          <FlagProvider>
+            <AppProvider
+              dataPortal={mockDataPortal}
+              businessManagersData={mockBusinessManagersData}
+              businessUnitsData={mockBusinessUnitsData}
+            >
+              <Story />
+            </AppProvider>
+          </FlagProvider>
+        </IAuthProvider>
       </BrowserRouter>
     ),
   ],

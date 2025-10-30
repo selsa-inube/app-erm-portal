@@ -2,6 +2,9 @@ const IS_PRODUCTION: boolean = import.meta.env.PROD;
 const AUTH_REDIRECT_URI: string = import.meta.env
   .VITE_AUTH_REDIRECT_URI as string;
 
+const ERROR_REDIRECT_URI: string =
+  import.meta.env.VITE_ERROR_REDIRECT_URI ?? window.location.origin;
+
 const maxRetriesServices = 5;
 const fetchTimeoutServices = 30000;
 
@@ -9,6 +12,7 @@ const secretKeyPortalId = import.meta.env.VITE_SECRET_KEY_PORTAL_ID as string;
 
 interface Environment {
   REDIRECT_URI: string;
+  ERROR_REDIRECT_URI: string;
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: string;
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
@@ -20,6 +24,7 @@ interface Environment {
 
 const environment: Environment = {
   REDIRECT_URI: IS_PRODUCTION ? AUTH_REDIRECT_URI : window.location.origin,
+  ERROR_REDIRECT_URI,
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IVITE_ISAAS_QUERY_PROCESS_SERVICE as string,
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: import.meta.env
