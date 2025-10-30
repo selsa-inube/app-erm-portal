@@ -47,9 +47,11 @@ const getStaffUseCases = async (
       }
 
       if (!res.ok) {
-        throw new Error(
-          `Error al obtener los casos de uso del staff (Status: ${res.status})`,
-        );
+        const errorData = await res.json().catch(() => ({}));
+        const errorMessage =
+          errorData?.message ??
+          `Error al obtener los casos de uso del staff (Status: ${res.status})`;
+        throw new Error(errorMessage);
       }
 
       const data: string[] = await res.json();
@@ -58,6 +60,9 @@ const getStaffUseCases = async (
     } catch (error) {
       if (attempt === maxRetries) {
         console.error("Error al obtener los casos de uso del staff:", error);
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener los casos de uso del staff.",
         );

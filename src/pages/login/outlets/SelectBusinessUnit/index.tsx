@@ -3,7 +3,6 @@ import { useCallback, useEffect } from "react";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { IClient } from "@context/AppContext/types";
-import { useSignOut } from "@hooks/useSignOut";
 
 import { SelectBusinessUnitUI } from "./interface";
 
@@ -12,8 +11,6 @@ function SelectBusinessUnit() {
     useAppContext();
   const navigate = useNavigate();
 
-  const { signOut } = useSignOut();
-
   const checkCredentials = useCallback(() => {
     try {
       if (!user) {
@@ -21,9 +18,7 @@ function SelectBusinessUnit() {
         return;
       }
 
-      if (!businessUnits || businessUnits.length === 0) {
-        signOut("/error?code=1003");
-      } else if (businessUnits.length === 1) {
+      if (businessUnits.length === 1) {
         const singleBusinessUnit = businessUnits[0];
         const selectedClient: IClient = {
           id: singleBusinessUnit.businessUnitPublicCode,

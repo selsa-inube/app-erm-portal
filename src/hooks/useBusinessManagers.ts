@@ -3,23 +3,29 @@ import { useState, useEffect } from "react";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerByCode";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
 
-import { useErrorFlag } from "./useErrorFlag";
+interface UseBusinessManagersReturn {
+  businessManagersData: IBusinessManager;
+  hasError: boolean;
+  codeError: number | undefined;
+  isFetching: boolean;
+}
 
 export const useBusinessManagers = (
   portalPublicCode: IStaffPortalByBusinessManager,
-) => {
+): UseBusinessManagersReturn => {
   const [businessManagersData, setBusinessManagersData] =
     useState<IBusinessManager>({} as IBusinessManager);
   const [hasError, setHasError] = useState(false);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
-  const [flagShown, setFlagShown] = useState(false);
 
-  useErrorFlag(flagShown);
+  const { showErrorModal } = useErrorModal();
 
   useEffect(() => {
-    const fetchBusinessManagers = async () => {
+    const fetchBusinessManagers = async (): Promise<void> => {
       if (!portalPublicCode?.publicCode) return;
 
       setIsFetching(true);
@@ -34,6 +40,12 @@ export const useBusinessManagers = (
         ) {
           setHasError(true);
           setCodeError(1002);
+
+          const errorConfig = modalErrorConfig[1002];
+          showErrorModal({
+            descriptionText: `${errorConfig.descriptionText}: ${codeError}`,
+            solutionText: errorConfig.solutionText,
+          });
           return;
         }
 
@@ -46,14 +58,19 @@ export const useBusinessManagers = (
         );
         setHasError(true);
         setCodeError(1007);
-        setFlagShown(true);
+
+        const errorConfig = modalErrorConfig[1007];
+        showErrorModal({
+          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+          solutionText: errorConfig.solutionText,
+        });
       } finally {
         setIsFetching(false);
       }
     };
 
     fetchBusinessManagers();
-  }, [portalPublicCode]);
+  }, [portalPublicCode, showErrorModal]);
 
   return { businessManagersData, hasError, codeError, isFetching };
 };

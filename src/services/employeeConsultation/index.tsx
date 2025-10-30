@@ -52,11 +52,9 @@ const getAllEmployees = async (
       const data = await res.json();
 
       if (!res.ok) {
-        throw {
-          message: "Error al obtener la lista de empleados",
-          status: res.status,
-          data,
-        };
+        const errorMessage =
+          data?.message ?? "Error al obtener la lista de empleados";
+        throw new Error(errorMessage);
       }
 
       const employees: Employee[] = data.map(mapEmployeeApiToEntity);
@@ -64,8 +62,11 @@ const getAllEmployees = async (
       return employees.sort((a: Employee, b: Employee) =>
         a.names.localeCompare(b.names),
       );
-    } catch {
+    } catch (error) {
       if (attempt === maxRetries) {
+        if (error instanceof Error) {
+          throw error;
+        }
         throw new Error(
           `Todos los intentos fallaron. No se pudo obtener la lista de empleados.`,
         );
