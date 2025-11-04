@@ -26,6 +26,7 @@ import {
   StyledCollapseIcon,
   StyledCollapse,
   StyledFinalLogo,
+  StyledFooter,
 } from "./styles";
 import { useHome } from "./interface";
 
@@ -59,7 +60,6 @@ function Home() {
   } = useHome();
 
   const isTablet = useMediaQuery("(max-width: 944px)");
-
   const finalLogo = businessManager?.urlLogo ?? logoUrl;
 
   const headerUsername = staffUser
@@ -68,7 +68,7 @@ function Home() {
 
   return (
     <StyledAppPage>
-      <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
+      <Grid templateRows="auto auto" justifyContent="unset">
         <Header
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
@@ -168,6 +168,7 @@ function Home() {
                 >
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
+
                 <StyledQuickAccessContainer $isTablet={isTablet}>
                   {dataOptions?.map(
                     (link, index) =>
@@ -188,7 +189,10 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
-      <StyledFinalLogo src={finalLogo} />
+
+      <StyledFooter>
+        <StyledFinalLogo src={finalLogo} alt="Logo final" />
+      </StyledFooter>
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />

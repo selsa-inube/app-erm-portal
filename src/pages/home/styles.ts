@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { inube } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
 
 interface StyledMainProps {
@@ -15,14 +14,19 @@ interface IStyledCollapseIcon {
 }
 
 const StyledAppPage = styled.div`
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
 `;
 
 const StyledContainer = styled.div`
-  display: inherit;
-  overflow: hidden;
+  flex: 1;
 `;
+
+interface IStyledFooter {
+  theme?: typeof inube;
+}
 
 const StyledMain = styled.main<StyledMainProps>`
   display: flex;
@@ -39,7 +43,7 @@ const StyledMain = styled.main<StyledMainProps>`
 
 const StyledContentImg = styled(Link)`
   text-decoration: none;
-  color: inheri;
+  color: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,12 +86,21 @@ const StyledCollapse = styled.div`
 `;
 
 const StyledFinalLogo = styled.img`
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  width: 34px;
-  height: 34px;
+  width: 43px;
+  height: 43px;
   object-fit: contain;
+`;
+
+const StyledFooter = styled.footer<IStyledFooter>`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: ${spacing.s200} ${spacing.s400};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  box-sizing: border-box;
+  margin-top: auto;
 `;
 
 export {
@@ -100,4 +113,5 @@ export {
   StyledCollapseIcon,
   StyledCollapse,
   StyledFinalLogo,
+  StyledFooter,
 };

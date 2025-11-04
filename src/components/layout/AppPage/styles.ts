@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { inube } from "@inubekit/inubekit";
 import styled from "styled-components";
 
 import { spacing } from "@design/tokens/spacing";
@@ -10,6 +11,10 @@ interface IStyledCollapseIcon {
 
 interface IStyledMain {
   $fullWidth: boolean;
+}
+
+interface IStyledFooter {
+  theme?: typeof inube;
 }
 
 const StyledAppPage = styled.div`
@@ -29,6 +34,7 @@ const StyledContainer = styled.div`
 const StyledMain = styled.main<IStyledMain>`
   box-sizing: border-box;
   width: 100%;
+  flex: 1;
   max-width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "1192px")};
 `;
 
@@ -68,9 +74,19 @@ const StyledCollapse = styled.div`
   z-index: 1;
 `;
 
+const StyledFooter = styled.footer<IStyledFooter>`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+`;
+
 const StyledFinalLogo = styled.img`
   width: ${spacing.s400};
   height: ${spacing.s400};
+  padding: ${spacing.s200} ${spacing.s050};
   height: auto;
 `;
 
@@ -84,4 +100,5 @@ export {
   StyledCollapseIcon,
   StyledMainScroll,
   StyledFinalLogo,
+  StyledFooter,
 };

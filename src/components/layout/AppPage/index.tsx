@@ -35,6 +35,7 @@ import {
   StyledCollapse,
   StyledMainScroll,
   StyledFinalLogo,
+  StyledFooter,
 } from "./styles";
 
 interface AppPageProps {
@@ -249,20 +250,15 @@ function AppPage(props: AppPageProps) {
               <StyledMain $fullWidth={fullWidth}>
                 <Outlet />
               </StyledMain>
+              {isTablet && finalLogo && (
+                <StyledFooter>
+                  <StyledFinalLogo src={finalLogo} />
+                </StyledFooter>
+              )}
             </StyledMainScroll>
           </Grid>
         </StyledContainer>
       </Grid>
-
-      {isTablet && finalLogo && (
-        <Stack
-          alignItems="flex-end"
-          justifyContent="end"
-          padding={`0 ${spacing.s200} ${spacing.s100} 0`}
-        >
-          <StyledFinalLogo src={finalLogo} />
-        </Stack>
-      )}
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
