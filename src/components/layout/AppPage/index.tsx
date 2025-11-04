@@ -6,6 +6,7 @@ import {
   Header,
   useMediaQuery,
   Icon,
+  Text,
   Stack,
 } from "@inubekit/inubekit";
 import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
@@ -252,7 +253,12 @@ function AppPage(props: AppPageProps) {
               </StyledMain>
               {isTablet && finalLogo && (
                 <StyledFooter>
-                  <StyledFinalLogo src={finalLogo} />
+                  <Stack alignItems="center" gap={spacing.s050}>
+                    <Text as="span" size="small" appearance="gray">
+                      ®
+                    </Text>
+                    <StyledFinalLogo src={finalLogo} />
+                  </Stack>
                 </StyledFooter>
               )}
             </StyledMainScroll>

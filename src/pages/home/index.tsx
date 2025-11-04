@@ -191,7 +191,12 @@ function Home() {
       </Grid>
 
       <StyledFooter>
-        <StyledFinalLogo src={finalLogo} alt="Logo final" />
+        <Stack alignItems="center" gap={spacing.s050}>
+          <Text as="span" size="small" appearance="gray">
+            ®
+          </Text>
+          <StyledFinalLogo src={finalLogo} />
+        </Stack>
       </StyledFooter>
 
       {isModalOpen && (
