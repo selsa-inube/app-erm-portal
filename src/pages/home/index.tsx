@@ -25,6 +25,8 @@ import {
   StyledQuickAccessContainer,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledFinalLogo,
+  StyledFooter,
 } from "./styles";
 import { useHome } from "./interface";
 
@@ -43,7 +45,9 @@ function Home() {
     selectedEmployee,
     configHeader,
     collapse,
+    staffUser,
     setCollapse,
+    businessManager,
     isModalOpen,
     toggleModal,
     collapseMenuRef,
@@ -56,10 +60,15 @@ function Home() {
   } = useHome();
 
   const isTablet = useMediaQuery("(max-width: 944px)");
+  const finalLogo = businessManager?.urlLogo ?? logoUrl;
+
+  const headerUsername = staffUser
+    ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
+    : "Nombre de usuario";
 
   return (
     <StyledAppPage>
-      <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
+      <Grid templateRows="auto auto" justifyContent="unset">
         <Header
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
@@ -67,7 +76,7 @@ function Home() {
             selectedClient?.name ?? "Sin unidad seleccionada",
           )}
           user={{
-            username: user?.username ?? "Nombre de usuario",
+            username: headerUsername,
             client: selectedClient?.name ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
@@ -159,6 +168,7 @@ function Home() {
                 >
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
+
                 <StyledQuickAccessContainer $isTablet={isTablet}>
                   {dataOptions?.map(
                     (link, index) =>
@@ -179,6 +189,15 @@ function Home() {
           </StyledMain>
         </StyledContainer>
       </Grid>
+
+      <StyledFooter>
+        <Stack alignItems="center" gap={spacing.s050}>
+          <Text as="span" size="small" appearance="gray">
+            ®
+          </Text>
+          <StyledFinalLogo src={finalLogo} />
+        </Stack>
+      </StyledFooter>
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />

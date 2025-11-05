@@ -7,6 +7,10 @@ interface IStyledQuickAccessContainer {
   theme: typeof inube;
 }
 
+interface IStyledFooter {
+  theme?: typeof inube;
+}
+
 const StyledAppPage = styled.div`
   display: flex;
   justify-content: center;
@@ -32,4 +36,31 @@ const StyledQuickAccessContainer = styled.div<IStyledQuickAccessContainer>`
   }
 `;
 
-export { StyledAppPage, StyledQuickAccessContainer };
+const StyledFinalLogo = styled.img`
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+`;
+
+/* Footer fijo en la parte inferior derecha */
+const StyledFooter = styled.footer<IStyledFooter>`
+  position: fixed; /* 🔹 Mantiene el footer fijo */
+  bottom: 0; /* 🔹 Pegado al fondo */
+  right: 0; /* 🔹 Pegado a la derecha */
+  padding: ${spacing.s100} ${spacing.s200};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: ${spacing.s050};
+  border-top-left-radius: ${spacing.s100}; /* 🔹 Opcional, mejora el acabado visual */
+  z-index: 10; /* 🔹 Asegura que quede sobre el contenido */
+`;
+
+export {
+  StyledAppPage,
+  StyledQuickAccessContainer,
+  StyledFinalLogo,
+  StyledFooter,
+};

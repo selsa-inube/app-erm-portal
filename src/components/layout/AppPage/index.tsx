@@ -6,6 +6,7 @@ import {
   Header,
   useMediaQuery,
   Icon,
+  Text,
   Stack,
 } from "@inubekit/inubekit";
 import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
@@ -34,6 +35,8 @@ import {
   StyledCollapseIcon,
   StyledCollapse,
   StyledMainScroll,
+  StyledFinalLogo,
+  StyledFooter,
 } from "./styles";
 
 interface AppPageProps {
@@ -61,14 +64,16 @@ const renderLogo = (
 function AppPage(props: AppPageProps) {
   const { withNav = true, withBanner = true, fullWidth = false } = props;
   const {
-    user,
     logoUrl,
     selectedClient,
     businessUnits,
     setSelectedClient,
     selectedEmployee,
+    staffUser,
     optionForCustomerPortal,
+    businessManager,
   } = useAppContext();
+
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,6 +89,7 @@ function AppPage(props: AppPageProps) {
   const { vacationDays, loadingDays, refetch } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
+
   const totalDays =
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
@@ -129,6 +135,12 @@ function AppPage(props: AppPageProps) {
 
   const showBusinessUnitSelector = businessUnits.length > 1;
 
+  const finalLogo = businessManager?.urlLogo ?? logoUrl;
+
+  const headerUsername = staffUser
+    ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
+    : "Nombre de usuario";
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -140,7 +152,7 @@ function AppPage(props: AppPageProps) {
             selectedEmployee,
           )}
           user={{
-            username: user?.username ?? "Nombre de usuario",
+            username: headerUsername,
             client: selectedClient?.name ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
@@ -178,7 +190,12 @@ function AppPage(props: AppPageProps) {
             height="95vh"
           >
             {withNav && !isTablet && (
-              <Nav navigation={navConfig} actions={actions} collapse={true} />
+              <Nav
+                navigation={navConfig}
+                actions={actions}
+                collapse={true}
+                footerLogo={finalLogo}
+              />
             )}
             <StyledMainScroll>
               <Stack width="100%">
@@ -189,8 +206,8 @@ function AppPage(props: AppPageProps) {
                     justifyContent="center"
                     margin={
                       isTablet
-                        ? `${spacing.s0} ${spacing.s200}`
-                        : `${spacing.s400} ${spacing.s800} ${spacing.s0} `
+                        ? `${spacing.s100} ${spacing.s200}`
+                        : `${spacing.s400} ${spacing.s800} ${spacing.s200} `
                     }
                   >
                     <VinculationBanner
@@ -234,6 +251,16 @@ function AppPage(props: AppPageProps) {
               <StyledMain $fullWidth={fullWidth}>
                 <Outlet />
               </StyledMain>
+              {isTablet && finalLogo && (
+                <StyledFooter>
+                  <Stack alignItems="center" gap={spacing.s050}>
+                    <Text as="span" size="small" appearance="gray">
+                      ®
+                    </Text>
+                    <StyledFinalLogo src={finalLogo} />
+                  </Stack>
+                </StyledFooter>
+              )}
             </StyledMainScroll>
           </Grid>
         </StyledContainer>

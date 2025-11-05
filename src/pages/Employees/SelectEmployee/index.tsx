@@ -16,7 +16,12 @@ import { useStaffUseCases } from "@hooks/useStaffUseCases";
 import { useAppContext } from "@context/AppContext";
 import { IStaffUseCasesData } from "@context/AppContext/types";
 
-import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
+import {
+  StyledAppPage,
+  StyledQuickAccessContainer,
+  StyledFooter,
+  StyledFinalLogo,
+} from "./styles";
 import { useSelectEmployee } from "./interface";
 
 function SelectEmployeePage() {
@@ -35,6 +40,7 @@ function SelectEmployeePage() {
   const {
     businessManager,
     selectedClient,
+    logoUrl,
     staffUseCasesData,
     setStaffUseCasesData,
   } = useAppContext();
@@ -46,6 +52,8 @@ function SelectEmployeePage() {
 
   const publicCode = businessManager?.publicCode ?? "";
   const clientId = selectedClient?.id ?? "";
+
+  const finalLogo = businessManager?.urlLogo ?? logoUrl;
 
   const { data } = useStaffUseCases(publicCode, clientId, id);
 
@@ -66,122 +74,132 @@ function SelectEmployeePage() {
   };
 
   return (
-    <Formik
-      initialValues={{ keyword: "" }}
-      validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Formulario enviado con valores:", values);
-      }}
-    >
-      {(formik: FormikProps<{ keyword: string }>) => (
-        <StyledAppPage>
-          <Stack direction="column" gap={spacing.s250}>
-            <StyledQuickAccessContainer>
-              <Stack direction="column" gap={spacing.s250}>
-                <Text type="headline" size={isMobile ? "small" : undefined}>
-                  Seleccionar empleado
-                </Text>
-                <Text appearance="gray">
-                  Digita la cédula y/o nombre del empleado que quieres
-                  seleccionar.
-                </Text>
+    <>
+      <Formik
+        initialValues={{ keyword: "" }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          console.log("Formulario enviado con valores:", values);
+        }}
+      >
+        {(formik: FormikProps<{ keyword: string }>) => (
+          <StyledAppPage>
+            <Stack direction="column" gap={spacing.s250}>
+              <StyledQuickAccessContainer>
+                <Stack direction="column" gap={spacing.s250}>
+                  <Text type="headline" size={isMobile ? "small" : undefined}>
+                    Seleccionar empleado
+                  </Text>
+                  <Text appearance="gray">
+                    Digita la cédula y/o nombre del empleado que quieres
+                    seleccionar.
+                  </Text>
 
-                {loading && (
-                  <Text appearance="gray">Cargando empleados...</Text>
-                )}
-                {error && <Text appearance="danger">{error}</Text>}
+                  {loading && (
+                    <Text appearance="gray">Cargando empleados...</Text>
+                  )}
+                  {error && <Text appearance="danger">{error}</Text>}
 
-                <form onSubmit={formik.handleSubmit}>
-                  <Stack
-                    gap={spacing.s150}
-                    alignItems="start"
-                    width={isMobile ? "100%" : "576px"}
-                    direction="row"
-                  >
-                    <SearchInput
-                      value={formik.values.keyword}
-                      setValue={setSearchTerm}
-                      formik={formik}
-                      filteredItems={filteredEmployees}
-                      handleItemSelection={handleEmployeeSelection}
-                      renderItemLabel={(item) => (
-                        <Stack>
-                          <Text
-                            type="body"
-                            size={isMobile ? "small" : "medium"}
-                          >
-                            {item.employeeId === "no-results"
-                              ? "No hay resultados para esta búsqueda."
-                              : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
-                          </Text>
-                        </Stack>
-                      )}
-                      placeholder="Palabra clave"
-                    />
-
-                    {isMobile ? (
-                      <Icon
-                        appearance="primary"
-                        disabled={!formik.isValid || !formik.dirty || loading}
-                        icon={
-                          isSubmitting ? (
-                            <Spinner appearance="primary" />
-                          ) : (
-                            <MdOutlineArrowForward />
-                          )
-                        }
-                        cursorHover={!loading}
-                        spacing="wide"
-                        variant="filled"
-                        shape="rectangle"
-                        size="40px"
-                        onClick={() => {
-                          if (selectedEmployee) {
-                            handleSubmit({
-                              employee: selectedEmployee.employeeId,
-                            });
-                          }
-                        }}
+                  <form onSubmit={formik.handleSubmit}>
+                    <Stack
+                      gap={spacing.s150}
+                      alignItems="start"
+                      width={isMobile ? "100%" : "576px"}
+                      direction="row"
+                    >
+                      <SearchInput
+                        value={formik.values.keyword}
+                        setValue={setSearchTerm}
+                        formik={formik}
+                        filteredItems={filteredEmployees}
+                        handleItemSelection={handleEmployeeSelection}
+                        renderItemLabel={(item) => (
+                          <Stack>
+                            <Text
+                              type="body"
+                              size={isMobile ? "small" : "medium"}
+                            >
+                              {item.employeeId === "no-results"
+                                ? "No hay resultados para esta búsqueda."
+                                : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
+                            </Text>
+                          </Stack>
+                        )}
+                        placeholder="Palabra clave"
                       />
-                    ) : (
-                      <Button
-                        appearance="primary"
-                        loading={isSubmitting}
-                        spacing="wide"
-                        variant="filled"
-                        disabled={!formik.isValid || !formik.dirty}
-                        onClick={() => {
-                          if (selectedEmployee) {
-                            handleSubmit({
-                              employee: selectedEmployee.employeeId,
-                            });
+
+                      {isMobile ? (
+                        <Icon
+                          appearance="primary"
+                          disabled={!formik.isValid || !formik.dirty || loading}
+                          icon={
+                            isSubmitting ? (
+                              <Spinner appearance="primary" />
+                            ) : (
+                              <MdOutlineArrowForward />
+                            )
                           }
-                        }}
-                      >
-                        Continuar
-                      </Button>
-                    )}
-                  </Stack>
-                </form>
-              </Stack>
-            </StyledQuickAccessContainer>
-            {hasAddEmployeeLinkPrivilege && (
-              <Stack justifyContent="end">
-                <Button
-                  appearance="primary"
-                  iconBefore={<MdOutlineAdd />}
-                  variant="none"
-                  spacing="wide"
-                  onClick={handleOpenNewEmployeePage}
-                >
-                  Vincular nuevo empleado
-                </Button>
-              </Stack>
-            )}
-          </Stack>
-        </StyledAppPage>
-      )}
-    </Formik>
+                          cursorHover={!loading}
+                          spacing="wide"
+                          variant="filled"
+                          shape="rectangle"
+                          size="40px"
+                          onClick={() => {
+                            if (selectedEmployee) {
+                              handleSubmit({
+                                employee: selectedEmployee.employeeId,
+                              });
+                            }
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          appearance="primary"
+                          loading={isSubmitting}
+                          spacing="wide"
+                          variant="filled"
+                          disabled={!formik.isValid || !formik.dirty}
+                          onClick={() => {
+                            if (selectedEmployee) {
+                              handleSubmit({
+                                employee: selectedEmployee.employeeId,
+                              });
+                            }
+                          }}
+                        >
+                          Continuar
+                        </Button>
+                      )}
+                    </Stack>
+                  </form>
+                </Stack>
+              </StyledQuickAccessContainer>
+              {hasAddEmployeeLinkPrivilege && (
+                <Stack justifyContent="end">
+                  <Button
+                    appearance="primary"
+                    iconBefore={<MdOutlineAdd />}
+                    variant="none"
+                    spacing="wide"
+                    onClick={handleOpenNewEmployeePage}
+                  >
+                    Vincular nuevo empleado
+                  </Button>
+                </Stack>
+              )}
+            </Stack>
+          </StyledAppPage>
+        )}
+      </Formik>
+      <StyledFooter>
+        <Stack alignItems="center" gap={spacing.s050}>
+          <Text as="span" size="small" appearance="gray">
+            ®
+          </Text>
+          <StyledFinalLogo src={finalLogo} />
+        </Stack>
+      </StyledFooter>
+    </>
   );
 }
 
