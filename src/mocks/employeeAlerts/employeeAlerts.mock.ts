@@ -1,0 +1,26 @@
+export interface IEmployeeAlert {
+  id: string;
+  type: "quinquenio" | "certificados" | "general";
+  title: string;
+  description: string;
+  date: string;
+}
+
+export const employeeAlertsMock: IEmployeeAlert[] = [
+  {
+    id: "a1",
+    type: "quinquenio",
+    title: "¡Felicidades! Quinquenio Cumplido 🎉",
+    description:
+      "El empleado está próximo a cumplir 5 años de antigüedad. ¡Revisar beneficios!",
+    date: "2025-11-20",
+  },
+  {
+    id: "a2",
+    type: "certificados",
+    title: "Certificado pendiente",
+    description:
+      "Hay un certificado laboral pendiente de generación para el empleado.",
+    date: "2025-11-15",
+  },
+];

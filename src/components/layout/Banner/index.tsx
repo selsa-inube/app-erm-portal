@@ -9,7 +9,8 @@ import {
 } from "react-icons/md";
 
 import bannerImage from "@assets/images/banner.png";
-import { WidgetBanner } from "@components/cards/WidgetBanner";
+import { WidgetBanner } from "@components/widgets/WidgetBanner";
+import { AlertWidgetBanner } from "@components/widgets/AlertsWidget";
 import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords, truncateText } from "@utils/text";
 
@@ -22,6 +23,13 @@ import {
   MobileDropdown,
 } from "./styles";
 
+interface InfoItemProps {
+  icon: JSX.Element;
+  value: number | string;
+  label: string;
+  onClick?: () => void;
+}
+
 export interface VinculationBannerProps {
   name: string;
   status: string;
@@ -29,15 +37,9 @@ export interface VinculationBannerProps {
   redirectUrl?: string;
   pendingDays?: number;
   infoItems: InfoItemProps[];
+  alertItems: InfoItemProps[];
   isLoading: boolean;
   expandedWidth?: boolean;
-}
-
-interface InfoItemProps {
-  icon: JSX.Element;
-  value: number | string;
-  label: string;
-  onClick?: () => void;
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
@@ -46,6 +48,7 @@ function VinculationBanner(props: VinculationBannerProps) {
     status,
     redirectUrl,
     infoItems,
+    alertItems,
     expandedWidth = false,
     isLoading,
   } = props;
@@ -121,7 +124,9 @@ function VinculationBanner(props: VinculationBannerProps) {
                 variant="outlined"
                 shape="rectangle"
                 size="20px"
-                onClick={() => navigate(redirectUrl)}
+                onClick={() => {
+                  void navigate(redirectUrl);
+                }}
               />
             )}
           </Stack>
@@ -145,11 +150,25 @@ function VinculationBanner(props: VinculationBannerProps) {
                 <Stack
                   direction="column"
                   gap={spacing.s100}
-                  alignItems="flex-start"
+                  alignItems="center"
+                  justifyContent="center"
                 >
                   {infoItems.map((item, index) => (
                     <WidgetBanner
-                      key={index}
+                      key={`widget-${index}`}
+                      icon={item.icon}
+                      value={item.value}
+                      label={item.label}
+                      isLoading={isLoading}
+                      onClick={() => {
+                        if (item.onClick) item.onClick();
+                        setIsExpanded(false);
+                      }}
+                    />
+                  ))}
+                  {alertItems.map((item, index) => (
+                    <AlertWidgetBanner
+                      key={`alert-${index}`}
                       icon={item.icon}
                       value={item.value}
                       label={item.label}
@@ -166,21 +185,33 @@ function VinculationBanner(props: VinculationBannerProps) {
           </div>
         ) : (
           <Stack direction="row" gap={spacing.s100} alignItems="center">
-            {infoItems
+            {alertItems
               .slice()
               .reverse()
               .map((item, index) => (
-                <React.Fragment key={index}>
-                  <VerticalDivider />
-                  <WidgetBanner
+                <React.Fragment key={`alert-desktop-${index}`}>
+                  <AlertWidgetBanner
                     icon={item.icon}
                     value={item.value}
                     label={item.label}
                     isLoading={isLoading}
                     onClick={item.onClick}
                   />
+                  <VerticalDivider />
                 </React.Fragment>
               ))}
+            {infoItems.map((item, index) => (
+              <React.Fragment key={`widget-desktop-${index}`}>
+                <WidgetBanner
+                  icon={item.icon}
+                  value={item.value}
+                  label={item.label}
+                  isLoading={isLoading}
+                  onClick={item.onClick}
+                />
+                {index < infoItems.length - 1 && <VerticalDivider />}
+              </React.Fragment>
+            ))}
           </Stack>
         )}
       </Stack>

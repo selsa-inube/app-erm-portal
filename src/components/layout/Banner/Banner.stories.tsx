@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import { MemoryRouter } from "react-router-dom";
+import { MdOutlineBarChart } from "react-icons/md";
 
 import { VinculationBanner, VinculationBannerProps } from "./index";
 
@@ -36,6 +37,23 @@ Default.args = {
   status: "Activo",
   imageUrl: "url/dummy",
   redirectUrl: "/somewhere",
+  infoItems: [
+    {
+      icon: <MdOutlineBarChart />,
+      value: 1250000,
+      label: "Monto ahorrado",
+    },
+    {
+      icon: <MdOutlineBarChart />,
+      value: 5,
+      label: "Certificados",
+    },
+    {
+      icon: <MdOutlineBarChart />,
+      value: 2,
+      label: "Créditos",
+    },
+  ],
 };
 
 export default meta;

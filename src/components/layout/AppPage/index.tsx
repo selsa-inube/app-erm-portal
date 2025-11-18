@@ -9,7 +9,11 @@ import {
   Text,
   Stack,
 } from "@inubekit/inubekit";
-import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
+import {
+  MdOutlineChevronRight,
+  MdOutlineBeachAccess,
+  MdOutlineNotificationImportant,
+} from "react-icons/md";
 
 import {
   useNavConfig,
@@ -22,6 +26,8 @@ import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
+import { employeeAlertsMock } from "@mocks/employeeAlerts/employeeAlerts.mock";
+import { AlertModal } from "@components/modals/AlertModal";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
@@ -63,6 +69,7 @@ const renderLogo = (
 
 function AppPage(props: AppPageProps) {
   const { withNav = true, withBanner = true, fullWidth = false } = props;
+
   const {
     logoUrl,
     selectedClient,
@@ -85,6 +92,9 @@ function AppPage(props: AppPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const toggleAlertModal = () => setIsAlertModalOpen(!isAlertModalOpen);
 
   const { vacationDays, loadingDays, refetch } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
@@ -141,6 +151,12 @@ function AppPage(props: AppPageProps) {
     ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
     : "Nombre de usuario";
 
+  const alertEvents = employeeAlertsMock.map((alert) => ({
+    dateAndTime: alert.date,
+    title: alert.title,
+    message: alert.description,
+  }));
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -174,6 +190,7 @@ function AppPage(props: AppPageProps) {
             />
           </StyledCollapseIcon>
         )}
+
         {collapse && showBusinessUnitSelector && (
           <StyledCollapse ref={businessUnitChangeRef}>
             <BusinessUnitChange
@@ -183,6 +200,7 @@ function AppPage(props: AppPageProps) {
             />
           </StyledCollapse>
         )}
+
         <StyledContainer>
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
@@ -197,6 +215,7 @@ function AppPage(props: AppPageProps) {
                 footerLogo={finalLogo}
               />
             )}
+
             <StyledMainScroll>
               <Stack width="100%">
                 {withBanner && (
@@ -207,7 +226,7 @@ function AppPage(props: AppPageProps) {
                     margin={
                       isTablet
                         ? `${spacing.s100} ${spacing.s200}`
-                        : `${spacing.s400} ${spacing.s800} ${spacing.s200} `
+                        : `${spacing.s400} ${spacing.s800} ${spacing.s200}`
                     }
                   >
                     <VinculationBanner
@@ -243,14 +262,35 @@ function AppPage(props: AppPageProps) {
                           onClick: toggleModal,
                         },
                       ]}
+                      alertItems={
+                        employeeAlertsMock.length > 0
+                          ? [
+                              {
+                                icon: (
+                                  <Icon
+                                    icon={<MdOutlineNotificationImportant />}
+                                    appearance="primary"
+                                    size="24px"
+                                    cursorHover
+                                  />
+                                ),
+                                value: employeeAlertsMock.length,
+                                label: "Alertas",
+                                onClick: toggleAlertModal,
+                              },
+                            ]
+                          : []
+                      }
                       isLoading={loadingDays}
                     />
                   </Stack>
                 )}
               </Stack>
+
               <StyledMain $fullWidth={fullWidth}>
                 <Outlet />
               </StyledMain>
+
               {isTablet && finalLogo && (
                 <StyledFooter>
                   <Stack alignItems="center" gap={spacing.s050}>
@@ -268,6 +308,14 @@ function AppPage(props: AppPageProps) {
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
+      )}
+
+      {isAlertModalOpen && (
+        <AlertModal
+          handleClose={toggleAlertModal}
+          title="Alertas"
+          events={alertEvents}
+        />
       )}
     </StyledAppPage>
   );
