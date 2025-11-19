@@ -15,6 +15,7 @@ import {
 } from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
+import { AlertModal } from "@components/modals/AlertModal";
 import { employeeAlertsMock } from "@mocks/employeeAlerts/employeeAlerts.mock";
 import { spacing } from "@design/tokens/spacing";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
@@ -74,6 +75,12 @@ function Home() {
 
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const toggleAlertModal = () => setIsAlertModalOpen(!isAlertModalOpen);
+
+  const alertEvents = employeeAlertsMock.map((alert) => ({
+    dateAndTime: alert.date,
+    title: alert.title,
+    message: alert.description,
+  }));
 
   return (
     <StyledAppPage>
@@ -168,7 +175,10 @@ function Home() {
                             cursorHover
                           />
                         ),
-                        value: employeeAlertsMock.length,
+                        value:
+                          employeeAlertsMock.length > 99
+                            ? "+99"
+                            : employeeAlertsMock.length,
                         label: "Alertas",
                         onClick: toggleAlertModal,
                       },
@@ -229,6 +239,14 @@ function Home() {
 
       {isModalOpen && (
         <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
+      )}
+
+      {isAlertModalOpen && (
+        <AlertModal
+          handleClose={toggleAlertModal}
+          title="Alertas"
+          events={alertEvents}
+        />
       )}
     </StyledAppPage>
   );

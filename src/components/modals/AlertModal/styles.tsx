@@ -15,19 +15,22 @@ export interface IStyledContentScrollable {
   maxHeight?: string;
 }
 
+export interface IStyledDividerContainer {
+  $smallScreen?: boolean;
+  theme?: typeof inube;
+}
+
 export const StyledAlertContainer = styled.div<IStyledAlertContainer>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   border-radius: 8px;
-
   width: ${({ $smallScreen }) => ($smallScreen ? "335px" : "500px")};
   height: ${({ $smallScreen }) => ($smallScreen ? "460px" : "532px")};
-
   max-height: ${({ $smallScreen }) => ($smallScreen ? "90vh" : "532px")};
-
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: ${spacing.s300};
 `;
 
 export const StyledContentScrollable = styled.div<IStyledContentScrollable>`
@@ -43,14 +46,6 @@ export const StyledContentScrollable = styled.div<IStyledContentScrollable>`
       theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
     border-radius: 8px;
   }
-`;
-
-export const StyledFooter = styled.div<{ theme?: typeof inube }>`
-  padding: ${spacing.s200};
-  display: flex;
-  justify-content: flex-end;
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
 export const StyledCloseButton = styled.div`

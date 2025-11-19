@@ -19,7 +19,6 @@ import {
   StyledAlertContainer,
   StyledCloseButton,
   StyledContentScrollable,
-  StyledFooter,
 } from "./styles";
 
 export interface AlertModalProps {
@@ -52,7 +51,7 @@ export function AlertModal(props: AlertModalProps) {
         <Stack
           justifyContent="space-between"
           alignItems="center"
-          padding={isMobile ? spacing.s200 : spacing.s300}
+          padding={spacing.s100}
         >
           <Text type="title">{title}</Text>
 
@@ -69,14 +68,12 @@ export function AlertModal(props: AlertModalProps) {
           </StyledCloseButton>
         </Stack>
 
-        <Divider />
+        <Stack padding={spacing.s100}>
+          <Divider />
+        </Stack>
 
         <StyledContentScrollable>
-          <Stack
-            direction="column"
-            padding={isMobile ? spacing.s200 : spacing.s300}
-            gap={spacing.s300}
-          >
+          <Stack direction="column" padding={spacing.s100} gap={spacing.s300}>
             {events.map((ev, index) => (
               <EventCard
                 key={index}
@@ -87,12 +84,11 @@ export function AlertModal(props: AlertModalProps) {
             ))}
           </Stack>
         </StyledContentScrollable>
-
-        <StyledFooter>
+        <Stack justifyContent="end">
           <Button onClick={handleClose} variant="filled" appearance="primary">
             {closeButtonText}
           </Button>
-        </StyledFooter>
+        </Stack>
       </StyledAlertContainer>
     </Blanket>,
     node,

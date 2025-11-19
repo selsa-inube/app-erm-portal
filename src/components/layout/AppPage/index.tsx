@@ -274,7 +274,10 @@ function AppPage(props: AppPageProps) {
                                     cursorHover
                                   />
                                 ),
-                                value: employeeAlertsMock.length,
+                                value:
+                                  employeeAlertsMock.length > 99
+                                    ? "+99"
+                                    : employeeAlertsMock.length,
                                 label: "Alertas",
                                 onClick: toggleAlertModal,
                               },
