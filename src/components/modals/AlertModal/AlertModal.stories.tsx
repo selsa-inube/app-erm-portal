@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 import { Button } from "@inubekit/inubekit";
 
-import { AlertModal, IAlertModalProps } from "./index";
+import { AlertModal, AlertModalProps } from "./index";
 
 type Story = StoryObj<typeof AlertModal>;
 
@@ -26,7 +26,7 @@ const alertModal: Meta<typeof AlertModal> = {
   },
 };
 
-export const Default: Story = (args: IAlertModalProps) => {
+export const Default: Story = (args: AlertModalProps) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {

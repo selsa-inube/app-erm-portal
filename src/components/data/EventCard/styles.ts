@@ -3,11 +3,11 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-interface IStyledContainer {
+interface IStyledEventCard {
   theme: typeof inube;
 }
 
-const StyledEventCard = styled.div<IStyledContainer>`
+const StyledEventCard = styled.div<IStyledEventCard>`
   border-radius: 8px;
   padding: ${spacing.s200};
   background-color: ${({ theme }) =>
@@ -15,9 +15,8 @@ const StyledEventCard = styled.div<IStyledContainer>`
   display: flex;
   align-items: center;
 
-  box-shadow:
-    0px 1px 3px 1px rgba(0, 0, 0, 0.15),
-    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 6px 1px
+    ${({ theme }) => theme?.palette?.neutral?.N50 ?? inube.palette.neutral.N50};
 `;
 
 export { StyledEventCard };

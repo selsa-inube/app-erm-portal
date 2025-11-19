@@ -14,6 +14,7 @@ import { validationMessages } from "@validations/validationMessages";
 import { EventCard } from "@components/data/EventCard";
 import { spacing } from "@design/tokens/spacing";
 
+import { IEventItem } from "./types";
 import {
   StyledAlertContainer,
   StyledCloseButton,
@@ -21,22 +22,16 @@ import {
   StyledFooter,
 } from "./styles";
 
-export interface IEventItem {
-  dateAndTime: string;
-  title: string;
-  message: string;
-}
-
-export interface IAlertModalProps {
-  handleClose: () => void;
-  events: IEventItem[];
+export interface AlertModalProps {
   width?: string;
   portalId?: string;
   closeButtonText?: string;
   title: string;
+  events: IEventItem[];
+  handleClose: () => void;
 }
 
-export function AlertModal(props: IAlertModalProps) {
+export function AlertModal(props: AlertModalProps) {
   const {
     handleClose,
     title,

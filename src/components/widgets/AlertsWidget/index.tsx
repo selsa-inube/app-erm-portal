@@ -2,12 +2,11 @@ import { Icon, Stack, Text } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-import { IStyledAlertWidgetBanner } from "./styles";
+import { StyledAlertWidgetBanner } from "./styles";
 
 export interface AlertWidgetBannerProps {
   icon: JSX.Element;
   value: number | string;
-  label: string;
   isLoading: boolean;
   onClick?: () => void;
 }
@@ -20,7 +19,7 @@ export const AlertWidgetBanner = (props: AlertWidgetBannerProps) => {
   const newLabel = `${baseLabel} (${value})`;
 
   return (
-    <IStyledAlertWidgetBanner onClick={onClick} clickable={!!onClick}>
+    <StyledAlertWidgetBanner onClick={onClick} clickable={!!onClick}>
       <Stack alignItems="center" gap={spacing.s100}>
         <Icon icon={icon} appearance="primary" size="24px" />
       </Stack>
@@ -33,6 +32,6 @@ export const AlertWidgetBanner = (props: AlertWidgetBannerProps) => {
           {newLabel}
         </Text>
       )}
-    </IStyledAlertWidgetBanner>
+    </StyledAlertWidgetBanner>
   );
 };

@@ -1,13 +1,21 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
-interface IStyledContainer {
+import { spacing } from "@design/tokens/spacing";
+
+export interface IStyledAlertContainer {
   $smallScreen?: boolean;
-  theme?: typeof inube;
   width?: string;
+  theme?: typeof inube;
 }
 
-export const StyledAlertContainer = styled.div<IStyledContainer>`
+export interface IStyledContentScrollable {
+  $smallScreen?: boolean;
+  theme?: typeof inube;
+  maxHeight?: string;
+}
+
+export const StyledAlertContainer = styled.div<IStyledAlertContainer>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   border-radius: 8px;
@@ -22,7 +30,7 @@ export const StyledAlertContainer = styled.div<IStyledContainer>`
   overflow: hidden;
 `;
 
-export const StyledContentScrollable = styled.div<IStyledContainer>`
+export const StyledContentScrollable = styled.div<IStyledContentScrollable>`
   flex: 1;
   overflow-y: auto;
 
@@ -37,11 +45,12 @@ export const StyledContentScrollable = styled.div<IStyledContainer>`
   }
 `;
 
-export const StyledFooter = styled.div`
-  padding: 16px;
+export const StyledFooter = styled.div<{ theme?: typeof inube }>`
+  padding: ${spacing.s200};
   display: flex;
   justify-content: flex-end;
-  background-color: ${inube.palette.neutral.N0};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
 export const StyledCloseButton = styled.div`

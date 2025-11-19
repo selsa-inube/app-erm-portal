@@ -15,6 +15,7 @@ import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords, truncateText } from "@utils/text";
 
 import { getStatusConfig } from "./config";
+import { InfoItemProps } from "./types";
 import {
   StyledRadioClient,
   StyledBannerImage,
@@ -22,13 +23,6 @@ import {
   MobileToggle,
   MobileDropdown,
 } from "./styles";
-
-interface InfoItemProps {
-  icon: JSX.Element;
-  value: number | string;
-  label: string;
-  onClick?: () => void;
-}
 
 export interface VinculationBannerProps {
   name: string;
@@ -171,7 +165,6 @@ function VinculationBanner(props: VinculationBannerProps) {
                       key={`alert-${index}`}
                       icon={item.icon}
                       value={item.value}
-                      label={item.label}
                       isLoading={isLoading}
                       onClick={() => {
                         if (item.onClick) item.onClick();
@@ -193,7 +186,6 @@ function VinculationBanner(props: VinculationBannerProps) {
                   <AlertWidgetBanner
                     icon={item.icon}
                     value={item.value}
-                    label={item.label}
                     isLoading={isLoading}
                     onClick={item.onClick}
                   />

@@ -1,18 +1,18 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
-interface StyledInfoItemProps {
+interface IStyledAlertWidgetBanner {
   theme: typeof inube;
   clickable?: boolean;
 }
 
-const IStyledAlertWidgetBanner = styled.div.withConfig({
+const StyledAlertWidgetBanner = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== "clickable",
-})<StyledInfoItemProps>`
+})<IStyledAlertWidgetBanner>`
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: ${({ clickable }) => (clickable ? "pointer" : "default")};
 `;
 
-export { IStyledAlertWidgetBanner };
+export { StyledAlertWidgetBanner };
