@@ -24,7 +24,7 @@ export const StyledAlertContainer = styled.div<IStyledAlertContainer>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   border-radius: 8px;
-  width: ${({ $smallScreen }) => ($smallScreen ? "335px" : "500px")};
+  width: ${({ $smallScreen }) => ($smallScreen ? "300px" : "500px")};
   height: ${({ $smallScreen }) => ($smallScreen ? "460px" : "532px")};
   max-height: ${({ $smallScreen }) => ($smallScreen ? "90vh" : "532px")};
   display: flex;
