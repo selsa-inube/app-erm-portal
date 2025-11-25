@@ -12,6 +12,7 @@ import {
 import {
   MdOutlineChevronRight,
   MdOutlineBeachAccess,
+  MdOutlinePersonOff,
   MdOutlineNotificationImportant,
 } from "react-icons/md";
 
@@ -31,6 +32,14 @@ import { AlertModal } from "@components/modals/AlertModal";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { AbsenceDetailModal } from "@components/modals/AbsenceDetailModal";
+import {
+  AbsenceReasonES,
+  ESubReasonES,
+  ESubReason,
+} from "@ptypes/employeeAbsence.types";
+import { useEmployeeAbsences } from "@hooks/useEmployeeAbsences";
+import { formatDateRange } from "@utils/date";
 
 import {
   StyledAppPage,
@@ -96,6 +105,10 @@ function AppPage(props: AppPageProps) {
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const toggleAlertModal = () => setIsAlertModalOpen(!isAlertModalOpen);
 
+  const [isAbsenceDetailOpen, setIsAbsenceDetailOpen] = useState(false);
+  const toggleAbsenceDetailModal = () =>
+    setIsAbsenceDetailOpen(!isAbsenceDetailOpen);
+
   const { vacationDays, loadingDays, refetch } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
@@ -144,7 +157,6 @@ function AppPage(props: AppPageProps) {
   }, [location.pathname]);
 
   const showBusinessUnitSelector = businessUnits.length > 1;
-
   const finalLogo = businessManager?.urlLogo ?? logoUrl;
 
   const headerUsername = staffUser
@@ -156,6 +168,61 @@ function AppPage(props: AppPageProps) {
     title: alert.title,
     message: alert.description,
   }));
+
+  const { data: rawAbsences } = useEmployeeAbsences(
+    (employeeAbsences) => employeeAbsences,
+  );
+
+  const absences =
+    rawAbsences
+      ?.map((a) => [
+        {
+          label: "Motivo",
+          value: AbsenceReasonES[a.absenceReason] ?? a.absenceReason,
+        },
+        {
+          label: "Submotivo",
+          value: ESubReasonES[a.subReason as ESubReason] ?? a.subReason,
+        },
+        {
+          label: "Fecha en que se produjo",
+          value: new Date(a.absenceStartDate).toLocaleDateString(),
+        },
+        { label: "Duración", value: `${a.hoursAbsent} horas` },
+        { label: "Detalles del motivo", value: a.absenceReasonDetails },
+      ])
+      .flat() ?? [];
+
+  let lastAbsenceDateRange: string | null = null;
+
+  if (rawAbsences && rawAbsences.length > 0) {
+    const sortedAbsences = [...rawAbsences].sort(
+      (a, b) =>
+        new Date(b.absenceStartDate).getTime() -
+        new Date(a.absenceStartDate).getTime(),
+    );
+
+    const mostRecent = sortedAbsences[0];
+
+    const isHours = mostRecent.absenceStartHour !== undefined;
+    const isDays = mostRecent.absenceDays !== undefined;
+
+    if (isHours) {
+      lastAbsenceDateRange = formatDateRange(
+        mostRecent.absenceStartDate,
+        mostRecent.absenceStartDate,
+      );
+    }
+
+    if (isDays) {
+      const todayISO = new Date().toISOString();
+
+      lastAbsenceDateRange = formatDateRange(
+        mostRecent.absenceStartDate,
+        todayISO,
+      );
+    }
+  }
 
   return (
     <StyledAppPage>
@@ -284,6 +351,25 @@ function AppPage(props: AppPageProps) {
                             ]
                           : []
                       }
+                      absenceItems={
+                        lastAbsenceDateRange
+                          ? [
+                              {
+                                icon: (
+                                  <Icon
+                                    icon={<MdOutlinePersonOff />}
+                                    appearance="primary"
+                                    size="24px"
+                                    cursorHover
+                                  />
+                                ),
+                                label: "Ausencias",
+                                value: lastAbsenceDateRange,
+                                onClick: toggleAbsenceDetailModal,
+                              },
+                            ]
+                          : []
+                      }
                       isLoading={loadingDays}
                     />
                   </Stack>
@@ -318,6 +404,15 @@ function AppPage(props: AppPageProps) {
           handleClose={toggleAlertModal}
           title="Alertas"
           events={alertEvents}
+        />
+      )}
+
+      {isAbsenceDetailOpen && (
+        <AbsenceDetailModal
+          title="Detalle de la ausencia"
+          buttonLabel="Cerrar"
+          details={absences}
+          onClose={toggleAbsenceDetailModal}
         />
       )}
     </StyledAppPage>

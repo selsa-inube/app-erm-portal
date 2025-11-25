@@ -93,3 +93,42 @@ export const formatRequestTime = (
     return `Hace ${diffDays} día${diffDays === 1 ? "" : "s"}`;
   }
 };
+
+export const formatDateRange = (
+  startDateStr: string,
+  endDateStr: string,
+): string => {
+  const monthNames = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ];
+
+  const start = new Date(startDateStr);
+  const end = new Date(endDateStr);
+
+  const startDay = start.getUTCDate().toString().padStart(2, "0");
+  const startMonth = monthNames[start.getUTCMonth()];
+
+  const endDay = end.getUTCDate().toString().padStart(2, "0");
+  const endMonth = monthNames[end.getUTCMonth()];
+
+  if (
+    start.getUTCDate() === end.getUTCDate() &&
+    start.getUTCMonth() === end.getUTCMonth() &&
+    start.getUTCFullYear() === end.getUTCFullYear()
+  ) {
+    return `${startDay}/${startMonth}`;
+  }
+
+  return `${startDay}/${startMonth} - ${endDay}/${endMonth}`;
+};
