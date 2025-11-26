@@ -284,6 +284,13 @@ function AppPage(props: AppPageProps) {
                             ]
                           : []
                       }
+                      seniorityItems={[
+                        {
+                          value: 2.5,
+                          unit: "Años",
+                          label: "Antigüedad",
+                        },
+                      ]}
                       isLoading={loadingDays}
                     />
                   </Stack>

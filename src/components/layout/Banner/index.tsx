@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Text, Icon, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,11 +10,13 @@ import {
 import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/widgets/WidgetBanner";
 import { AlertWidgetBanner } from "@components/widgets/AlertsWidget";
+import { EmployeeSeniorityWidget } from "@components/widgets/EmployeeSeniorityWidget";
+
 import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords, truncateText } from "@utils/text";
 
 import { getStatusConfig } from "./config";
-import { InfoItemProps } from "./types";
+import { InfoItemProps, EmployeeSeniorityItemProps } from "./types";
 import {
   StyledRadioClient,
   StyledBannerImage,
@@ -32,6 +33,7 @@ export interface VinculationBannerProps {
   pendingDays?: number;
   infoItems: InfoItemProps[];
   alertItems: InfoItemProps[];
+  seniorityItems: EmployeeSeniorityItemProps[];
   isLoading: boolean;
   expandedWidth?: boolean;
 }
@@ -43,11 +45,14 @@ function VinculationBanner(props: VinculationBannerProps) {
     redirectUrl,
     infoItems,
     alertItems,
+    seniorityItems,
     expandedWidth = false,
     isLoading,
   } = props;
+
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleRef = useRef<HTMLDivElement>(null);
 
@@ -82,6 +87,7 @@ function VinculationBanner(props: VinculationBannerProps) {
       >
         <Stack gap={spacing.s150} alignItems="center">
           <StyledBannerImage src={bannerImage} alt={name} isMobile={isMobile} />
+
           <Stack direction="column">
             <Text
               type="label"
@@ -92,6 +98,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                 ? truncateText(capitalizeWords(name), 27)
                 : capitalizeWords(name)}
             </Text>
+
             <Stack gap={spacing.s075} alignItems="center">
               <Text size="small" appearance="gray">
                 Empleado
@@ -108,22 +115,19 @@ function VinculationBanner(props: VinculationBannerProps) {
               </Text>
             </Stack>
           </Stack>
-          <Stack alignItems="center" gap={spacing.s100}>
-            {redirectUrl && (
-              <Icon
-                appearance="primary"
-                icon={<MdCached />}
-                cursorHover
-                spacing="narrow"
-                variant="outlined"
-                shape="rectangle"
-                size="20px"
-                onClick={() => {
-                  void navigate(redirectUrl);
-                }}
-              />
-            )}
-          </Stack>
+
+          {redirectUrl && (
+            <Icon
+              appearance="primary"
+              icon={<MdCached />}
+              cursorHover
+              spacing="narrow"
+              variant="outlined"
+              shape="rectangle"
+              size="20px"
+              onClick={() => void navigate(redirectUrl)}
+            />
+          )}
         </Stack>
 
         {isMobile ? (
@@ -145,8 +149,16 @@ function VinculationBanner(props: VinculationBannerProps) {
                   direction="column"
                   gap={spacing.s100}
                   alignItems="center"
-                  justifyContent="center"
                 >
+                  {seniorityItems.map((item, index) => (
+                    <EmployeeSeniorityWidget
+                      key={`seniority-mobile-${index}`}
+                      value={item.value}
+                      unit={item.unit}
+                      label={item.label}
+                    />
+                  ))}
+
                   {infoItems.map((item, index) => (
                     <WidgetBanner
                       key={`widget-${index}`}
@@ -160,6 +172,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                       }}
                     />
                   ))}
+
                   {alertItems.map((item, index) => (
                     <AlertWidgetBanner
                       key={`alert-${index}`}
@@ -178,6 +191,17 @@ function VinculationBanner(props: VinculationBannerProps) {
           </div>
         ) : (
           <Stack direction="row" gap={spacing.s100} alignItems="center">
+            {seniorityItems.map((item, index) => (
+              <React.Fragment key={`seniority-desktop-${index}`}>
+                <EmployeeSeniorityWidget
+                  value={item.value}
+                  unit={item.unit}
+                  label={item.label}
+                />
+                <VerticalDivider />
+              </React.Fragment>
+            ))}
+
             {alertItems
               .slice()
               .reverse()
@@ -192,6 +216,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                   <VerticalDivider />
                 </React.Fragment>
               ))}
+
             {infoItems.map((item, index) => (
               <React.Fragment key={`widget-desktop-${index}`}>
                 <WidgetBanner

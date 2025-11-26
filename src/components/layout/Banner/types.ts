@@ -4,3 +4,9 @@ export interface InfoItemProps {
   label: string;
   onClick?: () => void;
 }
+
+export interface EmployeeSeniorityItemProps {
+  value: number | string;
+  unit?: string;
+  label?: string;
+}
