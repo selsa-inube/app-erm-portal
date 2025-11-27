@@ -20,4 +20,9 @@ interface INav {
   sections: Record<string, INavSection>;
 }
 
+export interface AbsenceDetailItem {
+  label: string;
+  value: string;
+}
+
 export type { INav, ISection };

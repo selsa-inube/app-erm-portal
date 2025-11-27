@@ -42,11 +42,10 @@ const StyledFinalLogo = styled.img`
   object-fit: contain;
 `;
 
-/* Footer fijo en la parte inferior derecha */
 const StyledFooter = styled.footer<IStyledFooter>`
-  position: fixed; /* 🔹 Mantiene el footer fijo */
-  bottom: 0; /* 🔹 Pegado al fondo */
-  right: 0; /* 🔹 Pegado a la derecha */
+  position: fixed;
+  bottom: 0;
+  right: 0;
   padding: ${spacing.s100} ${spacing.s200};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
@@ -54,8 +53,8 @@ const StyledFooter = styled.footer<IStyledFooter>`
   display: flex;
   align-items: center;
   gap: ${spacing.s050};
-  border-top-left-radius: ${spacing.s100}; /* 🔹 Opcional, mejora el acabado visual */
-  z-index: 10; /* 🔹 Asegura que quede sobre el contenido */
+  border-top-left-radius: ${spacing.s100};
+  z-index: 10;
 `;
 
 export {

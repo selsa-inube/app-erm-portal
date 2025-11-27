@@ -1,9 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { navConfig, useConfigHeader } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { useEmployeeAbsences } from "@hooks/useEmployeeAbsences";
+import {
+  AbsenceReasonES,
+  ESubReasonES,
+  ESubReason,
+} from "@ptypes/employeeAbsence.types";
+import { formatDateRange } from "@utils/date";
 
 export const useHome = () => {
   const {
@@ -18,19 +26,24 @@ export const useHome = () => {
     optionForCustomerPortal,
   } = useAppContext();
 
+  const navigate = useNavigate();
+
   const { vacationDays, loadingDays } = useEmployeeVacationDays(
     selectedEmployee?.employeeId ?? null,
   );
+
   const totalDays =
     vacationDays?.reduce((sum, contract) => sum + contract.pendingDays, 0) ?? 0;
 
   const configHeader = useConfigHeader(optionForCustomerPortal ?? []);
-  const navigate = useNavigate();
 
   const [collapse, setCollapse] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
   const [dataOptions, setDataOptions] = useState<
     {
       isEnabled: boolean;
@@ -42,16 +55,71 @@ export const useHome = () => {
     }[]
   >();
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      collapseMenuRef.current &&
-      !collapseMenuRef.current.contains(event.target as Node) &&
-      businessUnitChangeRef.current &&
-      !businessUnitChangeRef.current.contains(event.target as Node)
-    ) {
-      setCollapse(false);
+  const { data: rawAbsences } = useEmployeeAbsences(
+    (employeeAbsences) => employeeAbsences,
+  );
+
+  const lastAbsence =
+    rawAbsences && rawAbsences.length > 0
+      ? [...rawAbsences].sort(
+          (a, b) =>
+            new Date(b.absenceStartDate).getTime() -
+            new Date(a.absenceStartDate).getTime(),
+        )[0]
+      : null;
+
+  let lastAbsenceDateRange: string | null = null;
+
+  if (lastAbsence) {
+    if (lastAbsence.absenceStartHour !== undefined) {
+      lastAbsenceDateRange = formatDateRange(
+        lastAbsence.absenceStartDate,
+        lastAbsence.absenceStartDate,
+      );
     }
-  };
+
+    if (lastAbsence.absenceDays !== undefined) {
+      lastAbsenceDateRange = formatDateRange(
+        lastAbsence.absenceStartDate,
+        new Date().toISOString(),
+      );
+    }
+  }
+
+  const absences = lastAbsence
+    ? [
+        {
+          label: "Motivo",
+          value:
+            AbsenceReasonES[lastAbsence.absenceReason] ??
+            lastAbsence.absenceReason,
+        },
+        {
+          label: "Submotivo",
+          value:
+            ESubReasonES[lastAbsence.subReason as ESubReason] ??
+            lastAbsence.subReason,
+        },
+        {
+          label: "Fecha en que se produjo",
+          value: new Date(lastAbsence.absenceStartDate).toLocaleDateString(),
+        },
+        {
+          label: "Duración",
+          value: lastAbsence.hoursAbsent
+            ? `${lastAbsence.hoursAbsent} horas`
+            : `${lastAbsence.absenceDays} días`,
+        },
+        {
+          label: "Detalles del motivo",
+          value: lastAbsence.absenceReasonDetails,
+        },
+      ]
+    : [];
+
+  const [isAbsenceDetailOpen, setIsAbsenceDetailOpen] = useState(false);
+  const toggleAbsenceDetailModal = () =>
+    setIsAbsenceDetailOpen(!isAbsenceDetailOpen);
 
   useEffect(() => {
     if (!selectedClient) {
@@ -66,10 +134,19 @@ export const useHome = () => {
   }, [optionForCustomerPortal]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        collapseMenuRef.current &&
+        !collapseMenuRef.current.contains(event.target as Node) &&
+        businessUnitChangeRef.current &&
+        !businessUnitChangeRef.current.contains(event.target as Node)
+      ) {
+        setCollapse(false);
+      }
     };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogoClick = (businessUnit: IBusinessUnit) => {
@@ -82,10 +159,6 @@ export const useHome = () => {
 
     setCollapse(false);
     navigate("/employees/select-employee");
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
   };
 
   const showBusinessUnitSelector = businessUnits.length > 1;
@@ -110,5 +183,9 @@ export const useHome = () => {
     loadingDays,
     handleLogoClick,
     showBusinessUnitSelector,
+    lastAbsenceDateRange,
+    toggleAbsenceDetailModal,
+    isAbsenceDetailOpen,
+    absences,
   };
 };
