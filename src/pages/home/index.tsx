@@ -4,6 +4,7 @@ import {
   MdOutlineBeachAccess,
   MdOutlineChevronRight,
   MdOutlineNotificationImportant,
+  MdOutlinePersonOff,
 } from "react-icons/md";
 import {
   Text,
@@ -16,6 +17,8 @@ import {
 
 import { AppCard } from "@components/feedback/AppCard";
 import { AlertModal } from "@components/modals/AlertModal";
+import { AbsenceDetailModal } from "@components/modals/AbsenceDetailModal";
+
 import { employeeAlertsMock } from "@mocks/employeeAlerts/employeeAlerts.mock";
 import { spacing } from "@design/tokens/spacing";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
@@ -35,6 +38,7 @@ import {
   StyledFinalLogo,
   StyledFooter,
 } from "./styles";
+
 import { useHome } from "./interface";
 
 const renderLogo = (imgUrl: string, altText: string) => (
@@ -64,6 +68,10 @@ function Home() {
     loadingDays,
     handleLogoClick,
     showBusinessUnitSelector,
+    lastAbsenceDateRange,
+    toggleAbsenceDetailModal,
+    isAbsenceDetailOpen,
+    absences,
   } = useHome();
 
   const isTablet = useMediaQuery("(max-width: 944px)");
@@ -163,6 +171,25 @@ function Home() {
                   onClick: toggleModal,
                 },
               ]}
+              absenceItems={
+                lastAbsenceDateRange
+                  ? [
+                      {
+                        icon: (
+                          <Icon
+                            icon={<MdOutlinePersonOff />}
+                            appearance="primary"
+                            size="24px"
+                            cursorHover
+                          />
+                        ),
+                        label: "Ausencias",
+                        value: lastAbsenceDateRange,
+                        onClick: toggleAbsenceDetailModal,
+                      },
+                    ]
+                  : []
+              }
               alertItems={
                 employeeAlertsMock.length > 0
                   ? [
@@ -246,6 +273,15 @@ function Home() {
           handleClose={toggleAlertModal}
           title="Alertas"
           events={alertEvents}
+        />
+      )}
+
+      {isAbsenceDetailOpen && (
+        <AbsenceDetailModal
+          title="Detalle de la ausencia"
+          buttonLabel="Cerrar"
+          details={absences}
+          onClose={toggleAbsenceDetailModal}
         />
       )}
     </StyledAppPage>

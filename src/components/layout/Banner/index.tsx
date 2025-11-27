@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Text, Icon, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,6 +10,7 @@ import {
 import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/widgets/WidgetBanner";
 import { AlertWidgetBanner } from "@components/widgets/AlertsWidget";
+import { AbsenceWidgetBanner } from "@components/widgets/AbsenceWidgetBanner";
 import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords, truncateText } from "@utils/text";
 
@@ -32,6 +32,7 @@ export interface VinculationBannerProps {
   pendingDays?: number;
   infoItems: InfoItemProps[];
   alertItems: InfoItemProps[];
+  absenceItems?: InfoItemProps[];
   isLoading: boolean;
   expandedWidth?: boolean;
 }
@@ -43,9 +44,11 @@ function VinculationBanner(props: VinculationBannerProps) {
     redirectUrl,
     infoItems,
     alertItems,
+    absenceItems = [],
     expandedWidth = false,
     isLoading,
   } = props;
+
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -82,6 +85,7 @@ function VinculationBanner(props: VinculationBannerProps) {
       >
         <Stack gap={spacing.s150} alignItems="center">
           <StyledBannerImage src={bannerImage} alt={name} isMobile={isMobile} />
+
           <Stack direction="column">
             <Text
               type="label"
@@ -92,10 +96,12 @@ function VinculationBanner(props: VinculationBannerProps) {
                 ? truncateText(capitalizeWords(name), 27)
                 : capitalizeWords(name)}
             </Text>
+
             <Stack gap={spacing.s075} alignItems="center">
               <Text size="small" appearance="gray">
                 Empleado
               </Text>
+
               <Icon
                 appearance={color}
                 icon={icon}
@@ -103,27 +109,27 @@ function VinculationBanner(props: VinculationBannerProps) {
                 shape="rectangle"
                 size="12px"
               />
+
               <Text type="label" size="small" appearance={color}>
                 {label}
               </Text>
             </Stack>
           </Stack>
-          <Stack alignItems="center" gap={spacing.s100}>
-            {redirectUrl && (
-              <Icon
-                appearance="primary"
-                icon={<MdCached />}
-                cursorHover
-                spacing="narrow"
-                variant="outlined"
-                shape="rectangle"
-                size="20px"
-                onClick={() => {
-                  void navigate(redirectUrl);
-                }}
-              />
-            )}
-          </Stack>
+
+          {redirectUrl && (
+            <Icon
+              appearance="primary"
+              icon={<MdCached />}
+              cursorHover
+              spacing="narrow"
+              variant="outlined"
+              shape="rectangle"
+              size="20px"
+              onClick={() => {
+                navigate(redirectUrl);
+              }}
+            />
+          )}
         </Stack>
 
         {isMobile ? (
@@ -155,11 +161,12 @@ function VinculationBanner(props: VinculationBannerProps) {
                       label={item.label}
                       isLoading={isLoading}
                       onClick={() => {
-                        if (item.onClick) item.onClick();
+                        item.onClick?.();
                         setIsExpanded(false);
                       }}
                     />
                   ))}
+
                   {alertItems.map((item, index) => (
                     <AlertWidgetBanner
                       key={`alert-${index}`}
@@ -167,7 +174,21 @@ function VinculationBanner(props: VinculationBannerProps) {
                       value={item.value}
                       isLoading={isLoading}
                       onClick={() => {
-                        if (item.onClick) item.onClick();
+                        item.onClick?.();
+                        setIsExpanded(false);
+                      }}
+                    />
+                  ))}
+
+                  {absenceItems.map((item, index) => (
+                    <AbsenceWidgetBanner
+                      key={`absence-${index}`}
+                      icon={item.icon}
+                      label={item.label}
+                      value={String(item.value)}
+                      isLoading={isLoading}
+                      onClick={() => {
+                        item.onClick?.();
                         setIsExpanded(false);
                       }}
                     />
@@ -178,6 +199,19 @@ function VinculationBanner(props: VinculationBannerProps) {
           </div>
         ) : (
           <Stack direction="row" gap={spacing.s100} alignItems="center">
+            {absenceItems.map((item, index) => (
+              <React.Fragment key={`absence-desktop-${index}`}>
+                <AbsenceWidgetBanner
+                  icon={item.icon}
+                  label={item.label}
+                  value={String(item.value)}
+                  isLoading={isLoading}
+                  onClick={item.onClick}
+                />
+                <VerticalDivider />
+              </React.Fragment>
+            ))}
+
             {alertItems
               .slice()
               .reverse()
@@ -192,6 +226,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                   <VerticalDivider />
                 </React.Fragment>
               ))}
+
             {infoItems.map((item, index) => (
               <React.Fragment key={`widget-desktop-${index}`}>
                 <WidgetBanner
@@ -201,7 +236,6 @@ function VinculationBanner(props: VinculationBannerProps) {
                   isLoading={isLoading}
                   onClick={item.onClick}
                 />
-                {index < infoItems.length - 1 && <VerticalDivider />}
               </React.Fragment>
             ))}
           </Stack>
