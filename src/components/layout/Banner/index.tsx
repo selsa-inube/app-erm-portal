@@ -10,12 +10,14 @@ import {
 import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/widgets/WidgetBanner";
 import { AlertWidgetBanner } from "@components/widgets/AlertsWidget";
+import { EmployeeSeniorityWidget } from "@components/widgets/EmployeeSeniorityWidget";
 import { AbsenceWidgetBanner } from "@components/widgets/AbsenceWidgetBanner";
+
 import { spacing } from "@design/tokens/spacing";
 import { capitalizeWords, truncateText } from "@utils/text";
 
 import { getStatusConfig } from "./config";
-import { InfoItemProps } from "./types";
+import { InfoItemProps, EmployeeSeniorityItemProps } from "./types";
 import {
   StyledRadioClient,
   StyledBannerImage,
@@ -29,9 +31,9 @@ export interface VinculationBannerProps {
   status: string;
   imageUrl: string;
   redirectUrl?: string;
-  pendingDays?: number;
   infoItems: InfoItemProps[];
   alertItems: InfoItemProps[];
+  seniorityItems: EmployeeSeniorityItemProps[];
   absenceItems?: InfoItemProps[];
   isLoading: boolean;
   expandedWidth?: boolean;
@@ -44,6 +46,7 @@ function VinculationBanner(props: VinculationBannerProps) {
     redirectUrl,
     infoItems,
     alertItems,
+    seniorityItems,
     absenceItems = [],
     expandedWidth = false,
     isLoading,
@@ -51,9 +54,9 @@ function VinculationBanner(props: VinculationBannerProps) {
 
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleRef = useRef<HTMLDivElement>(null);
-
   const isMobile = useMediaQuery("(max-width: 550px)");
 
   useEffect(() => {
@@ -126,7 +129,7 @@ function VinculationBanner(props: VinculationBannerProps) {
               shape="rectangle"
               size="20px"
               onClick={() => {
-                navigate(redirectUrl);
+                void navigate(redirectUrl);
               }}
             />
           )}
@@ -151,14 +154,22 @@ function VinculationBanner(props: VinculationBannerProps) {
                   direction="column"
                   gap={spacing.s100}
                   alignItems="center"
-                  justifyContent="center"
                 >
-                  {infoItems.map((item, index) => (
-                    <WidgetBanner
-                      key={`widget-${index}`}
-                      icon={item.icon}
+                  {seniorityItems.map((item, index) => (
+                    <EmployeeSeniorityWidget
+                      key={`seniority-mobile-${index}`}
                       value={item.value}
+                      unit={item.unit}
                       label={item.label}
+                    />
+                  ))}
+
+                  {absenceItems.map((item, index) => (
+                    <AbsenceWidgetBanner
+                      key={`absence-mobile-${index}`}
+                      icon={item.icon}
+                      label={item.label}
+                      value={String(item.value)}
                       isLoading={isLoading}
                       onClick={() => {
                         item.onClick?.();
@@ -169,7 +180,7 @@ function VinculationBanner(props: VinculationBannerProps) {
 
                   {alertItems.map((item, index) => (
                     <AlertWidgetBanner
-                      key={`alert-${index}`}
+                      key={`alert-mobile-${index}`}
                       icon={item.icon}
                       value={item.value}
                       isLoading={isLoading}
@@ -180,12 +191,12 @@ function VinculationBanner(props: VinculationBannerProps) {
                     />
                   ))}
 
-                  {absenceItems.map((item, index) => (
-                    <AbsenceWidgetBanner
-                      key={`absence-${index}`}
+                  {infoItems.map((item, index) => (
+                    <WidgetBanner
+                      key={`widget-mobile-${index}`}
                       icon={item.icon}
+                      value={item.value}
                       label={item.label}
-                      value={String(item.value)}
                       isLoading={isLoading}
                       onClick={() => {
                         item.onClick?.();
@@ -199,6 +210,17 @@ function VinculationBanner(props: VinculationBannerProps) {
           </div>
         ) : (
           <Stack direction="row" gap={spacing.s100} alignItems="center">
+            {seniorityItems.map((item, index) => (
+              <React.Fragment key={`seniority-desktop-${index}`}>
+                <EmployeeSeniorityWidget
+                  value={item.value}
+                  unit={item.unit}
+                  label={item.label}
+                />
+                <VerticalDivider />
+              </React.Fragment>
+            ))}
+
             {absenceItems.map((item, index) => (
               <React.Fragment key={`absence-desktop-${index}`}>
                 <AbsenceWidgetBanner
@@ -228,15 +250,14 @@ function VinculationBanner(props: VinculationBannerProps) {
               ))}
 
             {infoItems.map((item, index) => (
-              <React.Fragment key={`widget-desktop-${index}`}>
-                <WidgetBanner
-                  icon={item.icon}
-                  value={item.value}
-                  label={item.label}
-                  isLoading={isLoading}
-                  onClick={item.onClick}
-                />
-              </React.Fragment>
+              <WidgetBanner
+                key={`widget-desktop-${index}`}
+                icon={item.icon}
+                value={item.value}
+                label={item.label}
+                isLoading={isLoading}
+                onClick={item.onClick}
+              />
             ))}
           </Stack>
         )}

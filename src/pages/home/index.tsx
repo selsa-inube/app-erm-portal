@@ -212,6 +212,13 @@ function Home() {
                     ]
                   : []
               }
+              seniorityItems={[
+                {
+                  value: 2.5,
+                  unit: "Años",
+                  label: "Antigüedad",
+                },
+              ]}
               isLoading={loadingDays}
               expandedWidth
             />
