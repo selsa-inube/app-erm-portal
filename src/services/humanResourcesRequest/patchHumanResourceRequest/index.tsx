@@ -1,4 +1,5 @@
 import { environment } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { IPatchHumanResourceResponse, IPatchRequestBody } from "./types";
 
@@ -24,13 +25,16 @@ export async function patchHumanResourceRequest(
     const errorMessage =
       errorData?.message ?? `HTTP ${response.status}: ${response.statusText}`;
 
-    console.error("Error response:", {
-      status: response.status,
-      statusText: response.statusText,
-      message: errorMessage,
-      body: errorData,
-      headers: Object.fromEntries(response.headers.entries()),
-    });
+    Logger.error(
+      "Error al actualizar la solicitud de recursos humanos",
+      new Error(errorMessage),
+      {
+        status: response.status,
+        statusText: response.statusText,
+        requestBody,
+        responseBody: errorData,
+      },
+    );
 
     throw new Error(errorMessage);
   }

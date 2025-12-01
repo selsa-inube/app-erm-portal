@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
+import { Logger } from "@utils/logger";
 import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
@@ -48,12 +49,11 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  const normalizeText = (text: string) => {
-    return text
+  const normalizeText = (text: string) =>
+    text
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
-  };
 
   const filteredEmployees = useMemo(() => {
     if (!debouncedSearchTerm.trim()) return [];
@@ -93,12 +93,11 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         "is-valid-employee",
         "Debes seleccionar un empleado de la lista.",
         function (value) {
-          const isValid = employees.some(
+          return employees.some(
             (emp) =>
               `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}` ===
               value,
           );
-          return isValid;
         },
       ),
   });
@@ -125,6 +124,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
 
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
+
     setTimeout(() => {
       const selectedEmployeeOption = employees.find(
         (emp) => emp.employeeId === values.employee,
@@ -138,8 +138,12 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         );
         navigate("/");
       } else {
-        console.error("Empleado no encontrado");
+        Logger.error(
+          "Empleado no encontrado al intentar confirmar selección",
+          new Error("Empleado no encontrado"),
+        );
       }
+
       setIsSubmitting(false);
     }, 300);
   };

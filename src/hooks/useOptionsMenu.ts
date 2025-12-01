@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { getOptionForCustomerPortal } from "@services/staffPortal/getOptionForCustomerPortal";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
@@ -58,7 +59,11 @@ export function useOptionsMenu(
         setHasError(null);
         setOptionData(staffoptionData);
       } catch (error) {
-        console.error("Error al obtener las opciones del menú:", error);
+        Logger.error(
+          "Error al obtener las opciones del menú",
+          error instanceof Error ? error : new Error(String(error)),
+        );
+
         setHasError(ERROR_CODE_FETCH_OPTIONS_FAILED);
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_OPTIONS_FAILED];

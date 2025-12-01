@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerByCode";
@@ -52,9 +53,12 @@ export const useBusinessManagers = (
         setHasError(false);
         setBusinessManagersData(fetchedBusinessManagers);
       } catch (err) {
-        console.error(
-          "Error al obtener los datos del gestor de negocios:",
-          err,
+        Logger.error(
+          "Error al obtener los datos del gestor de negocios",
+          err as Error,
+          {
+            useCase: "getBusinessManagerData",
+          },
         );
         setHasError(true);
         setCodeError(1007);

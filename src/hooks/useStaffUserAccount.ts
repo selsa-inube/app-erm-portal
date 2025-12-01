@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { staffUserAccountById } from "@services/StaffUser/StaffUserAccountIportalStaff";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
@@ -41,10 +42,11 @@ export const useStaffUserAccount = ({
           onUserAccountLoaded(data);
         }
       } catch (error) {
-        console.error(
-          "Error al obtener la cuenta de usuario del staff:",
-          error,
+        Logger.error(
+          "Error al obtener la cuenta de usuario del staff",
+          error instanceof Error ? error : new Error(String(error)),
         );
+
         setHasError(ERROR_CODE_FETCH_USER_ACCOUNT_FAILED);
 
         const errorConfig =

@@ -2,6 +2,7 @@ import { useFormik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 
+import { Logger } from "@utils/logger";
 import { usePatchHumanResourceRequest } from "@hooks/usePatchHumanResourceRequest";
 import { useAppContext } from "@context/AppContext";
 
@@ -37,7 +38,6 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
   const [isApproved, setIsApproved] = useState(false);
 
   const { updateRequest, reset, isLoading } = usePatchHumanResourceRequest();
-
   const { staffUser } = useAppContext();
 
   const validationSchema = Yup.object({
@@ -89,7 +89,10 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
         setIsApproved(approved);
         setShowModal(true);
       } catch (error) {
-        console.error("Error al procesar la solicitud:", error);
+        Logger.error(
+          "Error al procesar la solicitud de aprobación de vacaciones",
+          error instanceof Error ? error : new Error(String(error)),
+        );
       }
     },
   });

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Logger } from "@utils/logger";
 import {
   IPatchHumanResourceResponse,
   IPatchRequestBody,
@@ -31,10 +32,11 @@ export const usePatchHumanResourceRequest = () => {
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
 
-      console.error(
-        "Error al actualizar la solicitud de recursos humanos:",
-        err,
+      Logger.error(
+        "Error al actualizar la solicitud de recursos humanos",
+        errorInstance,
       );
+
       setError(errorInstance);
 
       const errorConfig = modalErrorConfig[ERROR_CODE_PATCH_REQUEST_FAILED];

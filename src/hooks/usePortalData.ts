@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+
+import { Logger } from "@utils/logger";
 import { encrypt } from "@utils/encrypt";
 import { staffPortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
@@ -40,7 +42,11 @@ export const usePortalData = (codeParame: string) => {
         setHasError(null);
         setPortalData(staffPortalData);
       } catch (error) {
-        console.error("Error al obtener los datos del portal:", error);
+        Logger.error(
+          "Error al obtener los datos del portal",
+          error instanceof Error ? error : new Error(String(error)),
+        );
+
         setHasError(ERROR_CODE_FETCH_PORTAL_FAILED);
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_PORTAL_FAILED];

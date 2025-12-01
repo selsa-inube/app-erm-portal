@@ -3,6 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 interface StaffUseCaseResponse {
   listOfUseCases: string[];
@@ -55,14 +56,23 @@ const getStaffUseCases = async (
       }
 
       const data: string[] = await res.json();
-
       return data;
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener los casos de uso del staff:", error);
+        Logger.error(
+          "Error al obtener los casos de uso del staff",
+          error instanceof Error ? error : new Error("Error desconocido"),
+          {
+            businessManagerCode,
+            businessUnitCode,
+            userId: id,
+          },
+        );
+
         if (error instanceof Error) {
           throw error;
         }
+
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener los casos de uso del staff.",
         );

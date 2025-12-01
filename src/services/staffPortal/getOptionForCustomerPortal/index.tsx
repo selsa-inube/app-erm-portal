@@ -4,6 +4,7 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
+import { Logger } from "@utils/logger";
 
 import { mapOptionForCustomerPortalApiToEntities } from "./mappers";
 
@@ -20,26 +21,26 @@ const getOptionForCustomerPortal = async (
         staffPortalPublicCode,
         businessUnit,
       });
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
-      const options: RequestInit = {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          "X-Action": "SearchOptionsStaffPortalByBusinessUnit",
-        },
-        signal: controller.signal,
-      };
-
       const res = await fetch(
         `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-manager?${queryParams.toString()}`,
-        options,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Action": "SearchOptionsStaffPortalByBusinessUnit",
+          },
+          signal: controller.signal,
+        },
       );
 
       clearTimeout(timeoutId);
+
       if (res.status === 204) {
-        return [] as IOptionWithSubOptions[];
+        return [];
       }
 
       const data = await res.json();
@@ -49,15 +50,25 @@ const getOptionForCustomerPortal = async (
           data?.message ?? "Error al obtener los datos del portal";
         throw new Error(errorMessage);
       }
+
       return Array.isArray(data)
         ? mapOptionForCustomerPortalApiToEntities(data)
         : [];
     } catch (error) {
-      console.error(`Attempt ${attempt} failed:`, error);
       if (attempt === maxRetries) {
+        Logger.error(
+          "Error al obtener las opciones del portal del cliente",
+          error instanceof Error ? error : new Error("Error desconocido"),
+          {
+            staffPortalPublicCode,
+            businessUnit,
+          },
+        );
+
         if (error instanceof Error) {
           throw error;
         }
+
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );
@@ -65,7 +76,7 @@ const getOptionForCustomerPortal = async (
     }
   }
 
-  return [] as IOptionWithSubOptions[];
+  return [];
 };
 
 export { getOptionForCustomerPortal };

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { getHumanEmployeeResourceRequests } from "@services/humanResourcesRequest/getHumanEmployeeResourcesRequest";
 import { HumanEmployeeResourceRequest } from "@ptypes/humanEmployeeResourcesRequest.types";
 import { useHeaders } from "@hooks/useHeaders";
@@ -17,10 +18,11 @@ export const useHumanEmployeeResourceRequests = <T>(
 
   const fetchData = async () => {
     if (!selectedEmployee?.employeeId) {
-      console.error("No employee ID selected");
+      Logger.warn("No employee ID selected");
       setIsLoading(false);
       return;
     }
+
     setIsLoading(true);
     try {
       const headers = await getHeaders();
@@ -34,8 +36,8 @@ export const useHumanEmployeeResourceRequests = <T>(
       const finalError = err instanceof Error ? err : new Error(String(err));
       setError(finalError);
       setData([]);
-      console.error(
-        "Error al obtener solicitudes de recursos humanos:",
+      Logger.error(
+        "Error al obtener solicitudes de recursos humanos",
         finalError,
       );
     } finally {

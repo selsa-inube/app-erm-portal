@@ -4,6 +4,7 @@ import {
   environment,
 } from "@config/environment";
 
+import { Logger } from "@utils/logger";
 export interface IRemunerationProfile {
   remunerationProfileId: string;
   remunerationProfileName: string;
@@ -44,14 +45,18 @@ const getRemunerationProfiles = async (
       }
 
       const data = await res.json();
-
       return Array.isArray(data) ? data : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener los perfiles de remuneración:", error);
+        Logger.error(
+          "Error al obtener los perfiles de remuneración",
+          error instanceof Error ? error : new Error(String(error)),
+        );
+
         if (error instanceof Error) {
           throw error;
         }
+
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener los perfiles de remuneración.",
         );

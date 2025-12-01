@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
+import { Logger } from "@utils/logger";
 import { getAllEmployees } from "@services/employeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
@@ -42,7 +43,15 @@ export const useAllEmployees = (
             ? err.message
             : "Ocurrió un error desconocido al obtener la lista de empleados";
 
-        console.error("Error al obtener la lista de empleados:", err);
+        Logger.error(
+          "Error al obtener la lista de empleados",
+          err instanceof Error ? err : new Error(String(err)),
+          {
+            useCase: "useAllEmployees",
+            page: fetchPage,
+            perPage: fetchPerPage,
+          },
+        );
         setError(errorMessage);
 
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_EMPLOYEES_FAILED];

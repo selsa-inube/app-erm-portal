@@ -4,6 +4,8 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { Logger } from "@utils/logger";
+
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (
@@ -17,21 +19,20 @@ const staffPortalByBusinessManager = async (
       const queryParams = new URLSearchParams({
         publicCode: codeParame,
       });
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
-      const options: RequestInit = {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          "X-Action": "SearchAllStaffPortalsByBusinessManager",
-        },
-        signal: controller.signal,
-      };
-
       const res = await fetch(
         `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-manager?${queryParams.toString()}`,
-        options,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            "X-Action": "SearchAllStaffPortalsByBusinessManager",
+          },
+          signal: controller.signal,
+        },
       );
 
       clearTimeout(timeoutId);
@@ -54,11 +55,19 @@ const staffPortalByBusinessManager = async (
 
       return normalizedEmployeePortal[0];
     } catch (error) {
-      console.error(`Attempt ${attempt} failed:`, error);
       if (attempt === maxRetries) {
+        Logger.error(
+          "Error al obtener el staff portal por business manager",
+          error instanceof Error ? error : new Error("Error desconocido"),
+          {
+            publicCode: codeParame,
+          },
+        );
+
         if (error instanceof Error) {
           throw error;
         }
+
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );

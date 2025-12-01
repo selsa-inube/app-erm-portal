@@ -6,6 +6,7 @@ import {
   requestTypeMap,
   requestTypeLabels,
 } from "@ptypes/humanResourcesRequest.types";
+import { Logger } from "@utils/logger";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { formatDate } from "@utils/date";
 import { parseDataSafely, getValueFromData } from "@utils/parser";
@@ -55,15 +56,19 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
         value: <MdOutlineVisibility />,
         type: "icon" as const,
         onClick: () =>
-          console.log(
-            `Ver detalles de la solicitud ${holiday.humanResourceRequestId}`,
-          ),
+          Logger.info("Holidays | View details", {
+            requestId: holiday.humanResourceRequestId,
+            requestType: holiday.humanResourceRequestType,
+          }),
       },
       delete: {
         value: <MdDeleteOutline />,
         type: "icon" as const,
         onClick: () =>
-          console.log(`Eliminar solicitud ${holiday.humanResourceRequestId}`),
+          Logger.info("Holidays | Delete request", {
+            requestId: holiday.humanResourceRequestId,
+            requestType: holiday.humanResourceRequestType,
+          }),
       },
       dataDetails: {
         value: {

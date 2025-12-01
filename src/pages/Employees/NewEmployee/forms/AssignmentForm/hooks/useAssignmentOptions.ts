@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { IOption } from "@inubekit/inubekit";
 
+import { Logger } from "@utils/logger";
 import { getRemunerationProfiles } from "@services/catalogs/getRemunerationProfiles";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
@@ -14,6 +15,7 @@ export const useAssignmentOptions = () => {
   const [assignmentOptions, setAssignmentOptions] = useState<IOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState<number | null>(null);
+
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
@@ -27,7 +29,11 @@ export const useAssignmentOptions = () => {
         const remunerationProfiles = await getRemunerationProfiles(headers);
         setAssignmentOptions(mapProfilesToOptions(remunerationProfiles));
       } catch (err) {
-        console.error("Error fetching assignment options:", err);
+        Logger.error(
+          "Error al obtener las opciones de asignación",
+          err instanceof Error ? err : new Error(String(err)),
+        );
+
         setHasError(ERROR_CODE_FETCH_ASSIGNMENT_OPTIONS_FAILED);
 
         const errorConfig =

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Logger } from "@utils/logger";
 import { getEmployeeAbsences } from "@services/employeeAbsences";
 import { EmployeeAbsence } from "@ptypes/employeeAbsence.types";
 import { useHeaders } from "@hooks/useHeaders";
@@ -51,7 +52,16 @@ export const useEmployeeAbsences = <T>(
       setData([]);
       setRawData([]);
 
-      console.error("Error al obtener ausencias del empleado", err);
+      Logger.error(
+        "Error al obtener ausencias del empleado",
+        err instanceof Error ? err : new Error(String(err)),
+        {
+          useCase: "useEmployeeAbsences",
+          employeeId: effectiveEmployeeId,
+          page,
+          perPage,
+        },
+      );
 
       const errorConfig =
         modalErrorConfig[ERROR_CODE_GET_EMPLOYEE_ABSENCES_FAILED];

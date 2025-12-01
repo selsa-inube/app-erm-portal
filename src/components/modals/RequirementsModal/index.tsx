@@ -17,6 +17,7 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import { Logger } from "@utils/logger";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -78,7 +79,12 @@ function RequirementsModal(props: RequirementsModalProps) {
         <Icon
           icon={<MdOutlineVisibility />}
           appearance="dark"
-          onClick={() => console.log("Add clicked", entry)}
+          onClick={() =>
+            Logger.debug("Add icon clicked", {
+              entryId: entry.id,
+              entry,
+            })
+          }
           spacing="compact"
           variant="empty"
           size="20px"
@@ -100,8 +106,14 @@ function RequirementsModal(props: RequirementsModalProps) {
           spacing="compact"
           cursorHover
           size="20px"
-          onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
+          onClick={() =>
+            Logger.debug("Check icon clicked", {
+              entryId: entry.id,
+              isDisabled,
+              entry,
+            })
+          }
         />
       </Stack>
     );
@@ -206,7 +218,10 @@ function RequirementsModal(props: RequirementsModalProps) {
                   disabled={!hasPrivilege}
                   onClick={
                     hasPrivilege
-                      ? () => console.log("Agregar Requisito")
+                      ? () =>
+                          Logger.debug("Agregar requisito button clicked", {
+                            hasPrivilege,
+                          })
                       : undefined
                   }
                 >

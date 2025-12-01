@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { Logger } from "@utils/logger";
 import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
@@ -9,6 +11,7 @@ export function useRequestSubmissionAPI() {
   const [humanResourceRequestId, setHumanResourceRequestId] = useState<
     string | null
   >(null);
+
   const { getHeaders } = useHeaders();
 
   const submitRequestToAPI = async (requestBody: IRequestBody) => {
@@ -25,7 +28,11 @@ export function useRequestSubmissionAPI() {
       setShowErrorFlag(true);
       return { success: false };
     } catch (error) {
-      console.error("Error sending request:", error);
+      Logger.error(
+        "Error sending request",
+        error instanceof Error ? error : new Error(String(error)),
+      );
+
       setErrorMessage(
         "Error al enviar la solicitud de vacaciones o certificación. Intente nuevamente.",
       );

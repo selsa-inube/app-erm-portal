@@ -3,6 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { mapImmediateSupervisorByRequestApiToEntity } from "./mappers";
 
@@ -48,7 +49,14 @@ const getImmediateSupervisorByRequest = async (
       return data ? mapImmediateSupervisorByRequestApiToEntity(data) : null;
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener el supervisor inmediato:", error);
+        Logger.error(
+          "Error al obtener el supervisor inmediato",
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            humanResourceRequestId,
+          },
+        );
+
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener el supervisor inmediato.",
         );
