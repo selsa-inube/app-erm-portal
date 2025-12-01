@@ -2,6 +2,8 @@ import { Meta, StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
+import { Logger } from "@utils/logger";
+
 import { IHolidaysTable } from "../types";
 import { HolidaysTable } from "..";
 
@@ -18,12 +20,20 @@ const holidaysData: IHolidaysTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("View details clicked for row 0"),
+      onClick: () =>
+        Logger.info("HolidaysTable | View details", {
+          row: 0,
+          description: "Disfrute de vacaciones",
+        }),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Delete clicked for row 0"),
+      onClick: () =>
+        Logger.info("HolidaysTable | Delete", {
+          row: 0,
+          description: "Disfrute de vacaciones",
+        }),
     },
     dataDetails: {
       value: {
@@ -46,12 +56,20 @@ const holidaysData: IHolidaysTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("View details clicked for row 1"),
+      onClick: () =>
+        Logger.info("HolidaysTable | View details", {
+          row: 1,
+          description: "Pago de vacaciones",
+        }),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Delete clicked for row 1"),
+      onClick: () =>
+        Logger.info("HolidaysTable | Delete", {
+          row: 1,
+          description: "Pago de vacaciones",
+        }),
     },
     dataDetails: {
       value: {

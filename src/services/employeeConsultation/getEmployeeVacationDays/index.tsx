@@ -4,6 +4,8 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 
+import { Logger } from "@utils/logger";
+
 import { IVacationDaysResponse } from "./types";
 
 const getEmployeeVacationDays = async (
@@ -61,13 +63,23 @@ const getEmployeeVacationDays = async (
       return vacationDays;
     } catch (error) {
       if (attempt === maxRetries) {
-        console.log(error);
         if (error instanceof Error) {
+          Logger.error(
+            `Todos los intentos fallaron. No se pudieron obtener los días de vacaciones pendientes para el empleado ${employeeId}.`,
+            error,
+            { employeeId, attempt },
+          );
           throw error;
         }
-        throw new Error(
+        const genericError = new Error(
           `Todos los intentos fallaron. No se pudieron obtener los días de vacaciones pendientes para el empleado ${employeeId}.`,
         );
+        Logger.error(
+          "Error genérico al obtener días de vacaciones.",
+          genericError,
+          { employeeId, attempt },
+        );
+        throw genericError;
       }
     }
   }

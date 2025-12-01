@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
+import { Logger } from "@utils/logger";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { AlertCardProps } from "@components/data/AlertCard";
@@ -105,10 +106,12 @@ function NewEmployee() {
     updateFormValues();
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
 
-    console.log("Personal Data:", personalData);
-    console.log("Contractual Position Data:", contractualPositionData);
-    console.log("Ubicación jurídica y contable Data:", legalAccountingLocation);
-    console.log("Assignments:", assignments);
+    Logger.info("NewEmployee | Finalizar vinculación asistida", {
+      personalData,
+      contractualPositionData,
+      legalAccountingLocation,
+      assignments,
+    });
   };
 
   const handleCloseSendModal = () => {

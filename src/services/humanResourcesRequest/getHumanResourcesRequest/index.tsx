@@ -3,6 +3,7 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
 
@@ -64,13 +65,19 @@ const getHumanResourceRequests = async (
         : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error(
-          "Error al obtener las solicitudes de recursos humanos:",
-          error,
+        Logger.error(
+          "Error al obtener las solicitudes de recursos humanos",
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            employeeId,
+            typeRequest,
+          },
         );
+
         if (error instanceof Error) {
           throw error;
         }
+
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener las solicitudes de recursos humanos.",
         );

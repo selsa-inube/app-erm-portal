@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { getStaffUseCases } from "@services/staffPortal/getStaffUseCases";
 import { useHeaders } from "@hooks/useHeaders";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
@@ -48,7 +49,11 @@ export const useStaffUseCases = <T>(
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
 
-      console.error("Error al obtener los casos de uso del staff:", err);
+      Logger.error(
+        "Error al obtener los casos de uso del staff",
+        errorInstance,
+      );
+
       setError(errorInstance);
       setData([]);
       setRawData([]);

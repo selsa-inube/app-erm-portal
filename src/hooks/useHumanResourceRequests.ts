@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+
+import { Logger } from "@utils/logger";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import {
   HumanResourceRequest,
@@ -50,7 +52,11 @@ export const useHumanResourceRequests = <T>(
     } catch (err) {
       const errorInstance = err instanceof Error ? err : new Error(String(err));
 
-      console.error("Error al obtener solicitudes de recursos humanos:", err);
+      Logger.error(
+        "Error al obtener solicitudes de recursos humanos",
+        errorInstance,
+      );
+
       setError(errorInstance);
       setData([]);
       setRawData([]);

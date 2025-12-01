@@ -3,6 +3,7 @@ import {
   environment,
   fetchTimeoutServices,
 } from "@config/environment";
+import { Logger } from "@utils/logger";
 
 import { mapHumanEmployeeResourceRequestApiToEntity } from "./mappers";
 
@@ -22,7 +23,7 @@ const getHumanEmployeeResourceRequests = async (
         page: "1",
         per_page: "500",
         sort: "desc.humanResourceRequestDate",
-        employeeId: employeeId,
+        employeeId,
       });
 
       const res = await fetch(
@@ -56,10 +57,14 @@ const getHumanEmployeeResourceRequests = async (
         : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error(
-          "Error al obtener las solicitudes de recursos humanos:",
-          error,
+        Logger.error(
+          "Error al obtener las solicitudes de recursos humanos",
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            employeeId,
+          },
         );
+
         throw new Error(
           "Todos los intentos fallaron. No se pudo obtener las solicitudes de recursos humanos.",
         );

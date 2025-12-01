@@ -1,5 +1,7 @@
 import { Meta, StoryFn } from "@storybook/react";
 
+import { Logger } from "@utils/logger";
+
 import { ConfirmDeleteModal } from ".";
 
 export default {
@@ -21,9 +23,11 @@ const Template: StoryFn<typeof ConfirmDeleteModal> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   onConfirmDelete: (justification: string) => {
-    console.log("Justification:", justification);
+    Logger.info("ConfirmDeleteModal | Justification submitted", {
+      justification,
+    });
   },
   onCloseModal: () => {
-    console.log("Modal closed");
+    Logger.info("ConfirmDeleteModal | Modal closed");
   },
 };

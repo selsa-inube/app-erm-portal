@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
+import { Logger } from "@utils/logger";
 import {
   getEmployeeVacationDays,
   IVacationDaysResponse,
@@ -10,19 +11,11 @@ import { useHeaders } from "@hooks/useHeaders";
 
 const ERROR_CODE_FETCH_VACATION_DAYS_FAILED = 1012;
 
-interface UseEmployeeVacationDaysResult {
-  vacationDays: IVacationDaysResponse[];
-  loadingDays: boolean;
-  error: string | null;
-  refetch: () => void;
-}
-
-export const useEmployeeVacationDays = (
-  employeeId: string | null,
-): UseEmployeeVacationDaysResult => {
+export const useEmployeeVacationDays = (employeeId: string | null) => {
   const [vacationDays, setVacationDays] = useState<IVacationDaysResponse[]>([]);
-  const [loadingDays, setLoadingDays] = useState<boolean>(false);
+  const [loadingDays, setLoadingDays] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
@@ -32,6 +25,9 @@ export const useEmployeeVacationDays = (
   const fetchVacationDays = useCallback(
     async (forceRefetch = false) => {
       if (!employeeId) {
+        Logger.debug("EmployeeId no proporcionado, se limpian vacaciones", {
+          hook: "useEmployeeVacationDays",
+        });
         setVacationDays([]);
         return;
       }
@@ -41,6 +37,10 @@ export const useEmployeeVacationDays = (
         employeeId === lastFetchedEmployeeId.current &&
         !isInitialMount.current
       ) {
+        Logger.debug("Fetch omitido: mismo employeeId", {
+          employeeId,
+          hook: "useEmployeeVacationDays",
+        });
         return;
       }
 
@@ -50,23 +50,38 @@ export const useEmployeeVacationDays = (
       isInitialMount.current = false;
 
       try {
+        Logger.info("Iniciando petición de días de vacaciones", {
+          employeeId,
+          hook: "useEmployeeVacationDays",
+        });
+
         const headers = await getHeaders();
         const data = await getEmployeeVacationDays(employeeId, headers);
-        setVacationDays(data);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Ocurrió un error desconocido al obtener los días de vacaciones pendientes";
 
-        console.error("Error al obtener los días de vacaciones:", err);
-        setError(errorMessage);
+        setVacationDays(data);
+
+        Logger.info("Vacaciones obtenidas correctamente", {
+          employeeId,
+          totalDays: data.length,
+        });
+      } catch (err) {
+        const errorInstance =
+          err instanceof Error ? err : new Error(String(err));
+
+        setError(errorInstance.message);
         setVacationDays([]);
+
+        Logger.error("Error al obtener días de vacaciones", errorInstance, {
+          employeeId,
+          errorCode: ERROR_CODE_FETCH_VACATION_DAYS_FAILED,
+          hook: "useEmployeeVacationDays",
+        });
 
         const errorConfig =
           modalErrorConfig[ERROR_CODE_FETCH_VACATION_DAYS_FAILED];
+
         showErrorModal({
-          descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+          descriptionText: errorConfig.descriptionText,
           solutionText: errorConfig.solutionText,
         });
       } finally {
@@ -81,8 +96,12 @@ export const useEmployeeVacationDays = (
   }, [employeeId]);
 
   const refetch = useCallback(() => {
+    Logger.debug("Refetch manual ejecutado", {
+      employeeId,
+      hook: "useEmployeeVacationDays",
+    });
     fetchVacationDays(true);
-  }, [fetchVacationDays]);
+  }, [fetchVacationDays, employeeId]);
 
   return { vacationDays, loadingDays, error, refetch };
 };
