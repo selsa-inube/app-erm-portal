@@ -1,8 +1,8 @@
 import { Grid } from "@inubekit/inubekit";
-
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { AlertCardProps } from "@components/data/AlertCard";
+import { labels } from "@i18n/labels";
 
 import { IFormsUpdateData } from "../../../types";
 import { IPersonalDataEntry } from "../../PersonalDataForm/types";
@@ -20,19 +20,23 @@ const renderPersonalInfoVerification = (
     gap={spacing.s100}
     width="100%"
   >
-    <BoxAttribute label="Nombres" value={values.names} direction="column" />
     <BoxAttribute
-      label="Apellidos"
+      label={labels.employee.personalDataForm.fields.names}
+      value={values.names}
+      direction="column"
+    />
+    <BoxAttribute
+      label={labels.employee.personalDataForm.fields.lastNames}
       value={values.lastNames}
       direction="column"
     />
     <BoxAttribute
-      label="Número de identificación"
+      label={labels.employee.personalDataForm.fields.identificationNumber}
       value={values.identificationNumber}
       direction="column"
     />
     <BoxAttribute
-      label="Hoja de vida"
+      label={labels.employee.personalDataForm.fields.resume}
       value={values.attachedFile?.name}
       direction="column"
     />
@@ -50,48 +54,52 @@ const renderContractualPositionVerification = (
     width="100%"
   >
     <BoxAttribute
-      label="Marco normativo"
+      label={labels.employee.contractualPositionForm.fields.normativeFramework}
       value={values.normativeFramework}
       direction="column"
     />
     <BoxAttribute
-      label="Tipo de contrato"
+      label={labels.employee.contractualPositionForm.fields.contractType}
       value={values.contractType}
       direction="column"
     />
     <BoxAttribute
-      label="Fecha de inicio"
+      label={labels.employee.contractualPositionForm.fields.startDate}
       value={values.startDate}
       direction="column"
     />
     <BoxAttribute
-      label="Fecha de finalización"
+      label={labels.employee.contractualPositionForm.fields.endDate}
       value={values.endDate}
       direction="column"
     />
     <BoxAttribute
-      label="Empresa contratante"
+      label={labels.employee.contractualPositionForm.fields.company}
       value={values.company}
       direction="column"
     />
     <BoxAttribute
-      label="Jornada laboral"
+      label={labels.employee.contractualPositionForm.fields.workingShift}
       value={values.workingShift}
       direction="column"
     />
     <BoxAttribute
-      label="Equipo de trabajo"
+      label={labels.employee.contractualPositionForm.fields.team}
       value={values.team}
       direction="column"
     />
-    <BoxAttribute label="Cargo" value={values.position} direction="column" />
     <BoxAttribute
-      label="Perfil salarial"
+      label={labels.employee.contractualPositionForm.fields.position}
+      value={values.position}
+      direction="column"
+    />
+    <BoxAttribute
+      label={labels.employee.contractualPositionForm.fields.salaryProfile}
       value={values.salaryProfile}
       direction="column"
     />
     <BoxAttribute
-      label="Sitio de trabajo"
+      label={labels.employee.contractualPositionForm.fields.jobMode}
       value={values.jobMode}
       direction="column"
     />
@@ -108,14 +116,20 @@ const renderLegalAccountingLocationVerification = (
     gap={spacing.s100}
     width="100%"
   >
-    <BoxAttribute label="Proyecto" value={values.proyect} direction="column" />
     <BoxAttribute
-      label="Segmentación zonal"
+      label={labels.employee.legalAccountingLocationForm.fields.project}
+      value={values.proyect}
+      direction="column"
+    />
+    <BoxAttribute
+      label={
+        labels.employee.legalAccountingLocationForm.fields.zonalSegmentation
+      }
       value={values.zonalSegmentation}
       direction="column"
     />
     <BoxAttribute
-      label="Centro de costos"
+      label={labels.employee.legalAccountingLocationForm.fields.costCenter}
       value={values.costCenter}
       direction="column"
     />

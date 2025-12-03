@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
+import { labels } from "@i18n/labels";
 
 export interface UseSelectEmployeeReturn {
   employees: Employee[];
@@ -29,6 +30,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   const { employees, loading, error, refetch } = useAllEmployees();
   const { setSelectedEmployee, selectedEmployee } = useAppContext();
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -38,7 +40,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     if (storedEmployee) {
       setSelectedEmployee(JSON.parse(storedEmployee));
     }
-  }, []);
+  }, [setSelectedEmployee]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -48,12 +50,11 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  const normalizeText = (text: string) => {
-    return text
+  const normalizeText = (text: string) =>
+    text
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
-  };
 
   const filteredEmployees = useMemo(() => {
     if (!debouncedSearchTerm.trim()) return [];
@@ -76,7 +77,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
       return [
         {
           employeeId: "no-results",
-          names: "No hay resultados para esta búsqueda.",
+          names: labels.employee.selection.noResults,
           surnames: "",
           identificationDocumentNumber: "",
         },
@@ -88,17 +89,16 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
 
   const validationSchema: Yup.ObjectSchema<{ keyword: string }> = Yup.object({
     keyword: Yup.string()
-      .required("Para continuar, primero debes seleccionar un empleado.")
+      .required(labels.employee.validation.required)
       .test(
         "is-valid-employee",
-        "Debes seleccionar un empleado de la lista.",
+        labels.employee.validation.invalidSelection,
         function (value) {
-          const isValid = employees.some(
+          return employees.some(
             (emp) =>
               `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}` ===
               value,
           );
-          return isValid;
         },
       ),
   });
@@ -125,6 +125,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
 
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
+
     setTimeout(() => {
       const selectedEmployeeOption = employees.find(
         (emp) => emp.employeeId === values.employee,
@@ -138,8 +139,9 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         );
         navigate("/");
       } else {
-        console.error("Empleado no encontrado");
+        console.error(labels.employee.errors.employeeNotFound);
       }
+
       setIsSubmitting(false);
     }, 300);
   };
