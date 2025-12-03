@@ -37,6 +37,7 @@ interface HolidaysOptionsUIProps {
     requestId: string,
     justification?: string,
   ) => boolean | void;
+  isSelfRequest?: boolean;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -60,6 +61,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasViewDetailsPrivilege = true,
     hasDeletePrivilege = true,
     handleDeleteRequest,
+    isSelfRequest = false,
   } = props;
 
   const [selectedTab, setSelectedTab] = useState("dias");
@@ -76,6 +78,15 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   });
   const { employee } = useEmployee(selectedEmployee.employeeId);
   const contracts = employee?.employmentContracts ?? [];
+
+  const selfMessage =
+    "No es posible realizar solicitudes a nombre propio desde el portal de gestor. Para realizar esta acción, ingrese al Portal de Empleados.";
+
+  const effectiveActionDescriptions = {
+    ...actionDescriptions,
+    enjoyment: isSelfRequest ? selfMessage : actionDescriptions.enjoyment,
+    payment: isSelfRequest ? selfMessage : actionDescriptions.payment,
+  };
 
   const tabs: ITab[] = [
     { id: "dias", label: "Días utilizados" },
@@ -111,9 +122,13 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const renderActions = () =>
     isMobile ? (
       <Detail
-        disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-        disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-        actionDescriptions={actionDescriptions}
+        disableEnjoyment={
+          !hasEnjoymentPrivilege || !hasActiveContract || isSelfRequest
+        }
+        disablePayment={
+          !hasPaymentPrivilege || !hasActiveContract || isSelfRequest
+        }
+        actionDescriptions={effectiveActionDescriptions}
         hasTableData={tableData && tableData.length > 0}
         onRequestEnjoyment={() => handleRequestEnjoyment()}
         onRequestPayment={() => handleRequestPayment()}
@@ -131,24 +146,38 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             variant="filled"
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
-            disabled={!hasActiveContract || !hasEnjoymentPrivilege}
+            disabled={
+              isSelfRequest || !hasActiveContract || !hasEnjoymentPrivilege
+            }
             onClick={
-              hasActiveContract && hasEnjoymentPrivilege
+              !isSelfRequest && hasActiveContract && hasEnjoymentPrivilege
                 ? () => handleRequestEnjoyment()
                 : undefined
             }
           >
             Agregar solicitud de disfrute
           </Button>
-          {(!hasActiveContract || !hasEnjoymentPrivilege) && (
+          {isSelfRequest ? (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.enjoyment)}
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
+              }
             />
-          )}
+          ) : !hasActiveContract || !hasEnjoymentPrivilege ? (
+            <Icon
+              icon={<MdOutlineInfo />}
+              appearance="primary"
+              size="16px"
+              cursorHover
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
+              }
+            />
+          ) : null}
         </Stack>
         <Stack gap={spacing.s025} alignItems="center">
           <Button
@@ -156,24 +185,38 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             variant="filled"
             iconBefore={<MdAdd />}
             fullwidth={isMobile}
-            disabled={!hasActiveContract || !hasPaymentPrivilege}
+            disabled={
+              isSelfRequest || !hasActiveContract || !hasPaymentPrivilege
+            }
             onClick={
-              hasActiveContract && hasPaymentPrivilege
+              !isSelfRequest && hasActiveContract && hasPaymentPrivilege
                 ? () => handleRequestPayment()
                 : undefined
             }
           >
             Agregar solicitud de pago
           </Button>
-          {(!hasActiveContract || !hasPaymentPrivilege) && (
+          {isSelfRequest ? (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => onOpenInfoModal(actionDescriptions.payment)}
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.payment)
+              }
             />
-          )}
+          ) : !hasActiveContract || !hasPaymentPrivilege ? (
+            <Icon
+              icon={<MdOutlineInfo />}
+              appearance="primary"
+              size="16px"
+              cursorHover
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.payment)
+              }
+            />
+          ) : null}
         </Stack>
       </Stack>
     );
