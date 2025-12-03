@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { useAppContext } from "@context/AppContext";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { InfoModal } from "@components/modals/InfoModal";
+import { useAppContext } from "@context/AppContext";
 
 export function PrivilegedRoute({
   children,
@@ -9,22 +11,42 @@ export function PrivilegedRoute({
   children: React.ReactNode;
   requiredPrivilege: string;
 }) {
-  const { staffUseCasesData } = useAppContext();
+  const { staffUseCasesData, selectedEmployee, staffUser } = useAppContext();
+  const navigate = useNavigate();
 
   const hasPrivilege =
     staffUseCasesData?.listOfUseCases?.includes(requiredPrivilege) ?? false;
 
-  const [infoModal, setInfoModal] = useState(true);
+  const isSelfRequest =
+    !!selectedEmployee?.identificationDocumentNumber &&
+    !!staffUser?.identificationDocumentNumber &&
+    selectedEmployee.identificationDocumentNumber ===
+      staffUser.identificationDocumentNumber;
 
-  if (!hasPrivilege) {
+  const denied = !hasPrivilege || isSelfRequest;
+
+  const [infoModalOpen, setInfoModalOpen] = useState(denied);
+
+  useEffect(() => {
+    setInfoModalOpen(denied);
+  }, [denied]);
+
+  const description = isSelfRequest
+    ? "No es posible realizar solicitudes a nombre propio desde el portal de gestor. Para realizar esta acción, ingrese al Portal de Empleados."
+    : "Ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.";
+
+  if (denied) {
     return (
       <>
-        {infoModal && (
+        {infoModalOpen && (
           <InfoModal
             title="Acción inhabilitada"
             titleDescription="¿Por qué está inhabilitado?"
-            description="Ya que no tiene un contrato activo o no cuenta con los privilegios necesarios."
-            onCloseModal={() => setInfoModal(false)}
+            description={description}
+            onCloseModal={() => {
+              setInfoModalOpen(false);
+              navigate("/", { replace: true });
+            }}
           />
         )}
       </>
