@@ -8,7 +8,9 @@ import { formatDate } from "@utils/date";
 
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
 import { IFormsUpdateData } from "../../../types";
-import { alerts } from "../../RequirementsForm/config/alertConfig";
+import { alerts as alertsConfig } from "../../RequirementsForm/config/alertConfig";
+
+import { labels } from "@i18n/labels";
 
 interface IContract {
   contractId: string;
@@ -31,6 +33,8 @@ const renderPersonalInfoVerification = (
       ? `${contractInfo.contractId} - ${contractInfo.businessName} - ${contractTypeLabels[contractInfo.contractType]}`
       : values.contract;
 
+  const fieldsLabels = labels.holidays.generalInformationForm.fields;
+
   return (
     <>
       <Grid
@@ -40,18 +44,18 @@ const renderPersonalInfoVerification = (
         width="100%"
       >
         <BoxAttribute
-          label="Días de disfrute:"
+          label={fieldsLabels.daysToPay.label}
           value={values.daysOff}
           direction="column"
         />
         <BoxAttribute
-          label="Fecha de inicio:"
+          label={fieldsLabels.startDate.label}
           value={formatDate(values.startDate)}
           direction="column"
         />
         {hasMultipleContracts && (
           <BoxAttribute
-            label="Contrato:"
+            label={fieldsLabels.contract.label}
             value={contractDisplay}
             direction="column"
           />
@@ -59,7 +63,7 @@ const renderPersonalInfoVerification = (
       </Grid>
       <Stack width="100%" direction="column">
         <BoxAttribute
-          label="Observaciones:"
+          label={fieldsLabels.observations.label}
           value={values.observations}
           direction="column"
         />
@@ -75,7 +79,7 @@ const renderAlerts = (isTablet: boolean) => (
     gap={spacing.s100}
     width="100%"
   >
-    {alerts.map((alert, index) => (
+    {alertsConfig.map((alert, index) => (
       <Stack key={index} direction="column" gap={spacing.s050}>
         <BoxAttribute
           label={alert.requirement}

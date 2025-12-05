@@ -2,10 +2,11 @@ export const contracts = {
   title: "Consulta histórica de contratos",
 
   actions: {
-    terminate: "Terminar",
-    renew: "Renovar",
-    modify: "Modificar",
+    add: "Agregar",
     addVinculation: "Agregar vinculación",
+    modify: "Modificar",
+    renew: "Renovar",
+    terminate: "Terminar",
   },
 
   tags: {

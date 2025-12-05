@@ -1,4 +1,5 @@
 import { MdAdd } from "react-icons/md";
+import { labels } from "@i18n/labels";
 
 import { IAction } from "./type";
 
@@ -13,7 +14,7 @@ export const Actions = (
       id: "enjoyment",
       icon: <MdAdd />,
       appearance: "primary",
-      label: "Solicitar disfrute",
+      label: labels.holidays.actions.addEnjoyment,
       onClick: onRequestEnjoyment,
       isDisabled: disableEnjoyment ?? false,
     },
@@ -21,7 +22,7 @@ export const Actions = (
       id: "payment",
       icon: <MdAdd />,
       appearance: "primary",
-      label: "Solicitar pago",
+      label: labels.holidays.actions.addPayment,
       onClick: onRequestPayment,
       isDisabled: disablePayment ?? false,
     },

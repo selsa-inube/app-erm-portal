@@ -14,6 +14,33 @@ export const employee = {
     title: "Vincular nuevo empleado",
     requirements: "Requisitos",
 
+    steps: {
+      personalData: {
+        name: "Datos personales",
+        description: "Completa los datos personales del empleado.",
+      },
+      contractualPosition: {
+        name: "Datos de posición contractual",
+        description: "Diligencia los datos solicitados.",
+      },
+      legalAccountingLocation: {
+        name: "Ubicación jurídica y contable",
+        description: "Define la asignación contable del empleado.",
+      },
+      assignments: {
+        name: "Asignaciones",
+        description: "Despliega las asignaciones seleccionadas.",
+      },
+      unmetRequirements: {
+        name: "Requisitos no cumplidos",
+        description: "Aspectos que son un impedimento y deben cambiar.",
+      },
+      verification: {
+        name: "Verificación",
+        description: "Confirma la información diligenciada.",
+      },
+    },
+
     assignments: {
       basicSalary: {
         title: "Asignación 1",
@@ -35,6 +62,10 @@ export const employee = {
       flagTitle: "Solicitud enviada",
       flagMessage: "El registro del nuevo empleado fue enviado exitosamente.",
     },
+  },
+
+  requestInfoModal: {
+    staffName: "Nombre Apellido",
   },
 
   assisted: {

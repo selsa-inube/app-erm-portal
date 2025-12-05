@@ -8,6 +8,7 @@ import {
 } from "@inubekit/inubekit";
 import { MdRule } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
@@ -86,7 +87,7 @@ function NewCertificationUI(
           <ButtonRequirements
             counter={mockAlertCards.length}
             buttonIcon={<MdRule />}
-            buttonText="Solicitar Pago"
+            buttonText={labels.certifications.buttons.addRequest}
             isMobile={isTablet}
             onClick={handleOpenModal}
           />
@@ -99,11 +100,7 @@ function NewCertificationUI(
             totalSteps={steps.length}
             disableNext={shouldDisableNext}
             size={isTablet ? "small" : "large"}
-            controls={{
-              goBackText: "Anterior",
-              goNextText: "Siguiente",
-              submitText: "Enviar",
-            }}
+            controls={labels.certifications.assistedControls}
             onNextClick={handleNextStep}
             onBackClick={handlePreviousStep}
             onSubmitClick={handleFinishAssisted}
@@ -144,8 +141,8 @@ function NewCertificationUI(
 
       {isModalOpen && (
         <RequirementsModal
-          title="Requisitos"
-          buttonLabel="Cerrar"
+          title={labels.certifications.infoModal.title}
+          buttonLabel={labels.certifications.infoModal.closeButtonLabel}
           requirements={mockRequirements}
           handleClose={handleCloseModal}
         />

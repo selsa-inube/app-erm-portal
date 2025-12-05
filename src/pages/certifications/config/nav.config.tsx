@@ -1,16 +1,18 @@
+import { labels } from "@i18n/labels";
+
 const breadcrumbs = {
   id: 1,
-  label: "Certificaciones",
+  label: labels.certifications.titles.certifications,
   crumbs: [
     {
       path: "/",
-      label: "Inicio",
+      label: labels.certifications.titles.home,
       id: "/",
       isActive: false,
     },
     {
       path: "/certifications",
-      label: "Certificaciones",
+      label: labels.certifications.titles.certifications,
       id: "/certifications",
       isActive: true,
     },

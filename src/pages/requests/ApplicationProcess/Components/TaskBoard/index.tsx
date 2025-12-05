@@ -1,6 +1,7 @@
 import { useMediaQuery, Text, Stack } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { TaskCard, TaskCardProps } from "../TaskCard";
 import {
@@ -23,11 +24,13 @@ function TaskBoard(props: TaskBoardProps) {
     completedTasks = [],
     isResponsible = true,
   } = props;
+
   const isMobile = useMediaQuery("(max-width: 710px)");
 
   const renderTaskSection = (
     title: string,
     tasks: TaskCardProps[],
+    emptyMessage: string,
     isRightSection = false,
     isMobileView = false,
   ) => {
@@ -38,6 +41,7 @@ function TaskBoard(props: TaskBoardProps) {
             {title}
           </Text>
         </StyledTaskHeader>
+
         <StyledTaskContent $isRightSection={!isMobileView && isRightSection}>
           {tasks.length > 0 ? (
             tasks.map((task) => (
@@ -50,9 +54,7 @@ function TaskBoard(props: TaskBoardProps) {
           ) : (
             <Stack width={isMobile ? "auto" : "100%"}>
               <Text size="small" appearance="gray">
-                {title === "Tareas por hacer"
-                  ? "No hay ninguna tarea pendiente por ahora."
-                  : "Ninguna tarea está hecha por ahora."}
+                {emptyMessage}
               </Text>
             </Stack>
           )}
@@ -65,10 +67,23 @@ function TaskBoard(props: TaskBoardProps) {
     return (
       <Stack direction="column" gap={spacing.s300}>
         <StyledMobileBoard>
-          {renderTaskSection("Tareas por hacer", pendingTasks, false, true)}
+          {renderTaskSection(
+            labels.requests.taskBoard.pendingTitle,
+            pendingTasks,
+            labels.requests.taskBoard.emptyState.pending,
+            false,
+            true,
+          )}
         </StyledMobileBoard>
+
         <StyledMobileBoard>
-          {renderTaskSection("Tareas hechas", completedTasks, false, true)}
+          {renderTaskSection(
+            labels.requests.taskBoard.completedTitle,
+            completedTasks,
+            labels.requests.taskBoard.emptyState.completed,
+            false,
+            true,
+          )}
         </StyledMobileBoard>
       </Stack>
     );
@@ -76,8 +91,18 @@ function TaskBoard(props: TaskBoardProps) {
 
   return (
     <StyledTaskBoardContainer>
-      {renderTaskSection("Tareas por hacer", pendingTasks)}
-      {renderTaskSection("Tareas hechas", completedTasks, true)}
+      {renderTaskSection(
+        labels.requests.taskBoard.pendingTitle,
+        pendingTasks,
+        labels.requests.taskBoard.emptyState.pending,
+      )}
+
+      {renderTaskSection(
+        labels.requests.taskBoard.completedTitle,
+        completedTasks,
+        labels.requests.taskBoard.emptyState.completed,
+        true,
+      )}
     </StyledTaskBoardContainer>
   );
 }

@@ -168,7 +168,7 @@ function NewEmployee() {
         <RequestInfoModal
           iconAppearance="success"
           requestId="##45678822"
-          staffName="Nombre Apellido"
+          staffName={labels.employee.requestInfoModal.staffName}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />

@@ -10,6 +10,7 @@ import {
   Button,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledModal, StyledContainerClose } from "./styles";
@@ -43,11 +44,11 @@ export function TakeRequestModal(props: TakeRequestModalProps) {
       <StyledModal $smallScreen={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="headline" size="small">
-            Tomar solicitud
+            {labels.requests.takeRequestModal.title}
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.requests.takeRequestModal.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -59,11 +60,12 @@ export function TakeRequestModal(props: TakeRequestModalProps) {
         </Stack>
         <Divider />
         <Text>
-          Acabas de seleccionar la solicitud{" "}
+          {labels.requests.takeRequestModal.description.beforeRequestId}
           <Text as="span" weight="bold">
-            No. {requestId}
+            {labels.requests.takeRequestModal.description.requestNumberPrefix}
+            {requestId}
           </Text>
-          , puedes ser responsable para su gestión. ¿Estás de acuerdo?
+          {labels.requests.takeRequestModal.description.afterRequestId}
         </Text>
         <Stack justifyContent="flex-end" gap={spacing.s250}>
           <Button
@@ -72,10 +74,10 @@ export function TakeRequestModal(props: TakeRequestModalProps) {
             variant="outlined"
             cursorHover
           >
-            Solo visualizar
+            {labels.requests.takeRequestModal.actions.visualize}
           </Button>
           <Button onClick={handleTakeRequest} cursorHover>
-            Sí, tomar solicitud
+            {labels.requests.takeRequestModal.actions.takeRequest}
           </Button>
         </Stack>
       </StyledModal>
