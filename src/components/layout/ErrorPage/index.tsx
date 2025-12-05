@@ -12,6 +12,7 @@ import { environment } from "@config/environment";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 import { errorCodes } from "@config/errorCodes.tsx";
+import { labels } from "@i18n/labels";
 
 import {
   StyledCompanyLogo,
@@ -46,11 +47,11 @@ const ListContent = ({ items }: { items: string[] }) => (
 function ErrorPage(props: ErrorPageProps) {
   const {
     logo = selsaLogo,
-    logoAlt = "Sistemas Enlinea",
-    heading = "¡Ups! Algo salió mal...",
+    logoAlt = labels.layout.errorPage.defaultLogoAlt,
+    heading = labels.layout.errorPage.defaultHeading,
     image = errorImage,
-    imageAlt = "Ha surgido un error. Revisa la descripción",
-    nameButton = "Regresar",
+    imageAlt = labels.layout.errorPage.defaultImageAlt,
+    nameButton = labels.layout.errorPage.defaultButtonName,
     errorCode = 0,
     onClick,
   } = props;
@@ -60,8 +61,8 @@ function ErrorPage(props: ErrorPageProps) {
   const isMobile = matches["(max-width: 600px)"];
 
   const errorDetail = errorCodes[errorCode] ?? {
-    whatWentWrong: ["No se proporcionó información sobre el error."],
-    howToFix: ["Intenta nuevamente más tarde."],
+    whatWentWrong: labels.layout.errorPage.defaultWhatWentWrong,
+    howToFix: labels.layout.errorPage.defaultHowToFix,
   };
 
   return (
@@ -82,6 +83,7 @@ function ErrorPage(props: ErrorPageProps) {
                 height={isMobile ? "40px" : "54px"}
               />
             </Stack>
+
             <Stack direction="column" alignItems="center">
               <Stack
                 direction="column"
@@ -96,10 +98,12 @@ function ErrorPage(props: ErrorPageProps) {
                 >
                   {heading}
                 </Text>
+
                 <Tag
                   appearance="gray"
-                  label={`Código de error: ${errorCode}`}
+                  label={`${labels.layout.errorPage.errorCodeLabel} ${errorCode}`}
                 />
+
                 <StyledErrorImage
                   src={image}
                   alt={imageAlt}
@@ -108,6 +112,7 @@ function ErrorPage(props: ErrorPageProps) {
                 />
               </Stack>
             </Stack>
+
             <StyledCertificationsContainer $isMobile={isMobile}>
               <Stack
                 direction={isMobile ? "column" : "row"}
@@ -117,21 +122,24 @@ function ErrorPage(props: ErrorPageProps) {
               >
                 <Stack direction="column" gap={spacing.s300} width="100%">
                   <Text type="headline" size="medium" weight="bold">
-                    ¿Qué salió mal?
+                    {labels.layout.errorPage.whatWentWrongTitle}
                   </Text>
                   <StyledDiv>
                     <ListContent items={errorDetail.whatWentWrong} />
                   </StyledDiv>
                 </Stack>
+
                 <VerticalDivider $isVertical={!isMobile} />
                 {isMobile && <Divider dashed />}
+
                 <Stack direction="column" gap={spacing.s300} width="100%">
                   <Text type="headline" size="medium" weight="bold">
-                    ¿Cómo solucionarlo?
+                    {labels.layout.errorPage.howToFixTitle}
                   </Text>
                   <StyledDiv>
                     <ListContent items={errorDetail.howToFix} />
                   </StyledDiv>
+
                   <Stack justifyContent="center">
                     <Button
                       appearance="primary"
@@ -153,9 +161,10 @@ function ErrorPage(props: ErrorPageProps) {
           </Stack>
         </Stack>
       </StyledMainContent>
+
       <StyledFooter>
         <Text appearance="gray" textAlign="center" size="small" weight="bold">
-          © 2024 Inube
+          {labels.layout.errorPage.footerText}
         </Text>
       </StyledFooter>
     </StyledContainer>

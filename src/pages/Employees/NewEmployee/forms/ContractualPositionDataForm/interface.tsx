@@ -11,6 +11,7 @@ import {
 
 import { spacing } from "@design/tokens/spacing";
 import { getFieldState, isRequired } from "@utils/forms";
+import { labels } from "@i18n/labels";
 
 import { IContractualPositionData } from "./types";
 import { StyledContainer } from "./styles";
@@ -38,6 +39,9 @@ function ContractualPositionDataFormUI(
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
+  const fieldLabels = labels.employee.contractualPositionForm.fields;
+  const placeholders = labels.employee.contractualPositionForm.placeholders;
+
   return (
     <form>
       <Stack
@@ -55,8 +59,8 @@ function ContractualPositionDataFormUI(
               autoRows="unset"
             >
               <Select
-                label="Marco normativo"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.normativeFramework}
+                placeholder={placeholders.select}
                 name="normativeFramework"
                 id="normativeFramework"
                 value={formik.values.normativeFramework}
@@ -65,16 +69,16 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "normativeFramework")}
-                onChange={(value) => {
-                  void formik.setFieldValue("normativeFramework", value);
-                }}
+                onChange={(value) =>
+                  void formik.setFieldValue("normativeFramework", value)
+                }
                 onBlur={formik.handleBlur}
                 options={[]}
               />
 
               <Select
-                label="Tipo de contrato"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.contractType}
+                placeholder={placeholders.select}
                 name="contractType"
                 id="contractType"
                 value={formik.values.contractType}
@@ -83,15 +87,15 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "contractType")}
-                onChange={(value) => {
-                  void formik.setFieldValue("contractType", value);
-                }}
+                onChange={(value) =>
+                  void formik.setFieldValue("contractType", value)
+                }
                 onBlur={formik.handleBlur}
                 options={[]}
               />
 
               <Date
-                label="Fecha de inicio"
+                label={fieldLabels.startDate}
                 name="startDate"
                 id="startDate"
                 value={formik.values.startDate}
@@ -106,13 +110,13 @@ function ContractualPositionDataFormUI(
               />
 
               <Date
-                label="Fecha de finalización"
+                label={fieldLabels.endDate}
                 name="endDate"
                 id="endDate"
                 value={formik.values.endDate}
                 status={getFieldState(formik, "endDate")}
                 message={formik.errors.endDate}
-                disabled={true}
+                disabled
                 size="compact"
                 fullwidth
                 onBlur={formik.handleBlur}
@@ -121,8 +125,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Empresa contratante"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.company}
+                placeholder={placeholders.select}
                 name="company"
                 id="company"
                 value={formik.values.company}
@@ -139,8 +143,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Jornada laboral"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.workingShift}
+                placeholder={placeholders.select}
                 name="workingShift"
                 id="workingShift"
                 value={formik.values.workingShift}
@@ -157,8 +161,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Equipo de trabajo"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.team}
+                placeholder={placeholders.select}
                 name="team"
                 id="team"
                 value={formik.values.team}
@@ -173,8 +177,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Cargo"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.position}
+                placeholder={placeholders.select}
                 name="position"
                 id="position"
                 value={formik.values.position}
@@ -191,8 +195,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Perfil salarial"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.salaryProfile}
+                placeholder={placeholders.select}
                 name="salaryProfile"
                 id="salaryProfile"
                 value={formik.values.salaryProfile}
@@ -209,8 +213,8 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Sitio de trabajo"
-                placeholder="Selecciona de la lista"
+                label={fieldLabels.jobMode}
+                placeholder={placeholders.select}
                 name="jobMode"
                 id="jobMode"
                 value={formik.values.jobMode}
@@ -236,13 +240,13 @@ function ContractualPositionDataFormUI(
               appearance="gray"
               variant="outlined"
             >
-              Anterior
+              {labels.employee.assisted.back}
             </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >
-              Siguiente
+              {labels.employee.assisted.next}
             </Button>
           </Stack>
         )}

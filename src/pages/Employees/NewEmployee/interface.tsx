@@ -13,6 +13,7 @@ import { spacing } from "@design/tokens/spacing";
 import { mockAlertCards } from "@mocks/requirements/requirements.mock";
 import { AlertCardProps } from "@components/data/AlertCard";
 import { ButtonRequirements } from "@components/inputs/ButtonWithCounter";
+import { labels } from "@i18n/labels";
 
 import { PersonalDataForm } from "./forms/PersonalDataForm";
 import { ContractualPositionDataForm } from "./forms/ContractualPositionDataForm";
@@ -81,13 +82,8 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -100,27 +96,29 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
       >
         <Stack justifyContent="space-between" alignItems="center">
           <Text type="title" as="h1" size={isTablet ? "medium" : "large"}>
-            Vincular nuevo empleado
+            {labels.employee.newEmployee.title}
           </Text>
+
           <Stack direction="column" alignItems="flex-end" margin={spacing.s075}>
             <ButtonRequirements
               counter={mockAlertCards.length}
               buttonIcon={<MdRule />}
-              buttonText="Requisitos"
+              buttonText={labels.employee.newEmployee.requirements}
               onClick={handleOpenModal}
               isMobile={isMobile}
             />
           </Stack>
         </Stack>
+
         <Assisted
           step={steps[currentStep - 1]}
           totalSteps={steps.length}
           disableNext={!isCurrentFormValid}
           size={isTablet ? "small" : "large"}
           controls={{
-            goBackText: "Anterior",
-            goNextText: "Siguiente",
-            submitText: "Finalizar",
+            goBackText: labels.employee.assisted.back,
+            goNextText: labels.employee.assisted.next,
+            submitText: labels.employee.assisted.submit,
           }}
           onNextClick={handleNextStep}
           onBackClick={handlePreviousStep}
@@ -132,7 +130,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
             <PersonalDataForm
               ref={personalDataRef}
               initialValues={initialPersonalDataValues}
-              withNextButton={true}
+              withNextButton
               onFormValid={setIsCurrentFormValid}
               handleNextStep={handleNextStep}
             />
@@ -142,7 +140,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
             <ContractualPositionDataForm
               ref={contractualPositionDataFormRef}
               initialValues={initialContractualPositionValues}
-              withNextButton={true}
+              withNextButton
               onFormValid={setIsCurrentFormValid}
               handleNextStep={handleNextStep}
               handlePreviousStep={handlePreviousStep}
@@ -153,29 +151,32 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
             <LegalAccountingLocationForm
               ref={legalAccountingLocationFormRef}
               initialValues={initialLegalAccountingLocationValues}
-              withNextButton={true}
+              withNextButton
               onFormValid={setIsCurrentFormValid}
               handleNextStep={handleNextStep}
               handlePreviousStep={handlePreviousStep}
             />
           )}
+
           {currentStep === 4 && (
             <AssignmentForm
-              withNextButton={true}
               assignments={assignments}
+              withNextButton
               onAssignmentsChange={onAssignmentsChange}
               handleNextStep={handleNextStep}
               handlePreviousStep={handlePreviousStep}
             />
           )}
+
           {currentStep === 5 && (
             <UnmetRequirementsForm
               alertCards={requirements}
-              withNextButton={true}
+              withNextButton
               handleNextStep={handleNextStep}
               handlePreviousStep={handlePreviousStep}
             />
           )}
+
           {currentStep === 6 && (
             <VerificationForm
               updatedData={{

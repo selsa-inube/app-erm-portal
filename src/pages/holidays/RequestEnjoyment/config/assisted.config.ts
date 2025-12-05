@@ -1,40 +1,42 @@
 import { IAssistedStep, IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
+
 export const requestEnjoymentSteps: IAssistedStep[] = [
   {
     id: 1,
     number: 1,
-    name: "Requisitos no cumplidos",
-    description: "Revisa los requisitos para el disfrute de vacaciones.",
+    name: labels.holidays.titles.requirements,
+    description: labels.holidays.assisted.previous,
   },
   {
     id: 2,
     number: 2,
-    name: "Información general",
-    description: "Proporciona información acerca de tu solicitud.",
+    name: labels.holidays.titles.daysUsedQuery,
+    description: labels.holidays.generalInformationForm.fields.daysToPay.label,
   },
   {
     id: 3,
     number: 3,
-    name: "Verificación",
-    description: "Verifica la información proporcionada.",
+    name: labels.holidays.titles.pendingRequests,
+    description: labels.holidays.verification.backToStep,
   },
 ];
 
 export const certificationOptions: IOption[] = [
   {
     id: "1",
-    label: "Certificado de servidor",
+    label: labels.holidays.actions.addEnjoyment,
     value: "certificado de servidor",
   },
   {
     id: "2",
-    label: "Certificado de pertenencia a empresa",
+    label: labels.holidays.actions.addPayment,
     value: "certificado de pertenencia a empresa",
   },
   {
     id: "3",
-    label: "Certificado de representante",
+    label: labels.holidays.actions.requestPayment,
     value: "certificado de representante",
   },
 ];
@@ -42,17 +44,17 @@ export const certificationOptions: IOption[] = [
 export const contractOptions: IOption[] = [
   {
     id: "1",
-    label: "Contrato por obra o labor",
-    value: "contrato por obra o labor.",
+    label: labels.holidays.generalInformationForm.fields.contract.label,
+    value: "contrato por obra o labor",
   },
   {
     id: "2",
-    label: "Contrato de trabajo a término fijo",
-    value: "contrato de trabajo a término fijo.",
+    label: labels.holidays.generalInformationForm.fields.contract.label,
+    value: "contrato de trabajo a término fijo",
   },
   {
     id: "3",
-    label: "Contrato de trabajo a término indefinido",
-    value: "contrato de trabajo a término indefinido.",
+    label: labels.holidays.generalInformationForm.fields.contract.label,
+    value: "contrato de trabajo a término indefinido",
   },
 ];

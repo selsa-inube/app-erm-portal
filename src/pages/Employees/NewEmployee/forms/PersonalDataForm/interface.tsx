@@ -9,9 +9,9 @@ import {
   Divider,
 } from "@inubekit/inubekit";
 
-import { isRequired } from "@utils/forms";
+import { isRequired, getFieldState } from "@utils/forms";
 import { spacing } from "@design/tokens/spacing";
-import { getFieldState } from "@utils/forms";
+import { labels } from "@i18n/labels";
 
 import { IPersonalDataEntry } from "./types";
 import { StyledContainer } from "./styles";
@@ -31,6 +31,9 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
 
   const isMobile = useMediaQuery("(max-width: 700px)");
 
+  const fieldLabels = labels.employee.personalDataForm.fields;
+  const placeholders = labels.employee.personalDataForm.placeholders;
+
   return (
     <form>
       <Stack
@@ -48,8 +51,8 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
               autoRows="unset"
             >
               <Textfield
-                label="Nombres"
-                placeholder="Ej: Juan Daniel"
+                label={fieldLabels.names}
+                placeholder={placeholders.names}
                 name="names"
                 id="names"
                 value={formik.values.names}
@@ -63,9 +66,10 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 onChange={formik.handleChange}
                 required={isRequired(validationSchema, "names")}
               />
+
               <Textfield
-                label="Apellidos"
-                placeholder="Ej: Rodríguez Pérez"
+                label={fieldLabels.lastNames}
+                placeholder={placeholders.lastNames}
                 name="lastNames"
                 id="lastNames"
                 value={formik.values.lastNames}
@@ -79,9 +83,10 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 onChange={formik.handleChange}
                 required={isRequired(validationSchema, "lastNames")}
               />
+
               <Textfield
-                label="Número de identificación"
-                placeholder="Número de identificación"
+                label={fieldLabels.identificationNumber}
+                placeholder={placeholders.identificationNumber}
                 name="identificationNumber"
                 id="identificationNumber"
                 value={formik.values.identificationNumber}
@@ -95,7 +100,9 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 required={isRequired(validationSchema, "identificationNumber")}
               />
             </Grid>
+
             <Divider dashed />
+
             <FileAttachment
               attachedFile={formik.values.attachedFile}
               onFileChange={(file) =>
@@ -111,7 +118,7 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >
-              Siguiente
+              {labels.employee.assisted.next}
             </Button>
           </Stack>
         )}

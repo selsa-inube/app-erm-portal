@@ -15,6 +15,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { AppCard } from "@components/feedback/AppCard";
 import { AlertModal } from "@components/modals/AlertModal";
 import { AbsenceDetailModal } from "@components/modals/AbsenceDetailModal";
@@ -79,7 +80,7 @@ function Home() {
 
   const headerUsername = staffUser
     ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
-    : "Nombre de usuario";
+    : labels.home.header.defaultUsername;
 
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const toggleAlertModal = () => setIsAlertModalOpen(!isAlertModalOpen);
@@ -97,11 +98,11 @@ function Home() {
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
             selectedClient?.logo ?? logoUrl,
-            selectedClient?.name ?? "Sin unidad seleccionada",
+            selectedClient?.name ?? labels.home.header.noUnitSelected,
           )}
           user={{
             username: headerUsername,
-            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            client: selectedClient?.name ?? labels.home.header.noUnitSelected,
             breakpoint: "800px",
           }}
           menu={userMenu}
@@ -147,12 +148,12 @@ function Home() {
               name={
                 selectedEmployee
                   ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-                  : "Empleado no seleccionado"
+                  : labels.home.banner.noEmployeeSelected
               }
               status={
                 selectedEmployee
                   ? selectedEmployee.employeeStatus
-                  : "estado-desconocido"
+                  : labels.home.banner.unknownStatus
               }
               imageUrl={logoUrl}
               redirectUrl="/employees/select-employee"
@@ -167,7 +168,7 @@ function Home() {
                     />
                   ),
                   value: totalDays,
-                  label: "Días pendientes",
+                  label: labels.home.banner.pendingDays,
                   onClick: toggleModal,
                 },
               ]}
@@ -183,7 +184,7 @@ function Home() {
                             cursorHover
                           />
                         ),
-                        label: "Ausencias",
+                        label: labels.home.banner.absences,
                         value: lastAbsenceDateRange,
                         onClick: toggleAbsenceDetailModal,
                       },
@@ -206,7 +207,7 @@ function Home() {
                           employeeAlertsMock.length > 99
                             ? "+99"
                             : employeeAlertsMock.length,
-                        label: "Alertas",
+                        label: labels.home.banner.alerts,
                         onClick: toggleAlertModal,
                       },
                     ]
@@ -215,8 +216,8 @@ function Home() {
               seniorityItems={[
                 {
                   value: 2.5,
-                  unit: "Años",
-                  label: "Antigüedad",
+                  unit: labels.home.banner.years,
+                  label: labels.home.banner.seniority,
                 },
               ]}
               isLoading={loadingDays}
@@ -231,14 +232,15 @@ function Home() {
             >
               <Stack gap={spacing.s300} direction="column">
                 <Text size={isTablet ? "medium" : "large"} type="headline">
-                  Bienvenido(a), {user?.username ?? "Usuario"}
+                  {labels.home.main.welcome},{" "}
+                  {user?.username ?? labels.home.main.defaultUser}
                 </Text>
                 <Text
                   type="title"
                   appearance="gray"
                   size={isTablet ? "medium" : "large"}
                 >
-                  Aquí tienes las funcionalidades disponibles.
+                  {labels.home.main.subtitle}
                 </Text>
 
                 <StyledQuickAccessContainer $isTablet={isTablet}>
@@ -278,15 +280,15 @@ function Home() {
       {isAlertModalOpen && (
         <AlertModal
           handleClose={toggleAlertModal}
-          title="Alertas"
+          title={labels.home.modals.alertsTitle}
           events={alertEvents}
         />
       )}
 
       {isAbsenceDetailOpen && (
         <AbsenceDetailModal
-          title="Detalle de la ausencia"
-          buttonLabel="Cerrar"
+          title={labels.home.modals.absenceDetailTitle}
+          buttonLabel={labels.home.modals.closeButton}
           details={absences}
           onClose={toggleAbsenceDetailModal}
         />

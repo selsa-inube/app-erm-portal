@@ -13,6 +13,7 @@ import {
 import { validationMessages } from "@validations/validationMessages";
 import { EventCard } from "@components/data/EventCard";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { IEventItem } from "./types";
 import {
@@ -37,7 +38,7 @@ export function AlertModal(props: AlertModalProps) {
     events,
     width = "450px",
     portalId = "portal",
-    closeButtonText = "Cerrar",
+    closeButtonText = labels.modal.generic.close,
   } = props;
 
   const node = document.getElementById(portalId);
@@ -57,7 +58,7 @@ export function AlertModal(props: AlertModalProps) {
 
           <StyledCloseButton onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modal.generic.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -84,6 +85,7 @@ export function AlertModal(props: AlertModalProps) {
             ))}
           </Stack>
         </StyledContentScrollable>
+
         <Stack justifyContent="end">
           <Button onClick={handleClose} variant="filled" appearance="primary">
             {closeButtonText}

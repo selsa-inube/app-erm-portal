@@ -11,6 +11,7 @@ import { useAppContext } from "@context/AppContext";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { RequirementsModal } from "@components/modals/RequirementsModal";
+import { labels } from "@i18n/labels";
 
 import { RequestSummary } from "./Components/RequestSummary";
 import { TaskBoard } from "./Components/TaskBoard";
@@ -36,8 +37,8 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
 
   useErrorFlag(
     showSuccessFlag,
-    "El nuevo responsable se asignó con éxito.",
-    "Responsable asignado.",
+    labels.requests.flags.assignResponsibleSuccess.message,
+    labels.requests.flags.assignResponsibleSuccess.title,
     true,
     5000,
   );
@@ -52,39 +53,16 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
         staff.value === selectedStaffId || staff.label === selectedStaffId,
     );
 
-    if (selectedStaff) {
-      setStaffInfo({
-        id: selectedStaff.value,
-        name: selectedStaff.label,
-      });
-    } else {
-      setStaffInfo({
-        id: selectedStaffId,
-        name: user?.username ?? "",
-      });
-    }
+    setStaffInfo(
+      selectedStaff
+        ? { id: selectedStaff.value, name: selectedStaff.label }
+        : { id: selectedStaffId, name: user?.username ?? "" },
+    );
 
     setShowStaffModal(false);
-
     setShowSuccessFlag(true);
 
-    setTimeout(() => {
-      setShowSuccessFlag(false);
-    }, 300);
-  };
-
-  const onSubmit = (modalType: string) => (values: FormValues) => {
-    if (modalType === "staffSelect") {
-      handleStaffSubmit(values);
-    }
-  };
-
-  const handleDiscard = () => {
-    console.log("Discard request");
-  };
-
-  const handleSeeRequirements = () => {
-    setIsRequirementsModalOpen(true);
+    setTimeout(() => setShowSuccessFlag(false), 300);
   };
 
   return (
@@ -93,33 +71,34 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
         <RequestSummary
           requestNumber={id}
           staffName={staffInfo.name}
-          onDiscard={handleDiscard}
-          onSeeRequirements={handleSeeRequirements}
+          onDiscard={() => console.log("Discard request")}
+          onSeeRequirements={() => setIsRequirementsModalOpen(true)}
           onEditStaff={handleEditStaff}
         />
+
         <TaskBoard
           pendingTasks={mockPendingTasks}
           completedTasks={mockCompletedTasks}
-          isResponsible={true}
+          isResponsible
         />
 
         {showStaffModal && (
           <SelectStaffModal
-            title="Cambiar responsable"
+            title={labels.requests.modals.selectStaff.title}
             portalId="portal"
             loading={false}
             selectionOptions={mockStaffMembers}
             selectedEmployee={user ?? undefined}
             initialSelection={staffInfo.id}
             onCloseModal={handleCloseModal}
-            onSubmit={onSubmit("staffSelect")}
+            onSubmit={(values) => handleStaffSubmit(values)}
           />
         )}
 
         {isRequirementsModalOpen && (
           <RequirementsModal
-            title="Requisitos"
-            buttonLabel="Cerrar"
+            title={labels.requests.modals.requirements.title}
+            buttonLabel={labels.requests.modals.requirements.closeButton}
             requirements={mockRequirements}
             handleClose={() => setIsRequirementsModalOpen(false)}
           />

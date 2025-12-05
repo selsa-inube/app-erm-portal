@@ -1,5 +1,7 @@
 import { MdAdd } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
+
 import { IAction } from "./type";
 
 export const Actions = (
@@ -11,7 +13,7 @@ export const Actions = (
       id: "enjoyment",
       icon: <MdAdd />,
       appearance: "primary",
-      label: "Agregar solicitud",
+      label: labels.certifications.titles.addRequestPage,
       onClick: onRequestEnjoyment,
       isDisabled: disableEnjoyment ?? false,
     },

@@ -17,6 +17,7 @@ import {
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 
+import { labels } from "@i18n/labels";
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
@@ -180,7 +181,7 @@ function RequirementsModal(props: RequirementsModalProps) {
             </Text>
             <StyledContainerClose onClick={handleClose}>
               <Stack alignItems="center" gap={spacing.s100}>
-                <Text>Cerrar</Text>
+                <Text>{labels.modal.generic.close}</Text>
                 <Icon
                   icon={<MdClear />}
                   size="24px"
@@ -210,7 +211,7 @@ function RequirementsModal(props: RequirementsModalProps) {
                       : undefined
                   }
                 >
-                  Agregar Requisito
+                  {labels.modal.requirements.addRequirement}
                 </Button>
                 {!hasPrivilege && (
                   <Icon
@@ -221,9 +222,9 @@ function RequirementsModal(props: RequirementsModalProps) {
                     onClick={() =>
                       setInfoModal({
                         open: true,
-                        title: "Agregar Requisito",
+                        title: labels.modal.requirements.addRequirement,
                         description:
-                          "No tienes permisos para agregar un requisito en este momento.",
+                          labels.modal.requirements.addRequirementNoPrivilege,
                       })
                     }
                   />

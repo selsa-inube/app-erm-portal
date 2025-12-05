@@ -3,6 +3,7 @@ import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
 import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { newEmployeeSteps } from "../../config/assisted.config";
 import { IFormsUpdateData } from "../../types";
@@ -44,11 +45,12 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.employee.assisted.back}
               </Button>
             </Stack>
           </Accordion>
         ))}
+
       <Stack
         direction="row"
         justifyContent="flex-end"
@@ -60,10 +62,10 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.employee.assisted.back}
         </Button>
         <Button onClick={handleSubmit} appearance="primary">
-          Finalizar
+          {labels.employee.assisted.submit}
         </Button>
       </Stack>
     </Stack>

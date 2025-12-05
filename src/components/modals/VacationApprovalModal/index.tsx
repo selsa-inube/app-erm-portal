@@ -12,6 +12,7 @@ import { MdClear, MdCheckCircle } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
 
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 
@@ -39,11 +40,11 @@ export function VacationApprovalModal(props: VacationApprovalModalProps) {
         <Stack direction="column" gap={spacing.s200}>
           <Stack justifyContent="space-between" alignItems="center">
             <Text type="headline" size="small">
-              Respuesta enviada
+              {labels.modal.vacationApproval.title}
             </Text>
             <StyledContainerClose onClick={onCloseModal}>
               <Stack alignItems="center" gap={spacing.s100}>
-                <Text>Cerrar</Text>
+                <Text>{labels.modal.generic.close}</Text>
                 <Icon
                   icon={<MdClear />}
                   size="24px"
@@ -64,8 +65,8 @@ export function VacationApprovalModal(props: VacationApprovalModalProps) {
           <Text weight="bold">
             <b>
               {isApproved
-                ? "¡Solicitud de vacaciones aprobada!"
-                : "Solicitud de vacaciones rechazada"}
+                ? labels.modal.vacationApproval.approved
+                : labels.modal.vacationApproval.rejected}
             </b>
           </Text>
         </Stack>

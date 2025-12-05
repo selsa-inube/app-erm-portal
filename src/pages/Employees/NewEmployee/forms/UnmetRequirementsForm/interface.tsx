@@ -8,6 +8,7 @@ import {
 } from "@inubekit/inubekit";
 import { MdOutlineCheckCircle } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { AlertCard, AlertCardProps } from "@components/data/AlertCard";
 
@@ -26,6 +27,8 @@ function UnmetRequirementsFormUI(props: UnmetRequirementsFormUIProps) {
 
   const isMobile = useMediaQuery("(max-width: 760px)");
   const isEmptyAlertCards = !alertCards || alertCards.length === 0;
+
+  const { unmetRequirementsForm } = labels.employee;
 
   return (
     <form>
@@ -51,8 +54,7 @@ function UnmetRequirementsFormUI(props: UnmetRequirementsFormUIProps) {
                   spacing="narrow"
                 />
                 <Text type="title" size="medium" textAlign="center">
-                  El cliente no presenta restricción por requisitos en este
-                  momento.
+                  {unmetRequirementsForm.emptyState.message}
                 </Text>
               </Stack>
             ) : (
@@ -83,9 +85,11 @@ function UnmetRequirementsFormUI(props: UnmetRequirementsFormUIProps) {
               appearance="gray"
               variant="outlined"
             >
-              Anterior
+              {unmetRequirementsForm.actions.previous}
             </Button>
-            <Button onClick={handleNextStep}>Siguiente</Button>
+            <Button onClick={handleNextStep}>
+              {unmetRequirementsForm.actions.next}
+            </Button>
           </Stack>
         )}
       </Stack>

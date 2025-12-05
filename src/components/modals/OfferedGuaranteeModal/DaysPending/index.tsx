@@ -4,6 +4,7 @@ import { spacing } from "@design/tokens/spacing";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
 import { useAppContext } from "@context/AppContext";
 import { capitalizeWords } from "@utils/text";
+import { labels } from "@i18n/labels";
 
 import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
 import { IPendingUsedDaysTableHeader } from "../PendingUsedDaysTable/types";
@@ -38,7 +39,7 @@ export function DaysPending({ isMobile }: IDaysPending) {
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>
         <Text type="body" size="medium" appearance="gray">
-          Total de días pendientes a la fecha:
+          {labels.modal.dataDaysPending.title}
         </Text>
 
         {loadingDays ? (

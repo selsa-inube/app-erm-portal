@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { useMediaQuery, IOption } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { useHumanEmployeeResourceRequests } from "@hooks/useHumanEmployeeResourceRequests";
 
 import { formatHumanResourceRequests } from "./formatHumanResourceRequests";
@@ -60,9 +61,9 @@ function Requests() {
     >;
 
     const sectionTitles: Record<BoardStatus, string> = {
-      noResponsible: "Sin responsable",
-      inProgress: "En progreso",
-      completed: "Terminada",
+      noResponsible: labels.requests.board.sections.noResponsible,
+      inProgress: labels.requests.board.sections.inProgress,
+      completed: labels.requests.board.sections.completed,
     };
 
     const backgroundMap: Record<BoardStatus, "gray" | "light"> = {
