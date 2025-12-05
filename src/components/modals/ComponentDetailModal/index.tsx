@@ -31,10 +31,11 @@ import {
   StyledTableContainer,
 } from "./styles";
 import { ModalContent } from "./types";
+import { labels } from "@i18n/labels";
 
 export interface RequestComponentDetailProps {
   title: string;
-  buttonLabel: string;
+  buttonLabel?: string; // ahora opcional, usamos label por defecto
   modalContent: string | ModalContent[];
   portalId?: string;
   stackDirection?: "row" | "column";
@@ -47,7 +48,7 @@ export interface RequestComponentDetailProps {
 function RequestComponentDetail(props: RequestComponentDetailProps) {
   const {
     title,
-    buttonLabel,
+    buttonLabel = labels.modal.generic.close, // valor por defecto desde labels
     modalContent,
     portalId = "portal",
     stackDirection,
@@ -58,10 +59,14 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   } = props;
 
   const infoItems = [
-    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    {
+      icon: <MdAddCircleOutline />,
+      text: labels.modal.requestDetail?.attach ?? "Adjuntar",
+      appearance: "help",
+    },
     {
       icon: <MdOutlineCheckCircle />,
-      text: "Forzar Aprobación",
+      text: labels.modal.requestDetail?.forceApproval ?? "Forzar Aprobación",
       appearance: "help",
     },
   ];
@@ -69,44 +74,61 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   const getIconByTagStatus = (tagElement: React.ReactElement) => {
     const label = tagElement.props.children;
 
-    if (label === "Cumple") {
-      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
-    } else if (label === "Sin Evaluar") {
-      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
-    } else if (label === "No Cumple") {
-      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
+    if (label === labels.modal.actions.yes) {
+      return (
+        <img
+          src={CheckIcon}
+          alt={labels.modal.actions.yes}
+          width={14}
+          height={14}
+        />
+      );
+    } else if (label === labels.modal.actions.pending) {
+      return (
+        <img
+          src={HelpIcon}
+          alt={labels.modal.actions.pending}
+          width={14}
+          height={14}
+        />
+      );
+    } else if (label === labels.modal.actions.no) {
+      return (
+        <img
+          src={CloseIcon}
+          alt={labels.modal.actions.no}
+          width={14}
+          height={14}
+        />
+      );
     } else {
       return null;
     }
   };
 
-  const getActionsMobileIcon = () => {
-    return [
-      {
-        id: "estado",
-        actionName: "",
-        content: (entry: IEntries) => {
-          const tagElement = entry.tag as React.ReactElement;
-          return (
-            <Stack>
-              <Icon
-                icon={getIconByTagStatus(tagElement)}
-                appearance={tagElement.props.appearance}
-                cursorHover
-                size="20px"
-              />
-            </Stack>
-          );
-        },
+  const getActionsMobileIcon = () => [
+    {
+      id: "estado",
+      actionName: "",
+      content: (entry: IEntries) => {
+        const tagElement = entry.tag as React.ReactElement;
+        return (
+          <Stack>
+            <Icon
+              icon={getIconByTagStatus(tagElement)}
+              appearance={tagElement.props.appearance}
+              cursorHover
+              size="20px"
+            />
+          </Stack>
+        );
       },
-    ];
-  };
+    },
+  ];
 
   const node = document.getElementById(portalId);
   if (!node) {
-    throw new Error(
-      "The portal node is not defined. This can occur when the specific node used to render the portal has not been defined correctly.",
-    );
+    throw new Error(labels.modal.requestDetail.errorPortalNode);
   }
 
   const isMobile = useMediaQuery("(max-width: 700px)");
@@ -125,7 +147,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           </Text>
           <StyledContainerClose onClick={handleClose}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modal.generic.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -137,6 +159,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
         </StyledContainerTitle>
 
         <Divider />
+
         <StyledContainerContent>
           <Stack gap={spacing.s150} direction="column">
             {Array.isArray(filteredContent) ? (
@@ -175,7 +198,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           {showRequirementsTable && (
             <Stack direction="column" alignItems="center" gap={spacing.s100}>
               <Text type="label" weight="bold">
-                Requisitos
+                {labels.modal.requestDetail?.requirements ?? "Requisitos"}
               </Text>
 
               <StyledTableContainer $smallScreen={isMobile}>

@@ -11,6 +11,7 @@ import { MdClear } from "react-icons/md";
 import { createPortal } from "react-dom";
 
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import {
   StyledModal,
@@ -37,7 +38,7 @@ function AbsenceDetailModal(props: AbsenceDetailModalProps) {
     title,
     details,
     onClose,
-    buttonLabel = "Cerrar",
+    buttonLabel = labels.modal.absenceDetail.buttonClose,
     portalId = "portal",
   } = props;
 
@@ -56,7 +57,7 @@ function AbsenceDetailModal(props: AbsenceDetailModalProps) {
 
           <StyledContainerClose onClick={onClose}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modal.absenceDetail.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -76,7 +77,8 @@ function AbsenceDetailModal(props: AbsenceDetailModalProps) {
               const maxCharsPerLine = isMobile ? 35 : 50;
               const isLongContent = text.length > maxCharsPerLine;
 
-              const forceFullWidth = item.label === "Detalles del motivo";
+              const forceFullWidth =
+                item.label === labels.modal.absenceDetail.detailsReasonLabel;
 
               return (
                 <StyledBoxAttribute

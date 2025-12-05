@@ -1,5 +1,6 @@
 import { Stack, Text } from "@inubekit/inubekit";
 import { StyledEmployeeSeniorityWidget } from "./styles";
+import { labels } from "@i18n/labels";
 
 export interface EmployeeSeniorityWidgetProps {
   value: number | string;
@@ -10,7 +11,11 @@ export interface EmployeeSeniorityWidgetProps {
 export const EmployeeSeniorityWidget = (
   props: EmployeeSeniorityWidgetProps,
 ) => {
-  const { value, unit = "Años", label = "Antigüedad" } = props;
+  const {
+    value,
+    unit = labels.widgets.employeeSeniority.titles.defaultUnit,
+    label = labels.widgets.employeeSeniority.titles.defaultLabel,
+  } = props;
 
   return (
     <StyledEmployeeSeniorityWidget>

@@ -1,10 +1,9 @@
 import { MdClose } from "react-icons/md";
 import { Stack, Text, Icon } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
-
 import { StyledContainer, StyledLi, StyledUl, StyledActions } from "./styles";
 import { Actions } from "./config";
+import { labels } from "@i18n/labels";
 
 interface ActionModalProps {
   onClose: () => void;
@@ -26,8 +25,9 @@ export function ActionModal(props: ActionModalProps) {
   const actionsLi = Actions(onClickDetails, onClickEliminate, onClickEdit);
 
   const noCumpleIndex = actionsLi.findIndex(
-    (item) => item.label === "No cumple",
+    (item) => item.label === labels.modal.actions.no,
   );
+
   if (noCumpleIndex !== -1) {
     if (disableDeleteAction) {
       actionsLi[noCumpleIndex].onClick = undefined;
@@ -41,7 +41,7 @@ export function ActionModal(props: ActionModalProps) {
   return (
     <StyledContainer>
       <StyledActions>
-        <Stack padding={`${spacing.s100} ${spacing.s150} `} width="132px">
+        <Stack padding={`${spacing.s100} ${spacing.s150}`} width="132px">
           <Icon
             icon={<MdClose />}
             appearance="dark"

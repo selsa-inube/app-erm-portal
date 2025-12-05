@@ -1,18 +1,36 @@
+import { labels } from "@i18n/labels";
+
 import { IPendingUsedDaysTableHeader } from "./types";
 
 export const contractTableHeaders: IPendingUsedDaysTableHeader[] = [
-  { label: "Contrato", key: "contract", style: { width: "auto" } },
-  { label: "Días pendientes", key: "pendingDays", style: { width: "auto" } },
+  {
+    label: labels.modal.daysUsed.tableHeaders.contract,
+    key: "contract",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.modal.daysUsed.tableHeaders.pendingDays,
+    key: "pendingDays",
+    style: { width: "auto" },
+  },
 ];
 
 export const paymentTableHeaders: IPendingUsedDaysTableHeader[] = [
   {
-    label: "Fecha de inicio o pago",
+    label: labels.modal.daysUsed.tableHeaders.startDate,
     key: "startDate",
     style: { width: "auto" },
   },
-  { label: "Modalidad de uso", key: "usageMode", style: { width: "auto" } },
-  { label: "Días", key: "days", style: { width: "auto" } },
+  {
+    label: labels.modal.daysUsed.tableHeaders.usageMode,
+    key: "usageMode",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.modal.daysUsed.tableHeaders.days,
+    key: "days",
+    style: { width: "auto" },
+  },
 ];
 
 export const contractTableColumns = [
