@@ -35,7 +35,7 @@ import { labels } from "@i18n/labels";
 
 export interface RequestComponentDetailProps {
   title: string;
-  buttonLabel?: string; // ahora opcional, usamos label por defecto
+  buttonLabel?: string;
   modalContent: string | ModalContent[];
   portalId?: string;
   stackDirection?: "row" | "column";
@@ -48,7 +48,7 @@ export interface RequestComponentDetailProps {
 function RequestComponentDetail(props: RequestComponentDetailProps) {
   const {
     title,
-    buttonLabel = labels.modal.generic.close, // valor por defecto desde labels
+    buttonLabel = labels.modal.generic.close,
     modalContent,
     portalId = "portal",
     stackDirection,
