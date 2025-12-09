@@ -18,12 +18,15 @@ const meta: Meta<typeof AppPage> = {
     (Story: StoryFn) => (
       <BrowserRouter>
         <IAuthProvider
-          clientId="storybook-client"
-          clientSecret="fake-secret"
           originatorId="storybook-origin"
           callbackUrl="http://localhost:6006"
           iAuthUrl="https://fake-iauth.inube.dev"
           serviceUrl="https://fake-service.inube.dev"
+          codeVerifier="fake-code-verifier"
+          codeChallenge="fake-code-challenge"
+          state="fake-state"
+          applicationName="storybook-app"
+          originatorCode="storybook-origin-code"
         >
           <FlagProvider>
             <AppProvider
