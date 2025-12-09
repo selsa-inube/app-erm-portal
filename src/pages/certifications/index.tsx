@@ -7,6 +7,7 @@ import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useAppContext } from "@context/AppContext";
 
 import { formatHumanResourceData } from "./config/table.config";
 import { CertificationsOptionsUI } from "./interface";
@@ -17,6 +18,14 @@ function CertificationsOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const { selectedEmployee, staffUser } = useAppContext();
+
+  const isSelfRequest =
+    !!selectedEmployee?.identificationDocumentNumber &&
+    !!staffUser?.identificationDocumentNumber &&
+    selectedEmployee.identificationDocumentNumber ===
+      staffUser.identificationDocumentNumber;
 
   const {
     data: fetchedData,
@@ -67,6 +76,7 @@ function CertificationsOptions() {
       tableData={tableData}
       isLoading={isLoading}
       isMobile={isMobile}
+      isSelfRequest={isSelfRequest}
       handleDeleteRequest={(requestId, justification) => {
         const request = tableData.find((item) => item.requestId === requestId);
         const requestNumber = request?.requestNumber?.value ?? "";
