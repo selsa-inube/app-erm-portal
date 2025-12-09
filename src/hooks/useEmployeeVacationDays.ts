@@ -4,6 +4,7 @@ import {
   getEmployeeVacationDays,
   IVacationDaysResponse,
 } from "@services/employeeConsultation/getEmployeeVacationDays";
+import { Logger } from "@utils/logger";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
 import { useHeaders } from "@hooks/useHeaders";
@@ -59,7 +60,9 @@ export const useEmployeeVacationDays = (
             ? err.message
             : "Ocurrió un error desconocido al obtener los días de vacaciones pendientes";
 
-        console.error("Error al obtener los días de vacaciones:", err);
+        Logger.error("Error al obtener los días de vacaciones", err as Error, {
+          employeeId,
+        });
         setError(errorMessage);
         setVacationDays([]);
 

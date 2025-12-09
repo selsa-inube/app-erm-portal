@@ -2,6 +2,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { BrowserRouter } from "react-router-dom";
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
+import { Logger } from "@utils/logger";
 import { FlagProvider } from "@inubekit/inubekit";
 
 import { ICertificationsTable } from "../types";
@@ -16,12 +17,18 @@ const certificationsData: ICertificationsTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("Ver detalles fila 0"),
+      onClick: () =>
+        Logger.debug("CertificationsTable | Ver detalles", {
+          requestNumber: "REQ-001",
+        }),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Eliminar fila 0"),
+      onClick: () =>
+        Logger.debug("CertificationsTable | Eliminar certificación", {
+          requestNumber: "REQ-001",
+        }),
     },
     dataDetails: {
       value: { description: "Detalles adicionales fila 0" },
@@ -35,15 +42,21 @@ const certificationsData: ICertificationsTable[] = [
     details: {
       value: <MdOutlineVisibility />,
       type: "icon",
-      onClick: () => console.log("Ver detalles fila 1"),
+      onClick: () =>
+        Logger.debug("CertificationsTable | Ver detalles", {
+          requestNumber: "REQ-002",
+        }),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon",
-      onClick: () => console.log("Eliminar fila 1"),
+      onClick: () =>
+        Logger.debug("CertificationsTable | Eliminar certificación", {
+          requestNumber: "REQ-002",
+        }),
     },
     dataDetails: {
-      value: { description: "Detalles adicionales fila 0" },
+      value: { description: "Detalles adicionales fila 1" },
     },
   },
 ];

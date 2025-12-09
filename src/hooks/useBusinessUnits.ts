@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
 import { useHeaders } from "@hooks/useHeaders";
@@ -66,7 +67,15 @@ export const useBusinessUnits = (
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        console.error("Error al obtener las unidades de negocio:", err);
+        Logger.error(
+          "Error al obtener las unidades de negocio",
+          err instanceof Error ? err : new Error(String(err)),
+          {
+            useCase: "useBusinessUnits",
+            userAccount,
+            portalPublicCode,
+          },
+        );
         if (isMounted) {
           setHasError(true);
           setCodeError(ERROR_CODE_FETCH_FAILED);

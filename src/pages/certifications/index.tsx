@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { Logger } from "@utils/logger";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
@@ -43,7 +44,10 @@ function CertificationsOptions() {
 
   useEffect(() => {
     if (error) {
-      console.error("Error fetching certifications:", error.message);
+      Logger.error(
+        "Error al obtener solicitudes de certificaciones",
+        error instanceof Error ? error : new Error(String(error)),
+      );
     }
   }, [error]);
 

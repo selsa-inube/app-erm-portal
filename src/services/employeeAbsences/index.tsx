@@ -3,8 +3,8 @@ import {
   maxRetriesServices,
   environment,
 } from "@config/environment";
-
 import { EmployeeAbsence } from "@ptypes/employeeAbsence.types";
+import { Logger } from "@utils/logger";
 
 import { mapEmployeeAbsenceApiToEntity } from "./mappers";
 
@@ -61,7 +61,15 @@ const getEmployeeAbsences = async (
         : [];
     } catch (error) {
       if (attempt === maxRetries) {
-        console.error("Error al obtener las ausencias del empleado:", error);
+        Logger.error(
+          "Error al obtener las ausencias del empleado",
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            employeeId,
+            page,
+            perPage,
+          },
+        );
 
         if (error instanceof Error) {
           throw error;

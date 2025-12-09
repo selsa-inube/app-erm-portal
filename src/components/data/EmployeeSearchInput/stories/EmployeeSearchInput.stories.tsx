@@ -3,8 +3,9 @@ import { BrowserRouter } from "react-router-dom";
 import { StoryFn, Meta } from "@storybook/react";
 import { Formik } from "formik";
 
-import { filteredEmployeesMock } from "./config";
+import { Logger } from "@utils/logger";
 
+import { filteredEmployeesMock } from "./config";
 import { SearchInput } from "../index";
 
 interface Employee {
@@ -40,13 +41,19 @@ const Template: StoryFn<EmployeeSearchInputStoryArgs> = (args) => {
     <Formik
       initialValues={{ keyword: searchTerm }}
       onSubmit={(values) => {
-        console.log("Submitted values:", values);
+        Logger.debug("EmployeeSearchInput submit", {
+          values,
+        });
       }}
     >
       {(formik) => {
         const handleSelection = (emp: Employee) => {
           setSearchTerm(emp.names);
           setIsEmployeeSelected(true);
+
+          Logger.debug("Employee selected from search", {
+            employeeName: emp.names,
+          });
         };
 
         return (
@@ -71,7 +78,7 @@ export const Default = Template.bind({});
 Default.args = {
   keyword: "",
   setSearchTerm: (term: string) => {
-    console.log("Search term:", term);
+    Logger.debug("Search term changed (Default)", { term });
   },
 };
 
@@ -79,7 +86,7 @@ export const WithKeyword = Template.bind({});
 WithKeyword.args = {
   keyword: "Juan Pérez",
   setSearchTerm: (term: string) => {
-    console.log("Search term:", term);
+    Logger.debug("Search term changed (WithKeyword)", { term });
   },
 };
 
@@ -87,7 +94,7 @@ export const WithNoResults = Template.bind({});
 WithNoResults.args = {
   keyword: "No existe",
   setSearchTerm: (term: string) => {
-    console.log("Search term:", term);
+    Logger.debug("Search term changed (WithNoResults)", { term });
   },
 };
 
