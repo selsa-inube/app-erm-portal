@@ -37,6 +37,7 @@ interface HolidaysOptionsUIProps {
     requestId: string,
     justification?: string,
   ) => boolean | void;
+  isSelfRequest?: boolean;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -54,6 +55,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasViewDetailsPrivilege = true,
     hasDeletePrivilege = true,
     handleDeleteRequest,
+    isSelfRequest = false,
   } = props;
 
   const { selectedEmployee } = useAppContext();
@@ -74,12 +76,31 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     payment: labels.holidays.privileges.payment,
   };
 
-  const onOpenInfoModal = (description: string) => {
+  const selfMessage = labels.holidays.privileges.selfRequest;
+
+  const effectiveActionDescriptions = {
+    enjoyment: isSelfRequest ? selfMessage : actionDescriptions.enjoyment,
+    payment: isSelfRequest ? selfMessage : actionDescriptions.payment,
+  };
+
+  const onOpenInfoModal = (desc: string) => {
     setInfoModal({
       open: true,
       title: labels.holidays.infoModal.disabledActionTitle,
-      description,
+      description: desc,
     });
+  };
+
+  const handleRequestEnjoyment = () => {
+    if (!isSelfRequest && hasActiveContract && hasEnjoymentPrivilege) {
+      navigate("/holidays/request-enjoyment");
+    }
+  };
+
+  const handleRequestPayment = () => {
+    if (!isSelfRequest && hasActiveContract && hasPaymentPrivilege) {
+      navigate("/holidays/request-payment");
+    }
   };
 
   const tabs: ITab[] = [
@@ -103,48 +124,44 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   const renderActions = () =>
     isMobile ? (
       <Detail
-        disableEnjoyment={!hasEnjoymentPrivilege || !hasActiveContract}
-        disablePayment={!hasPaymentPrivilege || !hasActiveContract}
-        actionDescriptions={actionDescriptions}
+        disableEnjoyment={
+          !hasEnjoymentPrivilege || !hasActiveContract || isSelfRequest
+        }
+        disablePayment={
+          !hasPaymentPrivilege || !hasActiveContract || isSelfRequest
+        }
+        actionDescriptions={effectiveActionDescriptions}
         hasTableData={tableData.length > 0}
-        onRequestEnjoyment={() => {
-          if (hasActiveContract && hasEnjoymentPrivilege) {
-            navigate("/holidays/request-enjoyment");
-          }
-        }}
-        onRequestPayment={() => {
-          if (hasActiveContract && hasPaymentPrivilege) {
-            navigate("/holidays/request-payment");
-          }
-        }}
-        onInfoIconClick={(desc) => {
-          onOpenInfoModal(desc);
-        }}
+        onRequestEnjoyment={handleRequestEnjoyment}
+        onRequestPayment={handleRequestPayment}
+        onInfoIconClick={onOpenInfoModal}
       />
     ) : (
       <Stack gap={spacing.s150}>
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             iconBefore={<MdAdd />}
-            disabled={!hasActiveContract || !hasEnjoymentPrivilege}
-            onClick={() => {
-              if (hasActiveContract && hasEnjoymentPrivilege) {
-                navigate("/holidays/request-enjoyment");
-              }
-            }}
+            disabled={
+              isSelfRequest || !hasActiveContract || !hasEnjoymentPrivilege
+            }
+            onClick={
+              !isSelfRequest && hasActiveContract && hasEnjoymentPrivilege
+                ? handleRequestEnjoyment
+                : undefined
+            }
           >
             {labels.holidays.actions.addEnjoyment}
           </Button>
 
-          {!hasEnjoymentPrivilege && (
+          {(isSelfRequest || !hasActiveContract || !hasEnjoymentPrivilege) && (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => {
-                onOpenInfoModal(actionDescriptions.enjoyment);
-              }}
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
+              }
             />
           )}
         </Stack>
@@ -152,25 +169,27 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         <Stack gap={spacing.s025} alignItems="center">
           <Button
             iconBefore={<MdAdd />}
-            disabled={!hasActiveContract || !hasPaymentPrivilege}
-            onClick={() => {
-              if (hasActiveContract && hasPaymentPrivilege) {
-                navigate("/holidays/request-payment");
-              }
-            }}
+            disabled={
+              isSelfRequest || !hasActiveContract || !hasPaymentPrivilege
+            }
+            onClick={
+              !isSelfRequest && hasActiveContract && hasPaymentPrivilege
+                ? handleRequestPayment
+                : undefined
+            }
           >
             {labels.holidays.actions.addPayment}
           </Button>
 
-          {!hasPaymentPrivilege && (
+          {(isSelfRequest || !hasActiveContract || !hasPaymentPrivilege) && (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
               size="16px"
               cursorHover
-              onClick={() => {
-                onOpenInfoModal(actionDescriptions.payment);
-              }}
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.payment)
+              }
             />
           )}
         </Stack>
@@ -223,9 +242,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             <Tabs
               tabs={tabs}
               selectedTab={selectedTab}
-              onChange={(id) => {
-                setSelectedTab(id);
-              }}
+              onChange={(id) => setSelectedTab(id)}
             />
 
             {selectedTab === "solicitudes" ? (
@@ -239,9 +256,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                   loading={isLoading}
                   hasViewDetailsPrivilege={hasViewDetailsPrivilege}
                   hasDeletePrivilege={hasDeletePrivilege}
-                  handleDeleteRequest={(id, justification) => {
-                    handleDeleteRequest(id, justification);
-                  }}
+                  handleDeleteRequest={handleDeleteRequest}
                 />
               </StyledHolidaysContainer>
             ) : (
@@ -256,9 +271,9 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           title={infoModal.title}
           titleDescription={labels.holidays.infoModal.disabledReasonTitle}
           description={infoModal.description}
-          onCloseModal={() => {
-            setInfoModal({ open: false, title: "", description: "" });
-          }}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
         />
       )}
     </>

@@ -56,6 +56,8 @@ export const holidays = {
       "No se puede solicitar disfrute de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
     payment:
       "No se puede solicitar pago de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
+    selfRequest:
+      "No es posible realizar solicitudes a nombre propio desde el portal de gestor. Para realizar esta acción, ingrese al Portal de Empleados.",
   },
 
   sendEnjoymentModal: {

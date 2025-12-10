@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Stack } from "@inubekit/inubekit";
 
+import { Logger } from "@utils/logger";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { mockPendingTasks, mockCompletedTasks } from "@config/TaskBoard.config";
@@ -62,7 +63,23 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
     setShowStaffModal(false);
     setShowSuccessFlag(true);
 
-    setTimeout(() => setShowSuccessFlag(false), 300);
+    setTimeout(() => {
+      setShowSuccessFlag(false);
+    }, 300);
+  };
+
+  const onSubmit = (modalType: string) => (values: FormValues) => {
+    if (modalType === "staffSelect") {
+      handleStaffSubmit(values);
+    }
+  };
+
+  const handleDiscard = () => {
+    Logger.info("ApplicationProcessUI | Solicitud descartada");
+  };
+
+  const handleSeeRequirements = () => {
+    setIsRequirementsModalOpen(true);
   };
 
   return (
@@ -71,8 +88,8 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
         <RequestSummary
           requestNumber={id}
           staffName={staffInfo.name}
-          onDiscard={() => console.log("Discard request")}
-          onSeeRequirements={() => setIsRequirementsModalOpen(true)}
+          onDiscard={handleDiscard}
+          onSeeRequirements={handleSeeRequirements}
           onEditStaff={handleEditStaff}
         />
 
@@ -91,7 +108,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
             selectedEmployee={user ?? undefined}
             initialSelection={staffInfo.id}
             onCloseModal={handleCloseModal}
-            onSubmit={(values) => handleStaffSubmit(values)}
+            onSubmit={onSubmit("staffSelect")}
           />
         )}
 

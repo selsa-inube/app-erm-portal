@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import { useIAuth } from "@inube/iauth-react";
+import { Logger } from "@utils/logger";
 
 import {
   IStaffPortalByBusinessManager,
@@ -77,7 +78,11 @@ function AppProvider(props: AppProviderProps) {
       try {
         return JSON.parse(storedStaffUser);
       } catch (error) {
-        console.error("Error al parsear staffUser desde localStorage", error);
+        Logger.error(
+          "Error al parsear staffUser desde localStorage",
+          error as Error,
+          { key: "staffUser" },
+        );
       }
     }
     return {} as IStaffUserAccount;
@@ -99,6 +104,7 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+
   const [optionForCustomerPortal, setOptionForCustomerPortal] = useState<
     IOptionWithSubOptions[] | null
   >(() => {
@@ -107,14 +113,16 @@ function AppProvider(props: AppProviderProps) {
       try {
         return JSON.parse(storedOption);
       } catch (error) {
-        console.error(
+        Logger.error(
           "Error al parsear optionForCustomerPortal desde localStorage",
-          error,
+          error as Error,
+          { key: "optionForCustomerPortal" },
         );
       }
     }
     return null;
   });
+
   useEffect(() => {
     if (optionForCustomerPortal) {
       localStorage.setItem(
@@ -132,9 +140,10 @@ function AppProvider(props: AppProviderProps) {
       try {
         return JSON.parse(storedClient);
       } catch (error) {
-        console.error(
+        Logger.error(
           "Error al parsear selectedClient desde localStorage",
-          error,
+          error as Error,
+          { key: "selectedClient" },
         );
       }
     }

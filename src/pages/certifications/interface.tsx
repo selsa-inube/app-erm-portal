@@ -8,7 +8,7 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 import { InfoModal } from "@components/modals/InfoModal";
-import { useAppContext } from "@context/AppContext/useAppContext";
+import { useAppContext } from "@context/AppContext";
 
 import { Detail } from "./components/CertificationsTable/Detail";
 import { StyledCertificationsContainer } from "./styles";
@@ -27,6 +27,7 @@ interface CertificationsOptionsUIProps {
   hasPrivilege?: boolean;
   hasPaymentPrivilege?: boolean;
   actionDescriptions?: Record<string, string>;
+  isSelfRequest?: boolean;
   handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
@@ -44,6 +45,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
       enjoyment: labels.certifications.infoModal.defaultDescription,
     },
     handleDeleteRequest,
+    isSelfRequest = false,
   } = props;
 
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     staffUseCasesData.listOfUseCases.includes("RequestCertificate");
 
   const canRequestCertificate =
-    hasActiveContract && hasRequestCertificatePrivilege;
+    hasActiveContract && hasRequestCertificatePrivilege && !isSelfRequest;
 
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
@@ -78,11 +80,19 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     });
   };
 
+  const selfMessage =
+    "No es posible realizar solicitudes a nombre propio desde el portal de gestor. Para realizar esta acción, ingrese al Portal de Empleados.";
+
+  const effectiveActionDescriptions = {
+    ...actionDescriptions,
+    enjoyment: isSelfRequest ? selfMessage : actionDescriptions.enjoyment,
+  };
+
   const renderActions = () =>
     isMobile ? (
       <Detail
         disableEnjoyment={!canRequestCertificate}
-        actionDescriptions={actionDescriptions}
+        actionDescriptions={effectiveActionDescriptions}
         onRequestEnjoyment={
           canRequestCertificate ? () => addRequest() : undefined
         }
@@ -101,20 +111,27 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
           >
             {labels.certifications.buttons.addRequest}
           </Button>
-          {!canRequestCertificate && (
+          {isSelfRequest ? (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
               size="16px"
               cursorHover
               onClick={() =>
-                onOpenInfoModal(
-                  actionDescriptions.enjoyment ??
-                    labels.certifications.infoModal.defaultDescription,
-                )
+                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
               }
             />
-          )}
+          ) : !canRequestCertificate ? (
+            <Icon
+              icon={<MdOutlineInfo />}
+              appearance="primary"
+              size="16px"
+              cursorHover
+              onClick={() =>
+                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
+              }
+            />
+          ) : null}
         </Stack>
       </Stack>
     );

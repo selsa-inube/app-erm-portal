@@ -22,7 +22,13 @@ function HolidaysOptions() {
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const { staffUseCasesData } = useAppContext();
+  const { staffUseCasesData, selectedEmployee, staffUser } = useAppContext();
+
+  const isSelfRequest =
+    !!selectedEmployee?.identificationDocumentNumber &&
+    !!staffUser?.identificationDocumentNumber &&
+    selectedEmployee.identificationDocumentNumber ===
+      staffUser.identificationDocumentNumber;
 
   const {
     data: enjoyedData,
@@ -144,6 +150,7 @@ function HolidaysOptions() {
         hasDeletePrivilege={hasDeletePrivilege}
         hasViewDetailsPrivilege={hasViewDetailsPrivilege}
         handleDeleteRequest={handleDeleteRequest}
+        isSelfRequest={isSelfRequest}
       />
 
       {validationModal.show && (

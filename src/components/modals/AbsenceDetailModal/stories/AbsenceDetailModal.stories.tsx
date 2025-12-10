@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
 
+import { Logger } from "@utils/logger";
+
 import { AbsenceDetailModal } from "../index";
 import { AbsenceDetailItem } from "../types";
 
@@ -47,5 +49,7 @@ Default.args = {
   buttonLabel: "Cerrar",
   portalId: "portal",
   details: [],
-  onClose: () => console.log("cerrar modal"),
+  onClose: () => {
+    Logger.debug("AbsenceDetailModal closed (storybook)");
+  },
 };

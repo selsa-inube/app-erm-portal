@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
+import { Logger } from "@utils/logger";
 import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
@@ -139,7 +140,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         );
         navigate("/");
       } else {
-        console.error(labels.employee.errors.employeeNotFound);
+        Logger.error(labels.employee.errors.employeeNotFound);
       }
 
       setIsSubmitting(false);

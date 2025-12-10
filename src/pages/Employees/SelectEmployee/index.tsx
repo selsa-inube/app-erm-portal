@@ -10,6 +10,7 @@ import { Formik, FormikProps } from "formik";
 import { MdOutlineAdd, MdOutlineArrowForward } from "react-icons/md";
 import { useEffect } from "react";
 
+import { Logger } from "@utils/logger";
 import { spacing } from "@design/tokens/spacing";
 import { SearchInput } from "@components/data/EmployeeSearchInput";
 import { useStaffUseCases } from "@hooks/useStaffUseCases";
@@ -81,7 +82,9 @@ function SelectEmployeePage() {
         initialValues={{ keyword: "" }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log("Formulario enviado con valores:", values);
+          Logger.info("SelectEmployeePage | Form submit", {
+            values,
+          });
         }}
       >
         {(formik: FormikProps<{ keyword: string }>) => (
