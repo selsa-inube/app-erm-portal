@@ -10,6 +10,8 @@ import {
   Tr,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
+
 import {
   contractTableHeaders,
   paymentTableHeaders,
@@ -31,7 +33,6 @@ function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
 
   const headers =
     variant === "contract" ? contractTableHeaders : paymentTableHeaders;
-
   const columns =
     variant === "contract" ? contractTableColumns : paymentTableColumns;
 
@@ -118,9 +119,7 @@ function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
         ) : data.length === 0 ? (
           <Tr border="bottom">
             <Td colSpan={headers.length} align="center" type="custom">
-              <Text size="medium">
-                Aún no has utilizado ningún día de vacaciones.
-              </Text>
+              <Text size="medium">{labels.modal.daysUsed.noData}</Text>
             </Td>
           </Tr>
         ) : (

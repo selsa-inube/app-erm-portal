@@ -14,6 +14,7 @@ import { MdClear } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { isRequired } from "@utils/forms";
 import { validationMessages } from "@validations/validationMessages";
@@ -86,7 +87,7 @@ export function SelectModal(props: SelectModalProps) {
               gap={spacing.s100}
               padding={isMobile ? "0px 0px 0px 90px" : "0px"}
             >
-              <Text>Cerrar</Text>
+              <Text>{labels.modal.generic.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -109,7 +110,7 @@ export function SelectModal(props: SelectModalProps) {
             direction="column"
           >
             <Select
-              placeholder="Selecciónalo de la lista"
+              placeholder={labels.modal.selectModal.placeholder}
               name="selection"
               id="selection"
               value={formik.values.selection}
@@ -130,10 +131,10 @@ export function SelectModal(props: SelectModalProps) {
                 appearance="gray"
                 variant="outlined"
               >
-                Cancelar
+                {labels.modal.selectModal.secondaryButtonText}
               </Button>
               <Button type="submit" disabled={isButtonDisabled()}>
-                Confirmar
+                {labels.modal.selectModal.primaryButtonText}
               </Button>
             </Stack>
           </Stack>

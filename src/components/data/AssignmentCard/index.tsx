@@ -1,4 +1,6 @@
 import { Stack, Text, Divider } from "@inubekit/inubekit";
+
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledAssignmentCard } from "./styles";
@@ -28,7 +30,7 @@ function AssignmentCard(props: AssignmentCardProps) {
         >
           <Stack direction="column" gap={spacing.s050}>
             <Text type="label" weight="bold" size="medium">
-              Asignación
+              {labels.data.assignmentCard.assignmentLabel}
             </Text>
             <Text size="medium" appearance="gray">
               {assignment}
@@ -36,7 +38,7 @@ function AssignmentCard(props: AssignmentCardProps) {
           </Stack>
           <Stack direction="column" gap={spacing.s050}>
             <Text type="label" weight="bold" size="medium">
-              Valor
+              {labels.data.assignmentCard.valueLabel}
             </Text>
             <Text size="medium" appearance="gray">
               {value}

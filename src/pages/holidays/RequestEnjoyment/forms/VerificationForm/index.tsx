@@ -8,6 +8,8 @@ import { requestEnjoymentSteps } from "../../config/assisted.config";
 import { IFormsUpdateData } from "../../types";
 import { VerificationBoxes } from "./VerificationBoxes";
 
+import { labels } from "@i18n/labels";
+
 interface VerificationFormProps {
   updatedData: IFormsUpdateData;
   handleStepChange: (stepId: number) => void;
@@ -45,7 +47,7 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.holidays.verification.backToStep}
               </Button>
             </Stack>
           </Accordion>
@@ -61,10 +63,10 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.holidays.assisted.previous}
         </Button>
         <Button onClick={handleSubmit} appearance="primary">
-          Enviar
+          {labels.holidays.assisted.submit}
         </Button>
       </Stack>
     </Stack>

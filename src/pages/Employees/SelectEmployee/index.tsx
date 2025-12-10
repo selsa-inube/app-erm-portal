@@ -16,6 +16,7 @@ import { SearchInput } from "@components/data/EmployeeSearchInput";
 import { useStaffUseCases } from "@hooks/useStaffUseCases";
 import { useAppContext } from "@context/AppContext";
 import { IStaffUseCasesData } from "@context/AppContext/types";
+import { labels } from "@i18n/labels";
 
 import {
   StyledAppPage,
@@ -45,15 +46,16 @@ function SelectEmployeePage() {
     staffUseCasesData,
     setStaffUseCasesData,
   } = useAppContext();
+
   const hasAddEmployeeLinkPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("AddEmployeeLink") ?? false;
+
   const id = JSON.parse(
     localStorage.getItem("staffUser") ?? "{}",
   ).identificationDocumentNumber;
 
   const publicCode = businessManager?.publicCode ?? "";
   const clientId = selectedClient?.id ?? "";
-
   const finalLogo = businessManager?.urlLogo ?? logoUrl;
 
   const { data } = useStaffUseCases(publicCode, clientId, id);
@@ -91,16 +93,19 @@ function SelectEmployeePage() {
               <StyledQuickAccessContainer>
                 <Stack direction="column" gap={spacing.s250}>
                   <Text type="headline" size={isMobile ? "small" : undefined}>
-                    Seleccionar empleado
+                    {labels.employee.selection.title}
                   </Text>
+
                   <Text appearance="gray">
-                    Digita la cédula y/o nombre del empleado que quieres
-                    seleccionar.
+                    {labels.employee.selection.description}
                   </Text>
 
                   {loading && (
-                    <Text appearance="gray">Cargando empleados...</Text>
+                    <Text appearance="gray">
+                      {labels.employee.selection.loading}
+                    </Text>
                   )}
+
                   {error && <Text appearance="danger">{error}</Text>}
 
                   <form onSubmit={formik.handleSubmit}>
@@ -123,12 +128,12 @@ function SelectEmployeePage() {
                               size={isMobile ? "small" : "medium"}
                             >
                               {item.employeeId === "no-results"
-                                ? "No hay resultados para esta búsqueda."
+                                ? labels.employee.selection.noResults
                                 : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
                             </Text>
                           </Stack>
                         )}
-                        placeholder="Palabra clave"
+                        placeholder={labels.employee.selection.placeholder}
                       />
 
                       {isMobile ? (
@@ -170,13 +175,14 @@ function SelectEmployeePage() {
                             }
                           }}
                         >
-                          Continuar
+                          {labels.employee.selection.continue}
                         </Button>
                       )}
                     </Stack>
                   </form>
                 </Stack>
               </StyledQuickAccessContainer>
+
               {hasAddEmployeeLinkPrivilege && (
                 <Stack justifyContent="end">
                   <Button
@@ -186,7 +192,7 @@ function SelectEmployeePage() {
                     spacing="wide"
                     onClick={handleOpenNewEmployeePage}
                   >
-                    Vincular nuevo empleado
+                    {labels.employee.selection.linkNewEmployee}
                   </Button>
                 </Stack>
               )}
@@ -194,6 +200,7 @@ function SelectEmployeePage() {
           </StyledAppPage>
         )}
       </Formik>
+
       <StyledFooter>
         <Stack alignItems="center" gap={spacing.s050}>
           <Text as="span" size="small" appearance="gray">

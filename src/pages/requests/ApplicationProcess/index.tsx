@@ -2,24 +2,24 @@ import { useParams } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { ApplicationProcessUI } from "./interface";
+import { labels } from "@i18n/labels";
 
 function ApplicationProcess() {
   const { id } = useParams();
-
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
   const breadcrumbs = {
-    label: "Trámite de solicitud",
+    label: labels.requests.breadcrumbs.applicationProcess,
     crumbs: [
       {
         path: "/",
-        label: "Inicio",
+        label: labels.requests.breadcrumbs.home,
         id: "/",
         isActive: false,
       },
       {
         path: "/requests",
-        label: isTablet ? "..." : "Solicitudes en trámite",
+        label: isTablet ? "..." : labels.requests.breadcrumbs.list,
         id: "/requests",
         isActive: false,
       },
@@ -34,7 +34,7 @@ function ApplicationProcess() {
         ...breadcrumbs.crumbs,
         {
           path: `/requests/application-process/${id}`,
-          label: "Trámite de solicitud",
+          label: labels.requests.breadcrumbs.applicationProcess,
           id: `/requests/application-process/${id}`,
           isActive: true,
         },

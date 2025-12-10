@@ -26,6 +26,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { spacing } from "@design/tokens/spacing";
 import { contractTypeLabels } from "@ptypes/labels.types";
 import { formatDate } from "@utils/date";
+import { labels } from "@i18n/labels";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
@@ -58,9 +59,9 @@ function HolidaysTable(props: HolidaysTableProps) {
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent] = useState({
-    title: "Información",
-    titleDescription: "No tienes privilegios",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: labels.holidays.infoModal.title,
+    titleDescription: labels.holidays.modals.infoNoPrivileges,
+    description: labels.holidays.infoModal.genericDescription,
   });
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
@@ -172,7 +173,7 @@ function HolidaysTable(props: HolidaysTableProps) {
 
   const showInfoModal = (titleDescription: string, description: string) => {
     setInfoModalContent({
-      title: "Información",
+      title: labels.holidays.infoModal.title,
       titleDescription,
       description,
     });
@@ -182,8 +183,8 @@ function HolidaysTable(props: HolidaysTableProps) {
   const handleOpenDetailsModal = (rowIndex: number) => {
     if (!hasViewDetailsPrivilege) {
       showInfoModal(
-        "No tienes privilegios",
-        "No tienes privilegios para ver detalles.",
+        labels.holidays.modals.infoNoPrivileges,
+        labels.holidays.modals.cannotView,
       );
       return;
     }
@@ -197,23 +198,29 @@ function HolidaysTable(props: HolidaysTableProps) {
       : "";
 
     const dataDeta = [
-      { label: "Días de disfrute", value: String(dataDe.daysOff ?? "") },
-      { label: "Días hábiles a pagar", value: String(dataDe.daysToPay ?? "") },
       {
-        label: "Fecha de inicio o pago",
+        label: labels.holidays.detailsModal.fields.daysOff,
+        value: String(dataDe.daysOff ?? ""),
+      },
+      {
+        label: labels.holidays.generalInformationForm.fields.daysToPay.label,
+        value: String(dataDe.daysToPay ?? ""),
+      },
+      {
+        label: labels.holidays.daysUsedTable.headers.startDate,
         value: dataDe.startDateEnyoment
           ? formatDate(dataDe.startDateEnyoment)
           : "",
       },
       {
-        label: "Contrato",
+        label: labels.holidays.generalInformationForm.fields.contract.label,
         value:
           dataDe.businessName && contractLabel
             ? `${dataDe.businessName} - ${contractLabel}`
             : "",
       },
       {
-        label: "Observaciones",
+        label: labels.holidays.generalInformationForm.fields.observations.label,
         value: String(dataDe.observationEmployee ?? ""),
       },
     ].filter(
@@ -231,8 +238,8 @@ function HolidaysTable(props: HolidaysTableProps) {
   const handleOpenModal = (requestId: string) => {
     if (!hasDeletePrivilege) {
       showInfoModal(
-        "No tienes privilegios",
-        "No tienes privilegios para eliminar este registro.",
+        labels.holidays.modals.infoNoPrivileges,
+        labels.holidays.modals.cannotView,
       );
       return;
     }
@@ -257,7 +264,9 @@ function HolidaysTable(props: HolidaysTableProps) {
         <Icon {...iconProps} />
         <Tooltip
           text={
-            hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
+            hasViewDetailsPrivilege
+              ? labels.holidays.tooltips.viewDetails
+              : labels.holidays.tooltips.noPrivileges
           }
         />
       </TooltipWrapper>
@@ -278,8 +287,8 @@ function HolidaysTable(props: HolidaysTableProps) {
         <Tooltip
           text={
             !disableDeleteAction && hasDeletePrivilege
-              ? "Descartar solicitud"
-              : "Sin privilegios"
+              ? labels.holidays.tooltips.deleteRequest
+              : labels.holidays.tooltips.noPrivileges
           }
         />
       </TooltipWrapper>
@@ -380,7 +389,7 @@ function HolidaysTable(props: HolidaysTableProps) {
             style={{ width: "110px" }}
             action
           >
-            <b>Acciones</b>
+            <b>{labels.holidays.actions.actionsColumn}</b>
           </StyledTh>
         </Tr>
       );
@@ -420,9 +429,7 @@ function HolidaysTable(props: HolidaysTableProps) {
   const renderEmptyState = () => (
     <Tr border="bottom">
       <Td colSpan={visibleHeaders.length} align="center" type="custom">
-        <Text size="medium">
-          Aún no has utilizado ningún día de vacaciones.
-        </Text>
+        <Text size="medium">{labels.holidays.daysUsedTable.emptyState}</Text>
       </Td>
     </Tr>
   );
@@ -484,20 +491,22 @@ function HolidaysTable(props: HolidaysTableProps) {
           handleClose={handleClose}
           modalContent={selectedRecord}
           requirements={mockRequirements}
-          title="Detalles de solicitudes de vacaciones"
-          buttonLabel="Cerrar"
+          title={labels.holidays.detailsModal.title}
+          buttonLabel={labels.holidays.detailsModal.buttonLabel}
           showRequirementsTable
         />
       )}
 
       {isSecondModalOpen && (
         <TextAreaModal
-          title="Descartar"
-          buttonText="Descartar"
-          inputLabel="Justificación"
-          inputPlaceholder="¿Por qué eliminarás el registro?"
-          description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
-          maxLength={500}
+          title={labels.holidays.modals.confirmDelete.title}
+          buttonText={labels.holidays.modals.confirmDelete.buttonText}
+          inputLabel={labels.holidays.modals.confirmDelete.inputLabel}
+          inputPlaceholder={
+            labels.holidays.modals.confirmDelete.inputPlaceholder
+          }
+          description={labels.holidays.modals.confirmDelete.description}
+          maxLength={labels.holidays.modals.confirmDelete.maxLength}
           onSubmit={(values) => {
             if (selectedRequestId) {
               handleDeleteRequest(selectedRequestId, values.textarea);
@@ -510,10 +519,10 @@ function HolidaysTable(props: HolidaysTableProps) {
 
       {isInfoModalOpen && (
         <InfoModal
-          title="Información"
+          title={labels.holidays.infoModal.title}
           titleDescription={infoModalContent.titleDescription}
           description={infoModalContent.description}
-          buttonText="Entendido"
+          buttonText={labels.holidays.infoModal.confirmButton}
           onCloseModal={handleClose}
         />
       )}

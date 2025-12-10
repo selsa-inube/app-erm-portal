@@ -12,6 +12,7 @@ import {
   ContractCard,
   ContractCardProps,
 } from "@components/cards/ContractCard";
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
@@ -113,7 +114,7 @@ function ContractsUI(props: ContractsUIProps) {
         <StyledContractsContainer $isMobile={isMobile}>
           <Stack justifyContent="space-between">
             <Text type="title" size="medium">
-              Consulta histórica de contratos
+              {labels.contracts.title}
             </Text>
             {isTablet ? (
               <Detail
@@ -145,7 +146,7 @@ function ContractsUI(props: ContractsUIProps) {
                       hasValidContract && canTerminate ? onTerminate : undefined
                     }
                   >
-                    Terminar
+                    {labels.contracts.actions.terminate}
                   </Button>
                   {(!hasValidContract || !canTerminate) && (
                     <Icon
@@ -154,7 +155,9 @@ function ContractsUI(props: ContractsUIProps) {
                       size="16px"
                       cursorHover
                       onClick={() =>
-                        onOpenInfoModal(actionDescriptions.Terminar)
+                        onOpenInfoModal(
+                          labels.contracts.infoModal.addVinculationDisabled,
+                        )
                       }
                     />
                   )}
@@ -173,7 +176,7 @@ function ContractsUI(props: ContractsUIProps) {
                         : undefined
                     }
                   >
-                    Renovar
+                    {labels.contracts.actions.renew}
                   </Button>
                   {(!hasFixedEndDate || !hasValidContract || !canRenew) && (
                     <Icon
@@ -197,7 +200,7 @@ function ContractsUI(props: ContractsUIProps) {
                       hasValidContract && canModify ? onModify : undefined
                     }
                   >
-                    Modificar
+                    {labels.contracts.actions.modify}
                   </Button>
                   {(!hasValidContract || !canModify) && (
                     <Icon
@@ -219,7 +222,7 @@ function ContractsUI(props: ContractsUIProps) {
                     spacing="compact"
                     onClick={canCreateRequest ? onAddVinculation : undefined}
                   >
-                    Agregar vinculación
+                    {labels.contracts.actions.addVinculation}
                   </Button>
                   {!canCreateRequest && (
                     <Icon
@@ -245,8 +248,8 @@ function ContractsUI(props: ContractsUIProps) {
                 appearance={hasPendingRequest ? "primary" : "danger"}
                 label={
                   hasPendingRequest
-                    ? "El empleado NO tiene un contrato vigente, PERO tiene una solicitud de vinculación en trámite."
-                    : "El empleado NO tiene ningún contrato vigente."
+                    ? labels.contracts.tags.pendingRequest
+                    : labels.contracts.tags.noContract
                 }
               />
             </Stack>
@@ -300,27 +303,34 @@ function ContractsUI(props: ContractsUIProps) {
 
       {modals.detail && selectedContract && (
         <RequestComponentDetail
-          title="Detalles de consulta de contrato"
-          buttonLabel="Cerrar"
+          title={labels.contracts.modals.detailTitle}
+          buttonLabel={labels.contracts.modals.detailCloseButton}
           modalContent={[
-            { label: "Sitio de trabajo", value: selectedContract.workplace },
             {
-              label: "Fecha de formalización",
+              label: labels.contracts.modals.detailFields.workplace,
+              value: selectedContract.workplace,
+            },
+            {
+              label: labels.contracts.modals.detailFields.formalizationDate,
               value: selectedContract.formalizationDate,
             },
-            { label: "Jornada laboral", value: selectedContract.workSchedule },
             {
-              label: "Perfil salarial",
+              label: labels.contracts.modals.detailFields.workSchedule,
+              value: selectedContract.workSchedule,
+            },
+            {
+              label: labels.contracts.modals.detailFields.lastSalary,
               value: selectedContract.lastSalary,
             },
             ...(!selectedContract.isContractValid
               ? [
                   {
-                    label: "Fecha de retiro",
+                    label: labels.contracts.modals.detailFields.retirementDate,
                     value: selectedContract.retirementDate ?? "",
                   },
                   {
-                    label: "Causal de retiro",
+                    label:
+                      labels.contracts.modals.detailFields.retirementReason,
                     value: selectedContract.retirementReason ?? "",
                   },
                 ]
@@ -333,8 +343,8 @@ function ContractsUI(props: ContractsUIProps) {
 
       {modals.terminate && (
         <SelectModal
-          title="Selecciona un contrato"
-          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          title={labels.contracts.modals.selectTitle}
+          description={labels.contracts.modals.selectDescription}
           portalId="portal"
           loading={false}
           selectionOptions={terminationOptions}
@@ -345,8 +355,8 @@ function ContractsUI(props: ContractsUIProps) {
 
       {modals.renew && (
         <SelectModal
-          title="Selecciona un contrato"
-          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          title={labels.contracts.modals.selectTitle}
+          description={labels.contracts.modals.selectDescription}
           portalId="portal"
           loading={false}
           selectionOptions={renewOptions}
@@ -357,8 +367,8 @@ function ContractsUI(props: ContractsUIProps) {
 
       {modals.modify && (
         <SelectModal
-          title="Selecciona un contrato"
-          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          title={labels.contracts.modals.selectTitle}
+          description={labels.contracts.modals.selectDescription}
           portalId="portal"
           loading={false}
           selectionOptions={modifyOptions}
@@ -370,7 +380,7 @@ function ContractsUI(props: ContractsUIProps) {
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.contracts.modals.infoTitleDescription}
           description={infoModal.description}
           onCloseModal={() =>
             onSetInfoModal({ open: false, title: "", description: "" })

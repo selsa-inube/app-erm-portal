@@ -6,6 +6,8 @@ import { spacing } from "@design/tokens/spacing/";
 import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";
 
+import { labels } from "@i18n/labels";
+
 interface AlertCardContainerProps {
   handleNextStep: () => void;
 }
@@ -20,9 +22,10 @@ const AlertCardStep = ({ handleNextStep }: AlertCardContainerProps) => {
           <AlertCard key={index} {...alert} />
         ))}
       </StyledContainer>
+
       <Stack justifyContent="flex-end" gap={spacing.s100}>
         <Button appearance="primary" onClick={handleNextStep}>
-          Siguiente
+          {labels.certifications.assistedControls.goNextText}
         </Button>
       </Stack>
     </Stack>

@@ -1,9 +1,9 @@
 import { Stack, Grid } from "@inubekit/inubekit";
-
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { contractTypeLabels } from "@ptypes/labels.types";
 import { useAppContext } from "@context/AppContext";
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { alerts } from "../../RequirementsForm/config/alertConfig";
 import { IGeneralInformationEntry } from "../../GeneralInformationForm/types";
@@ -51,18 +51,18 @@ const renderPersonalInfoVerification = (
         width="100%"
       >
         <BoxAttribute
-          label="Tipo de solicitud:"
+          label={labels.certifications.verificationLabels.requestType}
           value={values.certification}
           direction="column"
         />
         <BoxAttribute
-          label="Destinatario:"
+          label={labels.certifications.verificationLabels.addressee}
           value={values.addressee}
           direction="column"
         />
         {hasMultipleContracts && (
           <BoxAttribute
-            label="Contrato:"
+            label={labels.certifications.verificationLabels.contract}
             value={contractDisplay}
             direction="column"
           />
@@ -71,7 +71,7 @@ const renderPersonalInfoVerification = (
 
       <Stack width="100%" direction="column">
         <BoxAttribute
-          label="Observaciones:"
+          label={labels.certifications.verificationLabels.observations}
           value={values.observations}
           direction="column"
         />

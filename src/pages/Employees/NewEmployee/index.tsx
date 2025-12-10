@@ -7,18 +7,18 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { AlertCardProps } from "@components/data/AlertCard";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import { labels } from "@i18n/labels";
 
 import { NewEmployeeUI } from "./interface";
 import { newEmployeeSteps } from "./config/assisted.config";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
 import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
-import { IAssignment } from "./types";
-import { ModalState } from "./types";
+import { IAssignment, ModalState } from "./types";
 
 function NewEmployee() {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const [personalData, setPersonalData] = useState<IPersonalDataEntry>({
     id: "",
@@ -52,13 +52,15 @@ function NewEmployee() {
 
   const [assignments, setAssignments] = useState<IAssignment[]>([
     {
-      title: "Asignación 1",
-      assignment: "Salario básico",
+      title: labels.employee.newEmployee.assignments.basicSalary.title,
+      assignment:
+        labels.employee.newEmployee.assignments.basicSalary.assignment,
       value: "$ 1.800.000",
     },
     {
-      title: "Asignación 2",
-      assignment: "Auxilio de conectividad",
+      title: labels.employee.newEmployee.assignments.connectivitySubsidy.title,
+      assignment:
+        labels.employee.newEmployee.assignments.connectivitySubsidy.assignment,
       value: "$ 240.000",
     },
   ]);
@@ -130,8 +132,8 @@ function NewEmployee() {
     navigate("/employees", {
       state: {
         showFlag: true,
-        flagTitle: "Solicitud enviada",
-        flagMessage: "El registro del nuevo empleado fue enviado exitosamente.",
+        flagTitle: labels.employee.newEmployee.success.flagTitle,
+        flagMessage: labels.employee.newEmployee.success.flagMessage,
         isSuccess: true,
       },
     });
@@ -158,11 +160,12 @@ function NewEmployee() {
         handleFinishAssisted={handleFinishAssisted}
         setIsCurrentFormValid={setIsCurrentFormValid}
       />
+
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas finalizar la vinculación del empleado?"
-          title="Finalizar"
-          buttonText="Finalizar"
+          title={labels.employee.newEmployee.finishModal.title}
+          descriptionText={labels.employee.newEmployee.finishModal.description}
+          buttonText={labels.employee.newEmployee.finishModal.button}
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={handleCloseSendModal}
           onSecondaryButtonClick={handleCloseSendModal}
@@ -173,7 +176,7 @@ function NewEmployee() {
         <RequestInfoModal
           iconAppearance="success"
           requestId="##45678822"
-          staffName="Nombre Apellido"
+          staffName={labels.employee.requestInfoModal.staffName}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />

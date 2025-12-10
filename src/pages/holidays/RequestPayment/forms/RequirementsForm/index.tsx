@@ -1,5 +1,6 @@
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { AlertCard } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing";
 
@@ -21,7 +22,9 @@ const AlertCardStep = ({ handleNextStep }: AlertCardContainerProps) => {
         ))}
       </StyledContainer>
       <Stack justifyContent="flex-end">
-        <Button onClick={handleNextStep}>Siguiente</Button>
+        <Button onClick={handleNextStep}>
+          {labels.holidays.assisted.next}
+        </Button>
       </Stack>
     </Stack>
   );

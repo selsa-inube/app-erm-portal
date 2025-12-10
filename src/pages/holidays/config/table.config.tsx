@@ -13,9 +13,12 @@ import { parseDataSafely, getValueFromData } from "@utils/parser";
 
 import { HumanResourceRequestStatus } from "./enums";
 import { IDaysUsedTable } from "../components/DaysUsedTable/types";
+import { labels } from "@i18n/labels";
 
-export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
-  holidays.map((holiday) => {
+const { holidays } = labels;
+
+export const formatHolidaysData = (holidaysData: HumanResourceRequest[]) =>
+  holidaysData.map((holiday) => {
     const parsedData = parseDataSafely(holiday.humanResourceRequestData);
 
     const isPaidVacation =
@@ -50,7 +53,7 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
         value:
           HumanResourceRequestStatus[
             holiday.humanResourceRequestStatus as unknown as keyof typeof HumanResourceRequestStatus
-          ] ?? "Estado desconocido",
+          ] ?? holidays.statusUnknown,
       },
       details: {
         value: <MdOutlineVisibility />,
@@ -93,13 +96,14 @@ export const formatVacationHistory = (
     businessName: string;
     contractType: string;
   })[] = [];
+
   employees.forEach((employee) => {
     if (
       !employee.employmentContracts ||
       employee.employmentContracts.length === 0
-    ) {
+    )
       return;
-    }
+
     employee.employmentContracts.forEach((contract) => {
       contract.vacationsHistory.forEach((vacation) => {
         allVacations.push({
@@ -108,7 +112,9 @@ export const formatVacationHistory = (
           },
           usageMode: {
             value:
-              vacation.vacationType === "Pagadas" ? "Pagadas" : "Disfrutadas",
+              vacation.vacationType === holidays.vacationTypes.paid
+                ? holidays.vacationTypes.paid
+                : holidays.vacationTypes.enjoyed,
           },
           days: {
             value: vacation.businessDaysOfVacation,

@@ -16,6 +16,7 @@ import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 import { contractTypeLabels } from "@ptypes/labels.types";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { labels } from "@i18n/labels";
 
 import { StyledContainer } from "./styles";
 
@@ -37,6 +38,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     handleNextStep,
     handlePreviousStep,
   } = props;
+
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { selectedEmployee } = useAppContext();
 
@@ -74,8 +76,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
           <Stack direction="column" width="100%" gap={spacing.s200}>
             <Stack direction={isMobile ? "column" : "row"} gap={spacing.s200}>
               <Textfield
-                label="Días de disfrute"
-                placeholder="Ej: 2"
+                label={
+                  labels.holidays.generalInformationForm.fields.daysToPay.label
+                }
+                placeholder={
+                  labels.holidays.generalInformationForm.fields.daysToPay
+                    .placeholder
+                }
                 name="daysOff"
                 id="daysOff"
                 type="number"
@@ -91,7 +98,9 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               />
 
               <Date
-                label="Fecha de inicio"
+                label={
+                  labels.holidays.generalInformationForm.fields.startDate.label
+                }
                 name="startDateEnyoment"
                 id="startDateEnyoment"
                 value={formik.values.startDateEnyoment}
@@ -108,10 +117,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
             {contractOptions.length > 1 && (
               <Select
-                label="Contrato"
+                label={
+                  labels.holidays.generalInformationForm.fields.contract.label
+                }
+                placeholder={
+                  labels.holidays.generalInformationForm.fields.contract
+                    .placeholder
+                }
                 name="contractId"
                 options={contractOptions}
-                placeholder="Selecciona de la lista"
                 value={formik.values.contractId}
                 message={formik.errors.contractId}
                 disabled={loading}
@@ -122,7 +136,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                   const contrato = selectedEmployee.employmentContracts?.find(
                     (c) => c.contractId === v,
                   );
-
                   if (contrato) {
                     formik.setFieldValue("businessName", contrato.businessName);
                     formik.setFieldValue("contractType", contrato.contractType);
@@ -137,8 +150,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             )}
 
             <Textarea
-              label="Observaciones"
-              placeholder="Detalles a tener en cuenta."
+              label={
+                labels.holidays.generalInformationForm.fields.observations.label
+              }
+              placeholder={
+                labels.holidays.generalInformationForm.fields.observations
+                  .placeholder
+              }
               name="observationEmployee"
               id="observationEmployee"
               value={formik.values.observationEmployee}
@@ -158,6 +176,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             />
           </Stack>
         </StyledContainer>
+
         {withNextButton && (
           <Stack justifyContent="flex-end" gap={spacing.s250}>
             <Button
@@ -165,13 +184,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               variant="outlined"
               onClick={handlePreviousStep}
             >
-              Anterior
+              {labels.holidays.assisted.previous}
             </Button>
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >
-              Siguiente
+              {labels.holidays.assisted.next}
             </Button>
           </Stack>
         )}

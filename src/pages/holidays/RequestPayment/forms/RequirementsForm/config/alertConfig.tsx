@@ -1,16 +1,18 @@
 import { MdWarningAmber } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
+
 export const alerts = [
   {
-    title: "Alerta 1",
-    requirement: "Estar al día en las obligaciones.",
-    cause: "El cliente tiene en mora el crédito de vivienda.",
+    title: labels.holidays.alerts.first.title,
+    requirement: labels.holidays.alerts.first.requirement,
+    cause: labels.holidays.alerts.first.cause,
     icon: <MdWarningAmber />,
   },
   {
-    title: "Alerta 2",
-    requirement: "Requiere 90 días de antigüedad.",
-    cause: "El cliente tiene solo 60 días de afiliación.",
+    title: labels.holidays.alerts.second.title,
+    requirement: labels.holidays.alerts.second.requirement,
+    cause: labels.holidays.alerts.second.cause,
     icon: <MdWarningAmber />,
   },
 ];

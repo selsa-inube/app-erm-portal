@@ -40,6 +40,7 @@ import {
 } from "@ptypes/employeeAbsence.types";
 import { useEmployeeAbsences } from "@hooks/useEmployeeAbsences";
 import { formatDateRange } from "@utils/date";
+import { labels } from "@i18n/labels";
 
 import {
   StyledAppPage,
@@ -161,7 +162,7 @@ function AppPage(props: AppPageProps) {
 
   const headerUsername = staffUser
     ? `${staffUser.staffName} ${staffUser.staffLastName ?? ""}`
-    : "Nombre de usuario";
+    : labels.layout.header.defaultUsername;
 
   const alertEvents = employeeAlertsMock.map((alert) => ({
     dateAndTime: alert.date,
@@ -185,7 +186,7 @@ function AppPage(props: AppPageProps) {
   const absenceDetails = lastAbsence
     ? [
         {
-          label: "Motivo",
+          label: labels.layout.banner.absenceLabel,
           value:
             AbsenceReasonES[lastAbsence.absenceReason] ??
             lastAbsence.absenceReason,
@@ -238,12 +239,13 @@ function AppPage(props: AppPageProps) {
           navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
             selectedClient?.logo ?? logoUrl,
-            selectedClient?.name ?? "Sin unidad seleccionada",
+            selectedClient?.name ?? labels.layout.header.noClientSelected,
             selectedEmployee,
           )}
           user={{
             username: headerUsername,
-            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            client:
+              selectedClient?.name ?? labels.layout.header.noClientSelected,
             breakpoint: "800px",
           }}
           menu={userMenu}
@@ -312,7 +314,7 @@ function AppPage(props: AppPageProps) {
                       name={
                         selectedEmployee
                           ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-                          : "Empleado no seleccionado"
+                          : labels.layout.banner.employeeNotSelected
                       }
                       status={
                         selectedEmployee
@@ -332,7 +334,7 @@ function AppPage(props: AppPageProps) {
                             />
                           ),
                           value: totalDays,
-                          label: "Días pendientes",
+                          label: labels.layout.banner.daysPendingLabel,
                           onClick: toggleModal,
                         },
                       ]}
@@ -352,7 +354,7 @@ function AppPage(props: AppPageProps) {
                                   employeeAlertsMock.length > 99
                                     ? "+99"
                                     : employeeAlertsMock.length,
-                                label: "Alertas",
+                                label: labels.layout.banner.alertsLabel,
                                 onClick: toggleAlertModal,
                               },
                             ]
@@ -362,7 +364,7 @@ function AppPage(props: AppPageProps) {
                         {
                           value: 2.5,
                           unit: "Años",
-                          label: "Antigüedad",
+                          label: labels.layout.banner.seniorityLabel,
                         },
                       ]}
                       absenceItems={
@@ -377,7 +379,7 @@ function AppPage(props: AppPageProps) {
                                     cursorHover
                                   />
                                 ),
-                                label: "Ausencias",
+                                label: labels.layout.banner.absenceLabel,
                                 value: lastAbsenceDateRange,
                                 onClick: toggleAbsenceDetailModal,
                               },
@@ -416,15 +418,15 @@ function AppPage(props: AppPageProps) {
       {isAlertModalOpen && (
         <AlertModal
           handleClose={toggleAlertModal}
-          title="Alertas"
+          title={labels.layout.modals.alertTitle}
           events={alertEvents}
         />
       )}
 
       {isAbsenceDetailOpen && (
         <AbsenceDetailModal
-          title="Detalle de la ausencia"
-          buttonLabel="Cerrar"
+          title={labels.layout.modals.absenceDetailTitle}
+          buttonLabel={labels.layout.modals.absenceDetailButton}
           details={absenceDetails}
           onClose={toggleAbsenceDetailModal}
         />

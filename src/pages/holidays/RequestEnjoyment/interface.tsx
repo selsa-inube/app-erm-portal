@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { Stack, Assisted, IAssistedStep } from "@inubekit/inubekit";
 import { MdRule } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
@@ -86,7 +87,7 @@ function RequestEnjoymentUI({
           <ButtonRequirements
             counter={mockAlertCards.length}
             buttonIcon={<MdRule />}
-            buttonText="Solicitar Pago"
+            buttonText={labels.holidays.actions.requestPayment}
             isMobile={isTablet}
             onClick={handleOpenModal}
           />
@@ -100,9 +101,9 @@ function RequestEnjoymentUI({
             disableNext={shouldDisableNext}
             size={isTablet ? "small" : "large"}
             controls={{
-              goBackText: "Anterior",
-              goNextText: "Siguiente",
-              submitText: "Enviar",
+              goBackText: labels.holidays.assisted.previous,
+              goNextText: labels.holidays.assisted.next,
+              submitText: labels.holidays.assisted.submit,
             }}
             onNextClick={handleNextStep}
             onBackClick={handlePreviousStep}
@@ -144,8 +145,8 @@ function RequestEnjoymentUI({
 
       {isModalOpen && (
         <RequirementsModal
-          title="Requisitos"
-          buttonLabel="Cerrar"
+          title={labels.holidays.titles.requirements}
+          buttonLabel={labels.holidays.actions.close}
           requirements={mockRequirements}
           handleClose={handleCloseModal}
         />

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { labels } from "@i18n/labels";
 import { navConfig, useConfigHeader } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { useEmployeeVacationDays } from "@hooks/useEmployeeVacationDays";
@@ -89,29 +90,29 @@ export const useHome = () => {
   const absences = lastAbsence
     ? [
         {
-          label: "Motivo",
+          label: labels.home.absenceDetail.reason,
           value:
             AbsenceReasonES[lastAbsence.absenceReason] ??
             lastAbsence.absenceReason,
         },
         {
-          label: "Submotivo",
+          label: labels.home.absenceDetail.subReason,
           value:
             ESubReasonES[lastAbsence.subReason as ESubReason] ??
             lastAbsence.subReason,
         },
         {
-          label: "Fecha en que se produjo",
+          label: labels.home.absenceDetail.occurrenceDate,
           value: new Date(lastAbsence.absenceStartDate).toLocaleDateString(),
         },
         {
-          label: "Duración",
+          label: labels.home.absenceDetail.duration,
           value: lastAbsence.hoursAbsent
-            ? `${lastAbsence.hoursAbsent} horas`
-            : `${lastAbsence.absenceDays} días`,
+            ? `${lastAbsence.hoursAbsent} ${labels.home.absenceDetail.hours}`
+            : `${lastAbsence.absenceDays} ${labels.home.absenceDetail.days}`,
         },
         {
-          label: "Detalles del motivo",
+          label: labels.home.absenceDetail.reasonDetails,
           value: lastAbsence.absenceReasonDetails,
         },
       ]

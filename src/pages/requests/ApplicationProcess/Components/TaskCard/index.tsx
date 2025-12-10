@@ -3,6 +3,7 @@ import { MdInfoOutline } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
 import { truncateText } from "@utils/text";
+import { labels } from "@i18n/labels";
 
 import { StyledTaskCard } from "./styles";
 
@@ -42,15 +43,18 @@ function TaskCard(props: TaskCardProps) {
             spacing="narrow"
             disabled={hasNoPrivileges || isNotResponsible}
           />
+
           <Text
             size="small"
             ellipsis
-            appearance={hasNoPrivileges ? "gray" : "dark"}
+            appearance={hasNoPrivileges || isNotResponsible ? "gray" : "dark"}
           >
             {title}
           </Text>
         </Stack>
+
         <Divider dashed />
+
         <Stack direction="column" gap={spacing.s050}>
           <Text type="label" size="small" appearance="gray">
             {truncateText(description, 65)}
@@ -65,13 +69,14 @@ function TaskCard(props: TaskCardProps) {
             appearance="primary"
             size="14px"
             spacing="narrow"
-            disabled={hasNoPrivileges}
+            disabled
           />
           <Text type="label" weight="bold" size="small" appearance="gray">
-            No tienes privilegios para ejecutar esta tarea.
+            {labels.requests.taskCard.noPrivileges}
           </Text>
         </Stack>
       )}
+
       {isNotResponsible && (
         <Stack gap={spacing.s050} alignItems="center">
           <Icon
@@ -79,10 +84,10 @@ function TaskCard(props: TaskCardProps) {
             appearance="primary"
             size="14px"
             spacing="narrow"
-            disabled={isNotResponsible}
+            disabled
           />
           <Text type="label" weight="bold" size="small" appearance="gray">
-            Debes ser responsable de esta solicitud.
+            {labels.requests.taskCard.notResponsible}
           </Text>
         </Stack>
       )}

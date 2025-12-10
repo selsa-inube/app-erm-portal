@@ -2,6 +2,7 @@ import { Stack, Text, Icon, IIconAppearance } from "@inubekit/inubekit";
 import { MdOutlineWarningAmber } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
+import { labels } from "@i18n/labels";
 
 import { StyledEventCard } from "./styles";
 
@@ -30,7 +31,7 @@ function EventCard(props: EventCardProps) {
 
           <Stack direction="column" gap={spacing.s100}>
             <Text type="label" size="medium" appearance="gray">
-              Sucede el {dateAndTime}
+              {labels.data.eventCard.happensOnLabel} {dateAndTime}
             </Text>
 
             <Text size="medium" weight="bold">

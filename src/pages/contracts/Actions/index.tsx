@@ -1,6 +1,8 @@
 import { Stack, Text, Icon } from "@inubekit/inubekit";
 import { MdOutlineInfo, MdClose } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
+
 import {
   StyledContainer,
   StyledLi,
@@ -47,11 +49,23 @@ export function ActionModal(props: ActionModalProps) {
   );
 
   const modifyActions = [
-    { label: "Agregar", onClick: onClickAdd, disable: disableAddAction },
-    { label: "Modificar", onClick: onClickEdit, disable: disableModifyAction },
-    { label: "Renovar", onClick: onClickRenew, disable: disableRenewAction },
     {
-      label: "Terminar",
+      label: labels.contracts.actions.add,
+      onClick: onClickAdd,
+      disable: disableAddAction,
+    },
+    {
+      label: labels.contracts.actions.modify,
+      onClick: onClickEdit,
+      disable: disableModifyAction,
+    },
+    {
+      label: labels.contracts.actions.renew,
+      onClick: onClickRenew,
+      disable: disableRenewAction,
+    },
+    {
+      label: labels.contracts.actions.terminate,
       onClick: onClickEliminate,
       disable: disableDeleteAction,
       danger: true,
@@ -111,7 +125,7 @@ export function ActionModal(props: ActionModalProps) {
                       event.stopPropagation();
                       onInfoIconClick(
                         actionDescriptions?.[item.label] ??
-                          "Acción inhabilitada.",
+                          labels.contracts.modals.addVinculationBlocked,
                       );
                     }}
                   />

@@ -10,6 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
@@ -74,8 +75,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
           <Stack direction="column" width="100%" gap={spacing.s200}>
             <Stack direction={isMobile ? "column" : "row"} gap={spacing.s200}>
               <Textfield
-                label="Días hábiles a pagar"
-                placeholder="Ej: 2"
+                label={
+                  labels.holidays.generalInformationForm.fields.daysToPay.label
+                }
+                placeholder={
+                  labels.holidays.generalInformationForm.fields.daysToPay
+                    .placeholder
+                }
                 name="daysToPay"
                 id="daysToPay"
                 type="number"
@@ -91,10 +97,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               />
               {contractOptions.length > 1 && (
                 <Select
-                  label="Contrato"
+                  label={
+                    labels.holidays.generalInformationForm.fields.contract.label
+                  }
                   name="contractId"
                   options={contractOptions}
-                  placeholder="Selecciona de la lista"
+                  placeholder={
+                    labels.holidays.generalInformationForm.fields.contract
+                      .placeholder
+                  }
                   value={formik.values.contractId}
                   message={formik.errors.contractId}
                   disabled={loading}
@@ -127,8 +138,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             </Stack>
 
             <Textarea
-              label="Observaciones"
-              placeholder="Detalles a tener en cuenta."
+              label={
+                labels.holidays.generalInformationForm.fields.observations.label
+              }
+              placeholder={
+                labels.holidays.generalInformationForm.fields.observations
+                  .placeholder
+              }
               name="observationEmployee"
               id="observationEmployee"
               value={formik.values.observationEmployee}
@@ -156,13 +172,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               variant="outlined"
               onClick={handlePreviousStep}
             >
-              Anterior
+              {labels.holidays.assisted.previous}
             </Button>
             <Button
               onClick={handleNextStep}
               disabled={getDisabledState(loading, formik.isValid)}
             >
-              Siguiente
+              {labels.holidays.assisted.next}
             </Button>
           </Stack>
         )}

@@ -11,6 +11,7 @@ import { InfoModal } from "@components/modals/InfoModal";
 import { capitalizeWords } from "@utils/text";
 import { contractTypeLabels } from "@ptypes/labels.types";
 import { useEmployee } from "@hooks/useEmployee";
+import { labels } from "@i18n/labels";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -30,7 +31,6 @@ interface HolidaysOptionsUIProps {
   hasActiveContract?: boolean;
   hasEnjoymentPrivilege?: boolean;
   hasPaymentPrivilege?: boolean;
-  actionDescriptions?: Record<string, string>;
   hasViewDetailsPrivilege?: boolean;
   hasDeletePrivilege?: boolean;
   handleDeleteRequest: (
@@ -52,49 +52,67 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasActiveContract = true,
     hasEnjoymentPrivilege = true,
     hasPaymentPrivilege = true,
-    actionDescriptions = {
-      enjoyment:
-        "No se puede solicitar disfrute de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
-      payment:
-        "No se puede solicitar pago de vacaciones, ya que no tiene un contrato activo o no cuenta con los privilegios necesarios.",
-    },
     hasViewDetailsPrivilege = true,
     hasDeletePrivilege = true,
     handleDeleteRequest,
     isSelfRequest = false,
   } = props;
 
-  const [selectedTab, setSelectedTab] = useState("dias");
   const { selectedEmployee } = useAppContext();
   const navigate = useNavigate();
-  const [infoModal, setInfoModal] = useState<{
-    open: boolean;
-    title: string;
-    description: string;
-  }>({
-    open: false,
-    title: "",
-    description: "",
-  });
   const { employee } = useEmployee(selectedEmployee.employeeId);
   const contracts = employee?.employmentContracts ?? [];
 
-  const selfMessage =
-    "No es posible realizar solicitudes a nombre propio desde el portal de gestor. Para realizar esta acción, ingrese al Portal de Empleados.";
+  const [selectedTab, setSelectedTab] = useState("dias");
+
+  const [infoModal, setInfoModal] = useState({
+    open: false,
+    title: labels.holidays.infoModal.disabledActionTitle,
+    description: "",
+  });
+
+  const actionDescriptions = {
+    enjoyment: labels.holidays.privileges.enjoyment,
+    payment: labels.holidays.privileges.payment,
+  };
+
+  const selfMessage = labels.holidays.privileges.selfRequest;
 
   const effectiveActionDescriptions = {
-    ...actionDescriptions,
     enjoyment: isSelfRequest ? selfMessage : actionDescriptions.enjoyment,
     payment: isSelfRequest ? selfMessage : actionDescriptions.payment,
   };
 
+  const onOpenInfoModal = (desc: string) => {
+    setInfoModal({
+      open: true,
+      title: labels.holidays.infoModal.disabledActionTitle,
+      description: desc,
+    });
+  };
+
+  const handleRequestEnjoyment = () => {
+    if (!isSelfRequest && hasActiveContract && hasEnjoymentPrivilege) {
+      navigate("/holidays/request-enjoyment");
+    }
+  };
+
+  const handleRequestPayment = () => {
+    if (!isSelfRequest && hasActiveContract && hasPaymentPrivilege) {
+      navigate("/holidays/request-payment");
+    }
+  };
+
   const tabs: ITab[] = [
-    { id: "dias", label: "Días utilizados" },
+    {
+      id: "dias",
+      label: labels.holidays.tabs.daysUsed,
+    },
     {
       id: "solicitudes",
       label: isMobile
-        ? "Solicitudes en trámite"
-        : "Solicitudes de vacaciones en trámite",
+        ? labels.holidays.tabs.requestsShort
+        : labels.holidays.tabs.requestsLong,
       icon: {
         appearance: "warning",
         icon: <MdOutlineWarningAmber />,
@@ -102,22 +120,6 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
       },
     },
   ];
-
-  const handleRequestEnjoyment = (): void => {
-    void navigate("/holidays/request-enjoyment");
-  };
-
-  const handleRequestPayment = (): void => {
-    void navigate("/holidays/request-payment");
-  };
-
-  const onOpenInfoModal = (description: string) => {
-    setInfoModal({
-      open: true,
-      title: "Acción inhabilitada",
-      description,
-    });
-  };
 
   const renderActions = () =>
     isMobile ? (
@@ -129,35 +131,29 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           !hasPaymentPrivilege || !hasActiveContract || isSelfRequest
         }
         actionDescriptions={effectiveActionDescriptions}
-        hasTableData={tableData && tableData.length > 0}
-        onRequestEnjoyment={() => handleRequestEnjoyment()}
-        onRequestPayment={() => handleRequestPayment()}
+        hasTableData={tableData.length > 0}
+        onRequestEnjoyment={handleRequestEnjoyment}
+        onRequestPayment={handleRequestPayment}
         onInfoIconClick={onOpenInfoModal}
       />
     ) : (
-      <Stack
-        gap={spacing.s150}
-        justifyContent="end"
-        direction={isMobile ? "column" : "row"}
-      >
+      <Stack gap={spacing.s150}>
         <Stack gap={spacing.s025} alignItems="center">
           <Button
-            spacing="wide"
-            variant="filled"
             iconBefore={<MdAdd />}
-            fullwidth={isMobile}
             disabled={
               isSelfRequest || !hasActiveContract || !hasEnjoymentPrivilege
             }
             onClick={
               !isSelfRequest && hasActiveContract && hasEnjoymentPrivilege
-                ? () => handleRequestEnjoyment()
+                ? handleRequestEnjoyment
                 : undefined
             }
           >
-            Agregar solicitud de disfrute
+            {labels.holidays.actions.addEnjoyment}
           </Button>
-          {isSelfRequest ? (
+
+          {(isSelfRequest || !hasActiveContract || !hasEnjoymentPrivilege) && (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
@@ -167,36 +163,25 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 onOpenInfoModal(effectiveActionDescriptions.enjoyment)
               }
             />
-          ) : !hasActiveContract || !hasEnjoymentPrivilege ? (
-            <Icon
-              icon={<MdOutlineInfo />}
-              appearance="primary"
-              size="16px"
-              cursorHover
-              onClick={() =>
-                onOpenInfoModal(effectiveActionDescriptions.enjoyment)
-              }
-            />
-          ) : null}
+          )}
         </Stack>
+
         <Stack gap={spacing.s025} alignItems="center">
           <Button
-            spacing="wide"
-            variant="filled"
             iconBefore={<MdAdd />}
-            fullwidth={isMobile}
             disabled={
               isSelfRequest || !hasActiveContract || !hasPaymentPrivilege
             }
             onClick={
               !isSelfRequest && hasActiveContract && hasPaymentPrivilege
-                ? () => handleRequestPayment()
+                ? handleRequestPayment
                 : undefined
             }
           >
-            Agregar solicitud de pago
+            {labels.holidays.actions.addPayment}
           </Button>
-          {isSelfRequest ? (
+
+          {(isSelfRequest || !hasActiveContract || !hasPaymentPrivilege) && (
             <Icon
               icon={<MdOutlineInfo />}
               appearance="primary"
@@ -206,61 +191,41 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
                 onOpenInfoModal(effectiveActionDescriptions.payment)
               }
             />
-          ) : !hasActiveContract || !hasPaymentPrivilege ? (
-            <Icon
-              icon={<MdOutlineInfo />}
-              appearance="primary"
-              size="16px"
-              cursorHover
-              onClick={() =>
-                onOpenInfoModal(effectiveActionDescriptions.payment)
-              }
-            />
-          ) : null}
+          )}
         </Stack>
       </Stack>
     );
 
-  const renderDaysUsedContent = () => {
-    return (
-      <StyledHolidaysContainer $isMobile={isMobile}>
-        <Stack alignItems="center" justifyContent="space-between">
-          <Text type="title" size="medium">
-            Consulta de días utilizados
-          </Text>
-          {renderActions()}
-        </Stack>
-        {contracts.map((contract) => {
-          const contractVacationData = formatVacationHistory([
-            {
-              ...selectedEmployee,
-              employmentContracts: [contract],
-            },
-          ]);
+  const renderDaysUsedContent = () => (
+    <StyledHolidaysContainer $isMobile={isMobile}>
+      <Stack alignItems="center" justifyContent="space-between">
+        <Text type="title" size="medium">
+          {labels.holidays.titles.daysUsedQuery}
+        </Text>
+        {renderActions()}
+      </Stack>
 
-          return (
-            <div key={contract.contractId}>
-              {contracts.length > 1 && (
-                <Text
-                  type="title"
-                  weight="bold"
-                  size="small"
-                  appearance="gray"
-                  padding={`${spacing.s100} ${spacing.s0}`}
-                >
-                  {`${capitalizeWords(contract.businessName)} - ${
-                    contractTypeLabels[contract.contractType] ??
-                    contract.contractType
-                  }`}
-                </Text>
-              )}
-              <DaysUsedTable data={contractVacationData} />
-            </div>
-          );
-        })}
-      </StyledHolidaysContainer>
-    );
-  };
+      {contracts.map((contract) => {
+        const data = formatVacationHistory([
+          { ...selectedEmployee, employmentContracts: [contract] },
+        ]);
+
+        return (
+          <div key={contract.contractId}>
+            {contracts.length > 1 && (
+              <Text type="title" size="small" appearance="gray">
+                {`${capitalizeWords(contract.businessName)} - ${
+                  contractTypeLabels[contract.contractType] ??
+                  contract.contractType
+                }`}
+              </Text>
+            )}
+            <DaysUsedTable data={data} />
+          </div>
+        );
+      })}
+    </StyledHolidaysContainer>
+  );
 
   return (
     <>
@@ -270,24 +235,22 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
         appRoute={appRoute}
         navigatePage={navigatePage}
       >
-        {!tableData || tableData.length === 0 ? (
+        {!tableData.length ? (
           renderDaysUsedContent()
         ) : (
           <>
             <Tabs
               tabs={tabs}
               selectedTab={selectedTab}
-              onChange={(tabId) => setSelectedTab(tabId)}
-              scroll={false}
+              onChange={(id) => setSelectedTab(id)}
             />
+
             {selectedTab === "solicitudes" ? (
               <StyledHolidaysContainer $isMobile={isMobile}>
-                <Stack alignItems="center" justifyContent="space-between">
-                  <Text type="title" size="medium">
-                    Solicitudes en trámite
-                  </Text>
-                  {isMobile && renderActions()}
-                </Stack>
+                <Text type="title" size="medium">
+                  {labels.holidays.titles.pendingRequests}
+                </Text>
+
                 <HolidaysTable
                   data={tableData}
                   loading={isLoading}
@@ -302,10 +265,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           </>
         )}
       </AppMenu>
+
       {infoModal.open && (
         <InfoModal
           title={infoModal.title}
-          titleDescription="¿Por qué está inhabilitado?"
+          titleDescription={labels.holidays.infoModal.disabledReasonTitle}
           description={infoModal.description}
           onCloseModal={() =>
             setInfoModal({ open: false, title: "", description: "" })

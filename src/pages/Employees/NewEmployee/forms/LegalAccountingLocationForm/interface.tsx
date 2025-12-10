@@ -4,6 +4,7 @@ import { Stack, Button, Grid, useMediaQuery, Select } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 import { isRequired } from "@utils/forms";
+import { labels } from "@i18n/labels";
 
 import { ILegalAccountingLocation } from "./types";
 import { StyledContainer } from "./styles";
@@ -30,6 +31,7 @@ function LegalAccountingLocationFormUI(
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { employee } = labels;
 
   return (
     <form>
@@ -48,8 +50,10 @@ function LegalAccountingLocationFormUI(
               autoRows="unset"
             >
               <Select
-                label="Proyecto"
-                placeholder="Selecciona de la lista"
+                label={employee.legalAccountingLocationForm.fields.project}
+                placeholder={
+                  employee.legalAccountingLocationForm.placeholders.select
+                }
                 name="proyect"
                 id="proyect"
                 value={formik.values.proyect}
@@ -66,8 +70,12 @@ function LegalAccountingLocationFormUI(
               />
 
               <Select
-                label="Segmentación zonal"
-                placeholder="Selecciona de la lista"
+                label={
+                  employee.legalAccountingLocationForm.fields.zonalSegmentation
+                }
+                placeholder={
+                  employee.legalAccountingLocationForm.placeholders.select
+                }
                 name="zonalSegmentation"
                 id="zonalSegmentation"
                 value={formik.values.zonalSegmentation}
@@ -84,8 +92,10 @@ function LegalAccountingLocationFormUI(
               />
 
               <Select
-                label="Centro de costo"
-                placeholder="Selecciona de la lista"
+                label={employee.legalAccountingLocationForm.fields.costCenter}
+                placeholder={
+                  employee.legalAccountingLocationForm.placeholders.select
+                }
                 name="costCenter"
                 id="costCenter"
                 value={formik.values.costCenter}
@@ -111,13 +121,14 @@ function LegalAccountingLocationFormUI(
               appearance="gray"
               variant="outlined"
             >
-              Anterior
+              {employee.legalAccountingLocationForm.actions.previous}
             </Button>
+
             <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >
-              Siguiente
+              {employee.legalAccountingLocationForm.actions.next}
             </Button>
           </Stack>
         )}
