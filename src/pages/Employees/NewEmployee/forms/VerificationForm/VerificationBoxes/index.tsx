@@ -3,7 +3,21 @@ import { Grid } from "@inubekit/inubekit";
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { AlertCardProps } from "@components/data/AlertCard";
+import { formatDate } from "@utils/date";
 
+import {
+  getNormativeFrameworkLabel,
+  getCompanyLabel,
+  getContractTypeLabel,
+  getCostCenterLabel,
+  getJobModeLabel,
+  getPositionLabel,
+  getProyectLabel,
+  getSalaryProfileLabel,
+  getTeamLabel,
+  getWorkingShiftLabel,
+  getZonalSegmentationLabel,
+} from "./config/config";
 import { IFormsUpdateData } from "../../../types";
 import { IPersonalDataEntry } from "../../PersonalDataForm/types";
 import { IContractualPositionData } from "../../ContractualPositionDataForm/types";
@@ -51,48 +65,52 @@ const renderContractualPositionVerification = (
   >
     <BoxAttribute
       label="Marco normativo"
-      value={values.normativeFramework}
+      value={getNormativeFrameworkLabel(values.normativeFramework)}
       direction="column"
     />
     <BoxAttribute
       label="Tipo de contrato"
-      value={values.contractType}
+      value={getContractTypeLabel(values.contractType)}
       direction="column"
     />
     <BoxAttribute
       label="Fecha de inicio"
-      value={values.startDate}
+      value={formatDate(values.startDate)}
       direction="column"
     />
     <BoxAttribute
       label="Fecha de finalización"
-      value={values.endDate}
+      value={formatDate(values.endDate)}
       direction="column"
     />
     <BoxAttribute
       label="Empresa contratante"
-      value={values.company}
+      value={getCompanyLabel(values.company)}
       direction="column"
     />
     <BoxAttribute
       label="Jornada laboral"
-      value={values.workingShift}
+      value={getWorkingShiftLabel(values.workingShift)}
       direction="column"
     />
     <BoxAttribute
       label="Equipo de trabajo"
-      value={values.team}
+      value={getTeamLabel(values.team)}
       direction="column"
     />
-    <BoxAttribute label="Cargo" value={values.position} direction="column" />
+    <BoxAttribute
+      label="Cargo"
+      value={getPositionLabel(values.position)}
+      direction="column"
+    />
     <BoxAttribute
       label="Perfil salarial"
-      value={values.salaryProfile}
+      value={getSalaryProfileLabel(values.salaryProfile)}
       direction="column"
     />
     <BoxAttribute
       label="Sitio de trabajo"
-      value={values.jobMode}
+      value={getJobModeLabel(values.jobMode)}
       direction="column"
     />
   </Grid>
@@ -108,15 +126,19 @@ const renderLegalAccountingLocationVerification = (
     gap={spacing.s100}
     width="100%"
   >
-    <BoxAttribute label="Proyecto" value={values.proyect} direction="column" />
+    <BoxAttribute
+      label="Proyecto"
+      value={getProyectLabel(values.proyect)}
+      direction="column"
+    />
     <BoxAttribute
       label="Segmentación zonal"
-      value={values.zonalSegmentation}
+      value={getZonalSegmentationLabel(values.zonalSegmentation)}
       direction="column"
     />
     <BoxAttribute
       label="Centro de costos"
-      value={values.costCenter}
+      value={getCostCenterLabel(values.costCenter)}
       direction="column"
     />
   </Grid>

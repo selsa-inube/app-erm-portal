@@ -21,6 +21,12 @@ function isVacationEnjoyedData(data: FormValues) {
   return "daysOff" in data;
 }
 
+function isOnboardingData(data: FormValues) {
+  return (
+    "names" in data && "lastNames" in data && "identificationNumber" in data
+  );
+}
+
 export function useRequestSubmission(
   formValues: FormValues,
   typeRequest: ERequestType,
@@ -30,13 +36,8 @@ export function useRequestSubmission(
   const [requestNum, setRequestNum] = useState("");
   const { selectedEmployee } = useAppContext();
 
-  const {
-    submitRequestToAPI,
-    showErrorFlag,
-    errorMessage,
-    setShowErrorFlag,
-    humanResourceRequestId,
-  } = useRequestSubmissionAPI();
+  const { submitRequestToAPI, errorMessage, humanResourceRequestId } =
+    useRequestSubmissionAPI();
 
   const { navigateAfterSubmission } = useRequestNavigation();
 
@@ -82,6 +83,34 @@ export function useRequestSubmission(
           contractType: formValues.contractType ?? "",
           observationEmployee: formValues.observationEmployee ?? "",
         });
+      } else if (
+        typeRequest === ERequestType.onboarding &&
+        isOnboardingData(formValues)
+      ) {
+        humanResourceRequestData = JSON.stringify({
+          identificationNumber: formValues.identificationNumber ?? "",
+          names: formValues.names ?? "",
+          lastNames: formValues.lastNames ?? "",
+          attachedFile: formValues.attachedFile ?? null,
+          normativeFramework: formValues.normativeFramework ?? "",
+          contractType: formValues.contractType ?? "",
+          startDate: formValues.startDate
+            ? formatWithOffset(new Date(formValues.startDate))
+            : "",
+          endDate: formValues.endDate
+            ? formatWithOffset(new Date(formValues.endDate))
+            : "",
+          company: formValues.company ?? "",
+          workingShift: formValues.workingShift ?? "",
+          team: formValues.team ?? "",
+          position: formValues.position ?? "",
+          salaryProfile: formValues.salaryProfile ?? "",
+          jobMode: formValues.jobMode ?? "",
+          proyect: formValues.proyect ?? "",
+          zonalSegmentation: formValues.zonalSegmentation ?? "",
+          costCenter: formValues.costCenter ?? "",
+          assignments: formValues.assignments ?? [],
+        });
       } else {
         throw new Error("Tipo de solicitud no reconocido.");
       }
@@ -94,7 +123,7 @@ export function useRequestSubmission(
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observationEmployee ?? "",
+        humanResourceRequestDescription: "request",
         humanResourceRequestStatus: "supervisor_approval",
         humanResourceRequestType: typeRequestKey as ERequestType,
         userCodeInCharge,
@@ -127,8 +156,6 @@ export function useRequestSubmission(
     requestNum,
     submitRequestHandler,
     navigateAfterSubmission,
-    showErrorFlag,
     errorMessage,
-    setShowErrorFlag,
   };
 }

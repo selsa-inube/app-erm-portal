@@ -1,8 +1,4 @@
-import {
-  fetchTimeoutServices,
-  maxRetriesServices,
-  environment,
-} from "@config/environment";
+import { fetchTimeoutServices, maxRetriesServices } from "@config/environment";
 
 import { Logger } from "@utils/logger";
 export interface IRemunerationProfile {
@@ -24,11 +20,12 @@ const getRemunerationProfiles = async (
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
       const res = await fetch(
-        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/remuneration-profiles-catalog`,
+        `http://localhost:3001/portal-erm-query-process-service/api/remuneration-profiles-catalog`,
         {
           method: "GET",
           headers: {
             ...headers,
+            "X-Action": "SearchAllRemunerationProfileCatalog",
           },
           signal: controller.signal,
         },

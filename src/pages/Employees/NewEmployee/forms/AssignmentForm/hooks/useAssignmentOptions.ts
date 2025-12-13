@@ -48,7 +48,7 @@ export const useAssignmentOptions = () => {
     };
 
     fetchAssignmentOptions();
-  }, [getHeaders, showErrorModal]);
+  }, []);
 
   return { assignmentOptions, isLoading, hasError };
 };

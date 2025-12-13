@@ -4,15 +4,19 @@ import { Logger } from "@utils/logger";
 import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useHeaders } from "@hooks/useHeaders";
+import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
+import { modalErrorConfig } from "@config/modalErrorConfig";
+
+const ERROR_CODE_POST_HR_REQUESTS_FAILED = 1020;
 
 export function useRequestSubmissionAPI() {
-  const [showErrorFlag, setShowErrorFlag] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [humanResourceRequestId, setHumanResourceRequestId] = useState<
     string | null
   >(null);
 
   const { getHeaders } = useHeaders();
+  const { showErrorModal } = useErrorModal();
 
   const submitRequestToAPI = async (requestBody: IRequestBody) => {
     try {
@@ -25,27 +29,27 @@ export function useRequestSubmissionAPI() {
       }
 
       setErrorMessage("Error al enviar la solicitud. Intente nuevamente.");
-      setShowErrorFlag(true);
+
       return { success: false };
-    } catch (error) {
+    } catch (err) {
       Logger.error(
         "Error sending request",
-        error instanceof Error ? error : new Error(String(error)),
+        err instanceof Error ? err : new Error(String(err)),
       );
+      setErrorMessage("Error al enviar la solicitud. Intente nuevamente.");
+      const errorConfig = modalErrorConfig[ERROR_CODE_POST_HR_REQUESTS_FAILED];
 
-      setErrorMessage(
-        "Error al enviar la solicitud de vacaciones o certificación. Intente nuevamente.",
-      );
-      setShowErrorFlag(true);
+      showErrorModal({
+        descriptionText: `${errorConfig.descriptionText}: ${String(err)}`,
+        solutionText: errorConfig.solutionText,
+      });
       return { success: false };
     }
   };
 
   return {
     submitRequestToAPI,
-    showErrorFlag,
     errorMessage,
-    setShowErrorFlag,
     humanResourceRequestId,
   };
 }
