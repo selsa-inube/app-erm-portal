@@ -8,6 +8,9 @@ import { modal } from "./modal";
 import { widgets } from "./widgets";
 import { layout } from "./layout";
 import { data } from "./data";
+import { validations } from "./validations";
+import { types } from "./types";
+import { config } from "./config";
 
 export const labels = {
   employee,
@@ -20,6 +23,9 @@ export const labels = {
   widgets,
   layout,
   data,
+  validations,
+  types,
+  config,
 };
 
 export type Labels = typeof labels;

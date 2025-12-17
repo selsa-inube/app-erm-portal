@@ -1,45 +1,24 @@
-export enum ERequestType {
-  absence = "Ausencia",
-  certification = "Certificación",
-  disability = "Incapacidad",
-  leave = "Permiso",
-  leaving_the_job = "Retiro",
-  onboarding = "Vinculación",
-  paid_vacations = "Vacaciones Pagadas",
-  position_transfer = "Traslado de cargo",
-  pqr = "PQR",
-  salary_increase = "Ascenso salarial",
-  unpaid_leave = "Licencia no remunerada",
-  vacations_enjoyed = "Vacaciones Disfrutadas",
-}
+import { labels } from "@i18n/labels";
 
-export interface HumanResourceRequestBlockingPerTask {
-  blockType: string;
-  description: string;
-  errorId: string;
-  registrationDate: string;
-  taskManagingId: string;
-}
+// ---- TIPOS DE SOLICITUD ----
+export const ERequestType = {
+  absence: labels.types.requestTypes.absence,
+  certification: labels.types.requestTypes.certification,
+  disability: labels.types.requestTypes.disability,
+  leave: labels.types.requestTypes.leave,
+  leaving_the_job: labels.types.requestTypes.leaving_the_job,
+  onboarding: labels.types.requestTypes.onboarding,
+  paid_vacations: labels.types.requestTypes.paid_vacations,
+  position_transfer: labels.types.requestTypes.position_transfer,
+  pqr: labels.types.requestTypes.pqr,
+  salary_increase: labels.types.requestTypes.salary_increase,
+  unpaid_leave: labels.types.requestTypes.unpaid_leave,
+  vacations_enjoyed: labels.types.requestTypes.vacations_enjoyed,
+} as const;
 
-export enum TaskNameMapping {
-  update_personal_details = "Actualizar datos generales del Empleado",
-  update_contact_information = "Actualizar datos de contacto del empleado",
-  update_onboarding_information = "Actualizar datos de vinculación",
-  health_screening_management = "Gestionar exámenes médicos",
-  update_employee_references = "Actualizar referencias del empleado",
-  update_compensation_info = "Actualizar asignaciones de la remuneración del empleado",
-  manage_signatures = "Gestionar firmas",
-  manage_user_accounts_for_office_applications = "Gestionar cuentas de usuario para aplicaciones de oficina",
-  manage_social_security_enrollment = "Gestionar Afiliacion a Seguridad Social",
-  confirm_start_date = "Confirmar fecha de inicio laboral",
-  approve_request = "Aprobar Solicitud",
-  verify_viability_of_request = "Verificar viabilidad de la solicitud",
-  confirm_vacation_completion = "Confirmar el disfrute de las vacaciones",
-  generate_certification = "Generar certificación",
-  send_self_registration_invitation_to_email = "Enviar invitacion de autoregistro al correo",
-  monitor_completed_registration = "Monitorear registro completado",
-}
+export type ERequestType = (typeof ERequestType)[keyof typeof ERequestType];
 
+// ---- OBJETOS DERIVADOS ----
 export const requestTypeMap: Record<ERequestType, string> = {
   [ERequestType.absence]: "absence",
   [ERequestType.certification]: "certification",
@@ -56,43 +35,95 @@ export const requestTypeMap: Record<ERequestType, string> = {
 };
 
 export const requestTypeLabels: Record<ERequestType, string> = {
-  [ERequestType.absence]: "Ausencia",
-  [ERequestType.certification]: "Certificación",
-  [ERequestType.disability]: "Incapacidad",
-  [ERequestType.leave]: "Permiso",
-  [ERequestType.leaving_the_job]: "Retiro",
-  [ERequestType.onboarding]: "Vinculación",
-  [ERequestType.paid_vacations]: "Vacaciones Pagadas",
-  [ERequestType.position_transfer]: "Traslado de cargo",
-  [ERequestType.pqr]: "PQR",
-  [ERequestType.salary_increase]: "Ascenso salarial",
-  [ERequestType.unpaid_leave]: "Licencia no remunerada",
-  [ERequestType.vacations_enjoyed]: "Vacaciones Disfrutadas",
+  [ERequestType.absence]: labels.types.requestTypes.absence,
+  [ERequestType.certification]: labels.types.requestTypes.certification,
+  [ERequestType.disability]: labels.types.requestTypes.disability,
+  [ERequestType.leave]: labels.types.requestTypes.leave,
+  [ERequestType.leaving_the_job]: labels.types.requestTypes.leaving_the_job,
+  [ERequestType.onboarding]: labels.types.requestTypes.onboarding,
+  [ERequestType.paid_vacations]: labels.types.requestTypes.paid_vacations,
+  [ERequestType.position_transfer]: labels.types.requestTypes.position_transfer,
+  [ERequestType.pqr]: labels.types.requestTypes.pqr,
+  [ERequestType.salary_increase]: labels.types.requestTypes.salary_increase,
+  [ERequestType.unpaid_leave]: labels.types.requestTypes.unpaid_leave,
+  [ERequestType.vacations_enjoyed]: labels.types.requestTypes.vacations_enjoyed,
 };
 
-export enum ETaskStatus {
-  assigned = "Asignada",
-  executed = "Ejecutada",
-}
+// ---- TAREAS ----
+export const TaskNameMapping = {
+  update_personal_details: labels.types.taskNames.update_personal_details,
+  update_contact_information: labels.types.taskNames.update_contact_information,
+  update_onboarding_information:
+    labels.types.taskNames.update_onboarding_information,
+  health_screening_management:
+    labels.types.taskNames.health_screening_management,
+  update_employee_references: labels.types.taskNames.update_employee_references,
+  update_compensation_info: labels.types.taskNames.update_compensation_info,
+  manage_signatures: labels.types.taskNames.manage_signatures,
+  manage_user_accounts_for_office_applications:
+    labels.types.taskNames.manage_user_accounts_for_office_applications,
+  manage_social_security_enrollment:
+    labels.types.taskNames.manage_social_security_enrollment,
+  confirm_start_date: labels.types.taskNames.confirm_start_date,
+  approve_request: labels.types.taskNames.approve_request,
+  verify_viability_of_request:
+    labels.types.taskNames.verify_viability_of_request,
+  confirm_vacation_completion:
+    labels.types.taskNames.confirm_vacation_completion,
+  generate_certification: labels.types.taskNames.generate_certification,
+  send_self_registration_invitation_to_email:
+    labels.types.taskNames.send_self_registration_invitation_to_email,
+  monitor_completed_registration:
+    labels.types.taskNames.monitor_completed_registration,
+} as const;
 
-export enum HumanResourceRequestStatus {
-  closed = "Cerrada",
-  rejected = "Rechazada",
-  canceled = "Cancelada",
-  supervisor_approval = "Aprobación Jefe Inmediato",
-  HR_compliance_verification = "Verificación en Gestión Humana",
-  confirmation_of_vacation_taken = "Confirmación Disfrute de vacaciones",
-  successfully_processed = "Tramitada con Éxito",
-  certification_generation = "Generación de la certificación",
-  onboarding_in_progress = "Vinculación en Progreso",
-}
+export type TaskNameMapping =
+  (typeof TaskNameMapping)[keyof typeof TaskNameMapping];
 
-export enum ERequestStatus {
-  canceled = "Cancelado",
-  closed = "Cerrado",
-  finalized = "Finalizado",
-  supervisor_approval = "En progreso",
-  rejected = "Rechazado",
+// ---- ESTADOS DE TAREA ----
+export const ETaskStatus = {
+  assigned: labels.types.taskStatus.assigned,
+  executed: labels.types.taskStatus.executed,
+} as const;
+
+export type ETaskStatus = (typeof ETaskStatus)[keyof typeof ETaskStatus];
+
+// ---- ESTADOS DE SOLICITUD ----
+export const HumanResourceRequestStatus = {
+  closed: labels.types.requestStatus.closed,
+  rejected: labels.types.requestStatus.rejected,
+  canceled: labels.types.requestStatus.canceled,
+  supervisor_approval: labels.types.requestStatus.supervisor_approval,
+  HR_compliance_verification:
+    labels.types.requestStatus.HR_compliance_verification,
+  confirmation_of_vacation_taken:
+    labels.types.requestStatus.confirmation_of_vacation_taken,
+  successfully_processed: labels.types.requestStatus.successfully_processed,
+  certification_generation: labels.types.requestStatus.certification_generation,
+  onboarding_in_progress: labels.types.requestStatus.onboarding_in_progress,
+} as const;
+
+export type HumanResourceRequestStatus =
+  (typeof HumanResourceRequestStatus)[keyof typeof HumanResourceRequestStatus];
+
+export const ERequestStatus = {
+  canceled: labels.types.simpleRequestStatus.canceled,
+  closed: labels.types.simpleRequestStatus.closed,
+  finalized: labels.types.simpleRequestStatus.finalized,
+  supervisor_approval: labels.types.simpleRequestStatus.supervisor_approval,
+  rejected: labels.types.simpleRequestStatus.rejected,
+} as const;
+
+export type ERequestStatus =
+  (typeof ERequestStatus)[keyof typeof ERequestStatus];
+
+// ---- INTERFACES ----
+export interface HumanResourceRequestBlockingPerTask {
+  blockType: string;
+  description: string;
+  errorId: string;
+  registrationDate: string;
+  taskManagingId: string;
 }
 
 export interface IUnifiedHumanResourceRequestData {
@@ -123,7 +154,7 @@ export interface TaskToManageHumanResourceRequest {
   humanResourceRequestId: string;
   taskCode: string;
   taskManagingId: string;
-  taskName: string;
+  taskName: TaskNameMapping;
   taskStatus: ETaskStatus;
 }
 
