@@ -287,6 +287,7 @@ function AppPage(props: AppPageProps) {
                 actions={actions}
                 collapse
                 footerLogo={finalLogo}
+                footerLogoWidth="55%"
               />
             )}
 

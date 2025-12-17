@@ -53,7 +53,8 @@ export function ProtectedRoutes() {
       !isAuthenticated &&
       !hasPortalError &&
       !hasManagersError &&
-      authConfig
+      authConfig &&
+      window.location.pathname !== "/logout"
     ) {
       loginWithRedirect();
     }
