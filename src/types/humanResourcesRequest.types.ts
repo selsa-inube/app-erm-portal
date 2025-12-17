@@ -1,6 +1,5 @@
 import { labels } from "@i18n/labels";
 
-// ---- TIPOS DE SOLICITUD ----
 export const ERequestType = {
   absence: labels.types.requestTypes.absence,
   certification: labels.types.requestTypes.certification,
@@ -18,7 +17,6 @@ export const ERequestType = {
 
 export type ERequestType = (typeof ERequestType)[keyof typeof ERequestType];
 
-// ---- OBJETOS DERIVADOS ----
 export const requestTypeMap: Record<ERequestType, string> = {
   [ERequestType.absence]: "absence",
   [ERequestType.certification]: "certification",
@@ -49,7 +47,6 @@ export const requestTypeLabels: Record<ERequestType, string> = {
   [ERequestType.vacations_enjoyed]: labels.types.requestTypes.vacations_enjoyed,
 };
 
-// ---- TAREAS ----
 export const TaskNameMapping = {
   update_personal_details: labels.types.taskNames.update_personal_details,
   update_contact_information: labels.types.taskNames.update_contact_information,
@@ -80,7 +77,6 @@ export const TaskNameMapping = {
 export type TaskNameMapping =
   (typeof TaskNameMapping)[keyof typeof TaskNameMapping];
 
-// ---- ESTADOS DE TAREA ----
 export const ETaskStatus = {
   assigned: labels.types.taskStatus.assigned,
   executed: labels.types.taskStatus.executed,
@@ -88,7 +84,6 @@ export const ETaskStatus = {
 
 export type ETaskStatus = (typeof ETaskStatus)[keyof typeof ETaskStatus];
 
-// ---- ESTADOS DE SOLICITUD ----
 export const HumanResourceRequestStatus = {
   closed: labels.types.requestStatus.closed,
   rejected: labels.types.requestStatus.rejected,
@@ -117,7 +112,6 @@ export const ERequestStatus = {
 export type ERequestStatus =
   (typeof ERequestStatus)[keyof typeof ERequestStatus];
 
-// ---- INTERFACES ----
 export interface HumanResourceRequestBlockingPerTask {
   blockType: string;
   description: string;
