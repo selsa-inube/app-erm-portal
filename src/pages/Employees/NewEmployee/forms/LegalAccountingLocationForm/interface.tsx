@@ -5,6 +5,11 @@ import { Stack, Button, Grid, useMediaQuery, Select } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 import { isRequired } from "@utils/forms";
 
+import {
+  proyectOptions,
+  zonalSegmentationOptions,
+  costCenterOptions,
+} from "./config/formConfig";
 import { ILegalAccountingLocation } from "./types";
 import { StyledContainer } from "./styles";
 
@@ -58,11 +63,11 @@ function LegalAccountingLocationFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "proyect")}
-                onChange={(value) => {
-                  void formik.setFieldValue("proyect", value);
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
                 }}
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={proyectOptions}
               />
 
               <Select
@@ -76,11 +81,11 @@ function LegalAccountingLocationFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "zonalSegmentation")}
-                onChange={(value) => {
-                  void formik.setFieldValue("zonalSegmentation", value);
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
                 }}
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={zonalSegmentationOptions}
               />
 
               <Select
@@ -94,11 +99,11 @@ function LegalAccountingLocationFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "costCenter")}
-                onChange={(value) =>
-                  void formik.setFieldValue("costCenter", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={costCenterOptions}
               />
             </Grid>
           </Stack>

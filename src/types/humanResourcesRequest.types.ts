@@ -107,6 +107,39 @@ export interface IUnifiedHumanResourceRequestData {
   startDateEnyoment?: string;
   certificationType?: string;
   addressee?: string;
+  motive?: string;
+  subMotive?: string;
+  motiveDetails?: string;
+  startDate?: string;
+  daysDuration?: string;
+  hoursDuration?: string;
+  startTime?: string;
+  documents?: {
+    title: string;
+    required: boolean;
+    attachedFiles?: File[];
+  }[];
+  id?: string;
+  identificationNumber?: string;
+  names?: string;
+  lastNames?: string;
+  attachedFile?: File | null;
+  normativeFramework?: string;
+  endDate?: string;
+  company?: string;
+  workingShift?: string;
+  team?: string;
+  position?: string;
+  salaryProfile?: string;
+  jobMode?: string;
+  proyect?: string;
+  zonalSegmentation?: string;
+  costCenter?: string;
+  assignments?: {
+    title: string;
+    assignment: string;
+    value: string;
+  }[];
 }
 
 export interface HumanResourceRequestTraceability {
