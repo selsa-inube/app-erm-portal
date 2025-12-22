@@ -23,6 +23,15 @@ export function useRequestNavigation() {
           isSuccess: true,
         },
       });
+    } else if (typeRequest === "onboarding") {
+      navigate("/contracts", {
+        state: {
+          showFlag: true,
+          flagTitle: "Solicitud enviada",
+          flagMessage: "La solicitud de vinculacion fue enviada exitosamente.",
+          isSuccess: true,
+        },
+      });
     }
   };
 

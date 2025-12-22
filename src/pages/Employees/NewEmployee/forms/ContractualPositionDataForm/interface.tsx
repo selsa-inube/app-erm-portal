@@ -13,6 +13,16 @@ import { spacing } from "@design/tokens/spacing";
 import { getFieldState, isRequired } from "@utils/forms";
 import { labels } from "@i18n/labels";
 
+import {
+  normativeFrameworkOptions,
+  contractTypeOptions,
+  companyOptions,
+  workingShiftOptions,
+  teamOptions,
+  positionOptions,
+  salaryProfileOptions,
+  jobModeOptions,
+} from "./config/formConfig";
 import { IContractualPositionData } from "./types";
 import { StyledContainer } from "./styles";
 
@@ -69,11 +79,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "normativeFramework")}
-                onChange={(value) =>
-                  void formik.setFieldValue("normativeFramework", value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                }}
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={normativeFrameworkOptions}
               />
 
               <Select
@@ -87,11 +97,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "contractType")}
-                onChange={(value) =>
-                  void formik.setFieldValue("contractType", value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                }}
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={contractTypeOptions}
               />
 
               <Date
@@ -135,11 +145,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "company")}
-                onChange={(value) =>
-                  void formik.setFieldValue("company", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={companyOptions}
               />
 
               <Select
@@ -153,11 +163,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "workingShift")}
-                onChange={(value) =>
-                  void formik.setFieldValue("workingShift", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={workingShiftOptions}
               />
 
               <Select
@@ -171,9 +181,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "team")}
-                onChange={(value) => void formik.setFieldValue("team", value)}
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
+                }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={teamOptions}
               />
 
               <Select
@@ -187,11 +199,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "position")}
-                onChange={(value) =>
-                  void formik.setFieldValue("position", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={positionOptions}
               />
 
               <Select
@@ -205,11 +217,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "salaryProfile")}
-                onChange={(value) =>
-                  void formik.setFieldValue("salaryProfile", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={salaryProfileOptions}
               />
 
               <Select
@@ -223,11 +235,11 @@ function ContractualPositionDataFormUI(
                 size="compact"
                 fullwidth
                 required={isRequired(validationSchema, "jobMode")}
-                onChange={(value) =>
-                  void formik.setFieldValue("jobMode", value)
+                onChange={(name, value) =>
+                  void formik.setFieldValue(name, value)
                 }
                 onBlur={formik.handleBlur}
-                options={[]}
+                options={jobModeOptions}
               />
             </Grid>
           </Stack>

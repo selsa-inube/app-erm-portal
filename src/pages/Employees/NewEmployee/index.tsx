@@ -1,13 +1,15 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
-import { Logger } from "@utils/logger";
+import {
+  ERequestType,
+  IUnifiedHumanResourceRequestData,
+} from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { AlertCardProps } from "@components/data/AlertCard";
 import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
-import { labels } from "@i18n/labels";
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { NewEmployeeUI } from "./interface";
 import { newEmployeeSteps } from "./config/assisted.config";
@@ -16,56 +18,57 @@ import { IContractualPositionData } from "./forms/ContractualPositionDataForm/ty
 import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
 import { IAssignment, ModalState } from "./types";
 
-function NewEmployee() {
-  const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+function useFormManagement() {
+  type FormValues = IPersonalDataEntry &
+    IContractualPositionData &
+    ILegalAccountingLocation & {
+      assignments: IAssignment[];
+    } & Pick<
+      IUnifiedHumanResourceRequestData,
+      "contractId" | "contractNumber" | "businessName" | "observationEmployee"
+    >;
 
-  const [personalData, setPersonalData] = useState<IPersonalDataEntry>({
+  const [formValues, setFormValues] = useState<FormValues>({
     id: "",
     identificationNumber: "",
     lastNames: "",
     names: "",
     attachedFile: undefined,
+
+    normativeFramework: "",
+    contractType: "",
+    startDate: "",
+    endDate: "",
+    company: "",
+    workingShift: "",
+    team: "",
+    position: "",
+    salaryProfile: "",
+    jobMode: "",
+
+    proyect: "",
+    zonalSegmentation: "",
+    costCenter: "",
+
+    contractId: "",
+    contractNumber: "",
+    businessName: "",
+    observationEmployee: "",
+
+    assignments: [
+      {
+        title: "Asignación 1",
+        assignment: "Salario básico",
+        value: "$ 1.800.000",
+      },
+      {
+        title: "Asignación 2",
+        assignment: "Auxilio de conectividad",
+        value: "$ 240.000",
+      },
+    ],
   });
 
-  const [contractualPositionData, setContractualPositionData] =
-    useState<IContractualPositionData>({
-      id: "",
-      normativeFramework: "",
-      contractType: "",
-      startDate: "",
-      endDate: "",
-      company: "",
-      workingShift: "",
-      team: "",
-      position: "",
-      salaryProfile: "",
-      jobMode: "",
-    });
-
-  const [legalAccountingLocation, setLegalAccountingLocation] =
-    useState<ILegalAccountingLocation>({
-      proyect: "",
-      zonalSegmentation: "",
-      costCenter: "",
-    });
-
-  const [assignments, setAssignments] = useState<IAssignment[]>([
-    {
-      title: labels.employee.newEmployee.assignments.basicSalary.title,
-      assignment:
-        labels.employee.newEmployee.assignments.basicSalary.assignment,
-      value: "$ 1.800.000",
-    },
-    {
-      title: labels.employee.newEmployee.assignments.connectivitySubsidy.title,
-      assignment:
-        labels.employee.newEmployee.assignments.connectivitySubsidy.assignment,
-      value: "$ 240.000",
-    },
-  ]);
-
-  const [requirements] = useState<AlertCardProps[]>(mockAlertCards);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
   const personalDataRef = useRef<FormikProps<IPersonalDataEntry>>(null);
@@ -74,69 +77,146 @@ function NewEmployee() {
   const legalAccountingLocationFormRef =
     useRef<FormikProps<ILegalAccountingLocation>>(null);
 
+  const updateFormValues = (currentStep: number) => {
+    if (currentStep === 1 && personalDataRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        ...personalDataRef.current!.values,
+      }));
+      setIsCurrentFormValid(personalDataRef.current.isValid);
+    }
+
+    if (currentStep === 2 && contractualPositionDataFormRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        ...contractualPositionDataFormRef.current!.values,
+      }));
+      setIsCurrentFormValid(contractualPositionDataFormRef.current.isValid);
+    }
+
+    if (currentStep === 3 && legalAccountingLocationFormRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        ...legalAccountingLocationFormRef.current!.values,
+      }));
+      setIsCurrentFormValid(legalAccountingLocationFormRef.current.isValid);
+    }
+  };
+
+  return {
+    formValues,
+    setFormValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    personalDataRef,
+    contractualPositionDataFormRef,
+    legalAccountingLocationFormRef,
+    updateFormValues,
+  };
+}
+
+function useModalManagement() {
   const [modalState, setModalState] = useState<ModalState>({
     isSendModalVisible: false,
     isRequestInfoModalVisible: false,
   });
 
-  const updateFormValues = () => {
-    if (currentStep === 1 && personalDataRef.current) {
-      setPersonalData(personalDataRef.current.values);
-      setIsCurrentFormValid(personalDataRef.current.isValid);
-    } else if (currentStep === 2 && contractualPositionDataFormRef.current) {
-      setContractualPositionData(contractualPositionDataFormRef.current.values);
-      setIsCurrentFormValid(contractualPositionDataFormRef.current.isValid);
-    } else if (currentStep === 3 && legalAccountingLocationFormRef.current) {
-      setLegalAccountingLocation(legalAccountingLocationFormRef.current.values);
-      setIsCurrentFormValid(legalAccountingLocationFormRef.current.isValid);
-    }
+  const openSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
+  const closeSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
+  const openInfoModal = () =>
+    setModalState({
+      isSendModalVisible: false,
+      isRequestInfoModalVisible: true,
+    });
+
+  const closeInfoModal = () =>
+    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
   };
+}
+
+function NewEmployee() {
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [requirements] = useState<AlertCardProps[]>(mockAlertCards);
+
+  const {
+    formValues,
+    setFormValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    personalDataRef,
+    contractualPositionDataFormRef,
+    legalAccountingLocationFormRef,
+    updateFormValues,
+  } = useFormManagement();
+
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
+
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
+  const { requestNum, submitRequestHandler, navigateAfterSubmission } =
+    useRequestSubmission(
+      formValues,
+      ERequestType.onboarding,
+      userCodeInCharge,
+      userNameInCharge,
+    );
 
   const handleNextStep = () => {
-    updateFormValues();
+    updateFormValues(currentStep);
     setCurrentStep((prev) => prev + 1);
   };
 
   const handlePreviousStep = () => {
     if (currentStep > 1) {
-      updateFormValues();
+      updateFormValues(currentStep);
       setCurrentStep((prev) => prev - 1);
     }
   };
 
   const handleFinishAssisted = () => {
-    updateFormValues();
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
-
-    Logger.info("NewEmployee | Finalizar vinculación asistida", {
-      personalData,
-      contractualPositionData,
-      legalAccountingLocation,
-      assignments,
-    });
+    updateFormValues(currentStep);
+    openSendModal();
   };
 
-  const handleCloseSendModal = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
-  };
+  const handleConfirmSendModal = async () => {
+    const isSuccess = await submitRequestHandler();
 
-  const handleConfirmSendModal = () => {
-    setModalState({
-      isSendModalVisible: false,
-      isRequestInfoModalVisible: true,
-    });
+    if (isSuccess) {
+      closeSendModal();
+      openInfoModal();
+    } else {
+      closeSendModal();
+    }
   };
 
   const handleSubmitRequestInfoModal = () => {
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/employees", {
-      state: {
-        showFlag: true,
-        flagTitle: labels.employee.newEmployee.success.flagTitle,
-        flagMessage: labels.employee.newEmployee.success.flagMessage,
-        isSuccess: true,
-      },
-    });
+    closeInfoModal();
+    navigateAfterSubmission("onboarding");
+  };
+
+  const handleAssignmentsChange = (assignments: IAssignment[]) => {
+    setFormValues((prev) => ({
+      ...prev,
+      assignments,
+    }));
   };
 
   return (
@@ -146,15 +226,15 @@ function NewEmployee() {
         currentStep={currentStep}
         isCurrentFormValid={isCurrentFormValid}
         personalDataRef={personalDataRef}
-        initialPersonalDataValues={personalData}
+        initialPersonalDataValues={formValues}
         contractualPositionDataFormRef={contractualPositionDataFormRef}
-        initialContractualPositionValues={contractualPositionData}
+        initialContractualPositionValues={formValues}
         legalAccountingLocationFormRef={legalAccountingLocationFormRef}
-        initialLegalAccountingLocationValues={legalAccountingLocation}
-        assignments={assignments}
+        initialLegalAccountingLocationValues={formValues}
+        assignments={formValues.assignments}
         requirements={requirements}
         setCurrentStep={setCurrentStep}
-        onAssignmentsChange={setAssignments}
+        onAssignmentsChange={handleAssignmentsChange}
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePreviousStep}
         handleFinishAssisted={handleFinishAssisted}
@@ -163,20 +243,20 @@ function NewEmployee() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          title={labels.employee.newEmployee.finishModal.title}
-          descriptionText={labels.employee.newEmployee.finishModal.description}
-          buttonText={labels.employee.newEmployee.finishModal.button}
+          title="Finalizar solicitud"
+          descriptionText="¿Deseas enviar la solicitud de vinculación?"
+          buttonText="Enviar solicitud"
           onSubmitButtonClick={handleConfirmSendModal}
-          onCloseModal={handleCloseSendModal}
-          onSecondaryButtonClick={handleCloseSendModal}
+          onCloseModal={closeSendModal}
+          onSecondaryButtonClick={closeSendModal}
         />
       )}
 
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
           iconAppearance="success"
-          requestId="##45678822"
-          staffName={labels.employee.requestInfoModal.staffName}
+          requestId={requestNum}
+          staffName={userNameInCharge ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />

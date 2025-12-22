@@ -5,7 +5,6 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { labels } from "@i18n/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
@@ -118,21 +117,13 @@ function NewCertification() {
   const userCodeInCharge = "User 1";
   const userNameInCharge = "Johan Daniel Garcia Nova";
 
-  const {
-    requestNum,
-    submitRequestHandler,
-    navigateAfterSubmission,
-    showErrorFlag,
-    errorMessage,
-    setShowErrorFlag,
-  } = useRequestSubmission(
-    formValues,
-    ERequestType.certification,
-    userCodeInCharge,
-    userNameInCharge,
-  );
-
-  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
+  const { requestNum, submitRequestHandler, navigateAfterSubmission } =
+    useRequestSubmission(
+      formValues,
+      ERequestType.certification,
+      userCodeInCharge,
+      userNameInCharge,
+    );
 
   const handleNextStep = () => {
     if (currentStep < newCCertificationApplication.length) {
@@ -154,7 +145,6 @@ function NewCertification() {
 
   const handleConfirmSendModal = async () => {
     updateFormValues();
-    setShowErrorFlag(false);
     const isSuccess = await submitRequestHandler();
 
     if (isSuccess) {

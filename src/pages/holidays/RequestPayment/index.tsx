@@ -7,7 +7,6 @@ import { labels } from "@i18n/labels";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { ERequestType } from "@ptypes/humanResourcesRequest.types";
@@ -119,20 +118,12 @@ function RequestPayment() {
   const userCodeInCharge = "User 1";
   const userNameInCharge = "Johan Daniel Garcia Nova";
 
-  const {
-    requestNum,
-    submitRequestHandler,
-    showErrorFlag,
-    errorMessage,
-    setShowErrorFlag,
-  } = useRequestSubmission(
+  const { requestNum, submitRequestHandler } = useRequestSubmission(
     formValues,
     ERequestType.paid_vacations,
     userCodeInCharge,
     userNameInCharge,
   );
-
-  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
     if (currentStep < requestPaymentSteps.length) {
@@ -152,7 +143,6 @@ function RequestPayment() {
   };
 
   const handleConfirmSendModal = async () => {
-    setShowErrorFlag(false);
     const isSuccess = await submitRequestHandler();
 
     if (isSuccess) {

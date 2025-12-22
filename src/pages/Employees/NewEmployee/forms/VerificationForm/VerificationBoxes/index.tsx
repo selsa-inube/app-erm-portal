@@ -1,8 +1,24 @@
 import { Grid } from "@inubekit/inubekit";
+
 import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { AlertCardProps } from "@components/data/AlertCard";
+import { formatDate } from "@utils/date";
 import { labels } from "@i18n/labels";
+
+import {
+  getNormativeFrameworkLabel,
+  getCompanyLabel,
+  getContractTypeLabel,
+  getCostCenterLabel,
+  getJobModeLabel,
+  getPositionLabel,
+  getProyectLabel,
+  getSalaryProfileLabel,
+  getTeamLabel,
+  getWorkingShiftLabel,
+  getZonalSegmentationLabel,
+} from "./config/config";
 
 import { IFormsUpdateData } from "../../../types";
 import { IPersonalDataEntry } from "../../PersonalDataForm/types";
@@ -55,52 +71,52 @@ const renderContractualPositionVerification = (
   >
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.normativeFramework}
-      value={values.normativeFramework}
+      value={getNormativeFrameworkLabel(values.normativeFramework)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.contractType}
-      value={values.contractType}
+      value={getContractTypeLabel(values.contractType)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.startDate}
-      value={values.startDate}
+      value={formatDate(values.startDate)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.endDate}
-      value={values.endDate}
+      value={formatDate(values.endDate)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.company}
-      value={values.company}
+      value={getCompanyLabel(values.company)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.workingShift}
-      value={values.workingShift}
+      value={getWorkingShiftLabel(values.workingShift)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.team}
-      value={values.team}
+      value={getTeamLabel(values.team)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.position}
-      value={values.position}
+      value={getPositionLabel(values.position)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.salaryProfile}
-      value={values.salaryProfile}
+      value={getSalaryProfileLabel(values.salaryProfile)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.contractualPositionForm.fields.jobMode}
-      value={values.jobMode}
+      value={getJobModeLabel(values.jobMode)}
       direction="column"
     />
   </Grid>
@@ -118,19 +134,19 @@ const renderLegalAccountingLocationVerification = (
   >
     <BoxAttribute
       label={labels.employee.legalAccountingLocationForm.fields.project}
-      value={values.proyect}
+      value={getProyectLabel(values.proyect)}
       direction="column"
     />
     <BoxAttribute
       label={
         labels.employee.legalAccountingLocationForm.fields.zonalSegmentation
       }
-      value={values.zonalSegmentation}
+      value={getZonalSegmentationLabel(values.zonalSegmentation)}
       direction="column"
     />
     <BoxAttribute
       label={labels.employee.legalAccountingLocationForm.fields.costCenter}
-      value={values.costCenter}
+      value={getCostCenterLabel(values.costCenter)}
       direction="column"
     />
   </Grid>
@@ -196,21 +212,25 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
         )}
+
       {stepKey === 2 &&
         renderContractualPositionVerification(
           updatedData.contractualPositionData.values,
           isTablet,
         )}
+
       {stepKey === 3 &&
         renderLegalAccountingLocationVerification(
           updatedData.legalAccountingLocation.values,
           isTablet,
         )}
+
       {stepKey === 4 &&
         renderAssignmentsVerification(
           updatedData.assignmentForm.values,
           isTablet,
         )}
+
       {stepKey === 5 &&
         renderUnmetRequirementsVerification(
           updatedData.unmetRequirements.values,

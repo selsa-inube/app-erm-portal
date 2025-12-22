@@ -5,7 +5,6 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { labels } from "@i18n/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import {
   IUnifiedHumanResourceRequestData,
@@ -120,21 +119,13 @@ function RequestEnjoyment() {
   const userCodeInCharge = "User 1";
   const userNameInCharge = "Johan Daniel Garcia Nova";
 
-  const {
-    requestNum,
-    submitRequestHandler,
-    navigateAfterSubmission,
-    showErrorFlag,
-    errorMessage,
-    setShowErrorFlag,
-  } = useRequestSubmission(
-    formValues,
-    ERequestType.vacations_enjoyed,
-    userCodeInCharge,
-    userNameInCharge,
-  );
-
-  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
+  const { requestNum, submitRequestHandler, navigateAfterSubmission } =
+    useRequestSubmission(
+      formValues,
+      ERequestType.vacations_enjoyed,
+      userCodeInCharge,
+      userNameInCharge,
+    );
 
   const handleNextStep = () => {
     if (currentStep) {
@@ -154,7 +145,6 @@ function RequestEnjoyment() {
   };
 
   const handleConfirmSendModal = async () => {
-    setShowErrorFlag(false);
     const isSuccess = await submitRequestHandler();
 
     if (isSuccess) {
