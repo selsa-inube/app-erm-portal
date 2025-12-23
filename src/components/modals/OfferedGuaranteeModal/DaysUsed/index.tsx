@@ -1,6 +1,7 @@
 import { Stack, Text } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
+import { labels } from "@i18n/labels";
 import { useAppContext } from "@context/AppContext";
 import { formatDate } from "@utils/date";
 import { capitalizeWords } from "@utils/text";
@@ -14,13 +15,13 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
   const { selectedEmployee } = useAppContext();
 
   if (!selectedEmployee) {
-    return <Text>No hay empleado seleccionado.</Text>;
+    return <Text>{labels.modal.daysUsed.noEmployeeSelected}</Text>;
   }
 
   const contracts = selectedEmployee.employmentContracts ?? [];
 
   if (contracts.length === 0) {
-    return <Text>No hay contratos disponibles para este empleado.</Text>;
+    return <Text>{labels.modal.daysUsed.noContracts}</Text>;
   }
 
   const allVacations = contracts.flatMap((contract) =>
@@ -42,7 +43,7 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>
         <Text type="body" size="medium" appearance="gray">
-          Vacaciones utilizadas
+          {labels.modal.daysUsed.title}
         </Text>
         <Text type="title" weight="bold" size="large" appearance="primary">
           {totalPendingDays}
@@ -50,8 +51,10 @@ export function DaysUsed({ isMobile }: { isMobile: boolean }) {
       </Stack>
 
       {contracts.map((contract, index) => {
-        const businessName = contract.businessName ?? "Empresa desconocida";
-        const contractType = contract.contractType ?? "Contrato desconocido";
+        const businessName =
+          contract.businessName ?? labels.modal.daysUsed.unknownCompany;
+        const contractType =
+          contract.contractType ?? labels.modal.daysUsed.unknownContract;
 
         const contractVacations = contract.vacationsHistory.map((vacation) => ({
           startDate: formatDate(vacation.startDateVacationEnjoyment),

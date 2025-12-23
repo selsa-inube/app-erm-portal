@@ -8,6 +8,7 @@ import {
 } from "@inubekit/inubekit";
 import { createPortal } from "react-dom";
 
+import { labels } from "@i18n/labels";
 import { AssistedProcess } from "@components/feedback/AssistedProcess";
 
 import { StyledModal, StyledContainer } from "./styles";
@@ -26,9 +27,9 @@ export interface ProcessingRequestModalProps {
 
 export function ProcessingRequestModal(props: ProcessingRequestModalProps) {
   const {
-    buttonText = "Entendido",
-    description = "Descripcion por defecto",
-    title = "Procesando solicitud",
+    buttonText = labels.modal.processingRequest.buttonText,
+    description = labels.modal.processingRequest.description,
+    title = labels.modal.processingRequest.title,
     portalId = "portal",
     currentStepId = 1,
     steps,
@@ -39,9 +40,7 @@ export function ProcessingRequestModal(props: ProcessingRequestModalProps) {
   const portalNode = document.getElementById(portalId);
 
   if (!portalNode) {
-    throw new Error(
-      "The portal node is not defined. Ensure the specific node exists in the DOM.",
-    );
+    throw new Error(labels.modal.requestDetail.errorPortalNode);
   }
 
   const lastStepId = steps[steps.length - 1]?.id;

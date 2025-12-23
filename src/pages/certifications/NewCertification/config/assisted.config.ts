@@ -1,58 +1,10 @@
 import { IAssistedStep, IOption } from "@inubekit/inubekit";
+import { labels } from "@i18n/labels";
 
-export const newCCertificationApplication: IAssistedStep[] = [
-  {
-    id: 1,
-    number: 1,
-    name: "Requisitos no cumplidos",
-    description: "Proporciona información acerca de tu solicitud.",
-  },
-  {
-    id: 2,
-    number: 2,
-    name: "Información general",
-    description: "Revisa los requisitos para el disfrute de vacaciones.",
-  },
-  {
-    id: 3,
-    number: 3,
-    name: "Verificación",
-    description: "Verifica la información proporcionada.",
-  },
-];
+export const newCCertificationApplication: IAssistedStep[] =
+  labels.certifications.newCertificationSteps;
 
-export const certificationOptions: IOption[] = [
-  {
-    id: "1",
-    label: "Certificado de servidor",
-    value: "certificado de servidor",
-  },
-  {
-    id: "2",
-    label: "Certificado de pertenencia a empresa",
-    value: "certificado de pertenencia a empresa",
-  },
-  {
-    id: "3",
-    label: "Certificado de representante",
-    value: "certificado de representante",
-  },
-];
+export const certificationOptions: IOption[] =
+  labels.certifications.certificationOptions;
 
-export const contractOptions: IOption[] = [
-  {
-    id: "1",
-    label: "Contrato por obra o labor",
-    value: "contrato por obra o labor.",
-  },
-  {
-    id: "2",
-    label: "Contrato de trabajo a término fijo",
-    value: "contrato de trabajo a término fijo.",
-  },
-  {
-    id: "3",
-    label: "Contrato de trabajo a término indefinido",
-    value: "contrato de trabajo a término indefinido.",
-  },
-];
+export const contractOptions: IOption[] = labels.certifications.contractOptions;

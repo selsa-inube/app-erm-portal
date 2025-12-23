@@ -1,23 +1,28 @@
+import { labels } from "@i18n/labels";
+
 const breadcrumbs = {
-  label: "Solicitudes en trámite",
+  label: labels.requests.breadcrumbs.list,
   crumbs: [
     {
       path: "/",
-      label: "Inicio",
+      label: labels.requests.breadcrumbs.home,
       id: "/",
       isActive: false,
     },
     {
       path: "/requests",
-      label: "Solicitudes en trámite",
+      label: labels.requests.breadcrumbs.list,
       id: "/requests",
       isActive: true,
     },
   ],
   url: "/",
 };
+
 const RequestsNav: Record<string, { path: string }> = {
-  Vinculación: { path: "/requests/application-process" },
+  [labels.requests.navigation.vinculation]: {
+    path: "/requests/application-process",
+  },
 };
 
 export { breadcrumbs, RequestsNav };

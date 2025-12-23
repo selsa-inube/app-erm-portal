@@ -10,6 +10,7 @@ import {
 } from "@inubekit/inubekit";
 import { MdOutlineAdd } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { spacing } from "@design/tokens/spacing";
 import { AssignmentCard } from "@components/data/AssignmentCard";
 import { currencyFormat } from "@utils/forms/currency";
@@ -52,7 +53,9 @@ function AssignmentFormUI(props: AssignmentFormUIProps) {
     );
 
     const newAssignment: IAssignment = {
-      title: `Asignación ${assignments.length + 1}`,
+      title: `${labels.employee.assignmentsForm.assignmentTitle} ${
+        assignments.length + 1
+      }`,
       assignment: selectedOption?.label ?? values.assignment,
       value: currencyFormat(values.value),
     };
@@ -74,14 +77,14 @@ function AssignmentFormUI(props: AssignmentFormUIProps) {
           size={isMobile ? "small" : "large"}
           appearance="gray"
         >
-          Aún <b>NO</b> hay asignaciones. Define asignaciones con el botón.
+          {labels.employee.assignmentsForm.emptyTitle}
         </Text>
         <Button
           cursorHover
           iconBefore={<MdOutlineAdd />}
           onClick={handleOpenModal}
         >
-          Agregar asignación
+          {labels.employee.assignmentsForm.addAssignment}
         </Button>
       </Stack>
     </StyledContainer>
@@ -100,7 +103,7 @@ function AssignmentFormUI(props: AssignmentFormUIProps) {
           iconBefore={<MdOutlineAdd />}
           onClick={handleOpenModal}
         >
-          Agregar asignación
+          {labels.employee.assignmentsForm.addAssignment}
         </Button>
       )}
 
@@ -126,9 +129,11 @@ function AssignmentFormUI(props: AssignmentFormUIProps) {
   const renderNavigationButtons = () => (
     <Stack justifyContent="flex-end" gap={spacing.s250}>
       <Button onClick={handlePreviousStep} appearance="gray" variant="outlined">
-        Anterior
+        {labels.employee.assignmentsForm.previous}
       </Button>
-      <Button onClick={handleNextStep}>Siguiente</Button>
+      <Button onClick={handleNextStep}>
+        {labels.employee.assignmentsForm.next}
+      </Button>
     </Stack>
   );
 

@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
@@ -162,23 +163,23 @@ function RequestEnjoyment() {
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
   const breadcrumbs = {
-    label: "Solicitar disfrute",
+    label: labels.holidays.breadcrumbs.requestEnjoyment,
     crumbs: [
       {
         path: "/",
-        label: "Inicio",
+        label: labels.holidays.breadcrumbs.home,
         id: "/",
         isActive: false,
       },
       {
         path: "/holidays",
-        label: isTablet ? "..." : "Vacaciones",
+        label: isTablet ? "..." : labels.holidays.breadcrumbs.holidays,
         id: "/holidays",
         isActive: false,
       },
       {
         path: "/holidays/request-enjoyment",
-        label: "Solicitar disfrute",
+        label: labels.holidays.breadcrumbs.requestEnjoyment,
         id: "/holidays/request-enjoyment",
         isActive: true,
       },
@@ -212,7 +213,7 @@ function RequestEnjoyment() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de vacaciones?"
+          descriptionText={labels.holidays.sendEnjoymentModal.description}
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

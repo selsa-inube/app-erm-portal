@@ -18,6 +18,7 @@ import { IDaysUsedTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
+import { labels } from "@i18n/labels";
 
 interface DaysUsedTableProps {
   data: IDaysUsedTable[];
@@ -138,7 +139,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
       <Td colSpan={headers.length} align="center" type="custom">
         <Stack justifyContent="center">
           <Text type="label" size="large" appearance="gray">
-            Aún no has utilizado ningún día de vacaciones.
+            {labels.holidays.daysUsedTable.emptyState}
           </Text>
         </Stack>
       </Td>
@@ -167,7 +168,9 @@ function DaysUsedTable(props: DaysUsedTableProps) {
             <Col key={index} span={col.span} style={col.style} />
           ))}
         </Colgroup>
+
         <Thead>{renderHeaderRow()}</Thead>
+
         <Tbody>
           {loading
             ? renderLoadingRows()
@@ -175,6 +178,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
               ? renderEmptyState()
               : renderDataRows()}
         </Tbody>
+
         {!isMobile && data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">

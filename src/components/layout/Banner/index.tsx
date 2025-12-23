@@ -7,6 +7,7 @@ import {
   MdKeyboardArrowUp,
 } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/widgets/WidgetBanner";
 import { AlertWidgetBanner } from "@components/widgets/AlertsWidget";
@@ -102,7 +103,7 @@ function VinculationBanner(props: VinculationBannerProps) {
 
             <Stack gap={spacing.s075} alignItems="center">
               <Text size="small" appearance="gray">
-                Empleado
+                {labels.layout.banner.employeeLabel}
               </Text>
 
               <Icon

@@ -34,6 +34,7 @@ function useFormManagement() {
     lastNames: "",
     names: "",
     attachedFile: undefined,
+
     normativeFramework: "",
     contractType: "",
     startDate: "",
@@ -44,13 +45,16 @@ function useFormManagement() {
     position: "",
     salaryProfile: "",
     jobMode: "",
+
     proyect: "",
     zonalSegmentation: "",
     costCenter: "",
+
     contractId: "",
     contractNumber: "",
     businessName: "",
     observationEmployee: "",
+
     assignments: [
       {
         title: "Asignación 1",
@@ -80,13 +84,17 @@ function useFormManagement() {
         ...personalDataRef.current!.values,
       }));
       setIsCurrentFormValid(personalDataRef.current.isValid);
-    } else if (currentStep === 2 && contractualPositionDataFormRef.current) {
+    }
+
+    if (currentStep === 2 && contractualPositionDataFormRef.current) {
       setFormValues((prev) => ({
         ...prev,
         ...contractualPositionDataFormRef.current!.values,
       }));
       setIsCurrentFormValid(contractualPositionDataFormRef.current.isValid);
-    } else if (currentStep === 3 && legalAccountingLocationFormRef.current) {
+    }
+
+    if (currentStep === 3 && legalAccountingLocationFormRef.current) {
       setFormValues((prev) => ({
         ...prev,
         ...legalAccountingLocationFormRef.current!.values,
@@ -115,13 +123,16 @@ function useModalManagement() {
 
   const openSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
   const closeSendModal = () =>
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+
   const openInfoModal = () =>
     setModalState({
       isSendModalVisible: false,
       isRequestInfoModalVisible: true,
     });
+
   const closeInfoModal = () =>
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
 
@@ -232,9 +243,9 @@ function NewEmployee() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas finalizar la vinculación del empleado?"
-          title="Finalizar"
-          buttonText="Finalizar"
+          title="Finalizar solicitud"
+          descriptionText="¿Deseas enviar la solicitud de vinculación?"
+          buttonText="Enviar solicitud"
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

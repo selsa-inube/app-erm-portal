@@ -13,6 +13,7 @@ import {
 
 import { spacing } from "@design/tokens/spacing";
 import { formatFileSize } from "@utils/size";
+import { labels } from "@src/i18n/labels";
 
 import { File } from "../../components/File";
 import {
@@ -51,10 +52,10 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
         if (file.size <= MAX_FILE_SIZE) {
           setSelectedFile(file);
         } else {
-          alert("El archivo supera el tamaño máximo permitido de 2.5MB.");
+          alert(labels.employee.personalDataForm.resumeModal.errors.maxSize);
         }
       } else {
-        alert("Solo se permiten archivos PDF.");
+        alert(labels.employee.personalDataForm.resumeModal.errors.onlyPdf);
       }
     }
   };
@@ -89,10 +90,10 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
         if (file.size <= MAX_FILE_SIZE) {
           setSelectedFile(file);
         } else {
-          alert("El archivo supera el tamaño máximo permitido de 2.5MB.");
+          alert(labels.employee.personalDataForm.resumeModal.errors.maxSize);
         }
       } else {
-        alert("Solo se permiten archivos PDF.");
+        alert(labels.employee.personalDataForm.resumeModal.errors.onlyPdf);
       }
       e.dataTransfer.clearData();
     }
@@ -109,11 +110,11 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
       <StyledModal $smallScreen={isMobile} $selectedFile={!!selectedFile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="headline" size="small">
-            Adjuntar hoja de vida
+            {labels.employee.personalDataForm.resumeModal.title}
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.employee.personalDataForm.resumeModal.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -133,11 +134,11 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
         >
           <Icon icon={<MdOutlineCloudUpload />} appearance="gray" size="32px" />
           <Stack direction="column" alignItems="center">
-            <Text>Arrastra un documento</Text>
-            <Text>o</Text>
+            <Text> {labels.employee.personalDataForm.resumeModal.drag}</Text>
+            <Text>{labels.employee.personalDataForm.resumeModal.or}</Text>
           </Stack>
           <Button spacing="compact" onClick={handleBrowseClick}>
-            Busca un documento
+            {labels.employee.personalDataForm.resumeModal.browse}
           </Button>
           <input
             type="file"
@@ -148,15 +149,18 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           />
         </StyledAttachContainer>
         <Text size="medium" appearance="gray">
-          Peso máximo por archivo: 2.5MB
+          {labels.employee.personalDataForm.resumeModal.maxWeight}
         </Text>
         {selectedFile && (
           <>
             <Divider dashed />
             <Stack direction="column" gap={spacing.s300}>
-              <Text type="title" size="medium" weight="bold" appearance="gray">
-                Documentos adjuntos
-              </Text>
+              <Text
+                type="title"
+                size="medium"
+                weight="bold"
+                appearance="gray"
+              ></Text>
               <File
                 name={selectedFile.name}
                 size={formatFileSize(selectedFile.size)}
@@ -171,7 +175,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           gap={spacing.s250}
         >
           <Button onClick={onCloseModal} variant="outlined" appearance="gray">
-            Cancelar
+            {labels.employee.personalDataForm.resumeModal.cancel}
           </Button>
           <Button
             onClick={() => {
@@ -181,7 +185,7 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
             }}
             disabled={!selectedFile}
           >
-            Adjuntar
+            {labels.employee.personalDataForm.resumeModal.attach}
           </Button>
         </Stack>
       </StyledModal>

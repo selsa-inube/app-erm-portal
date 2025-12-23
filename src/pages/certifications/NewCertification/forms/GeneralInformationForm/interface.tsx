@@ -10,6 +10,7 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
@@ -84,10 +85,13 @@ const GeneralInformationFormUI = ({
             <Select
               name="certificationType"
               size="compact"
-              label="Tipo de certificación"
+              label={labels.certifications.titles.certifications}
               fullwidth
               options={certificationOptions}
-              placeholder="Selecciona de la lista"
+              placeholder={
+                labels.certifications.placeholders?.certificationType ??
+                "Seleccione"
+              }
               value={formik.values.certificationType ?? ""}
               onChange={(name, value) => {
                 void formik.setFieldValue(name, value);
@@ -98,10 +102,13 @@ const GeneralInformationFormUI = ({
               fullwidth
               id="addressee"
               required
-              label="Destinatario"
+              label={labels.certifications.verificationLabels.addressee}
               maxLength={60}
               name="addressee"
-              placeholder="Ej: A quien interese"
+              placeholder={
+                labels.certifications.placeholders?.addressee ??
+                "Ej: A quien interese"
+              }
               value={formik.values.addressee}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -110,11 +117,13 @@ const GeneralInformationFormUI = ({
 
           {contractOptions.length > 1 && (
             <Select
-              label="Contrato"
+              label={labels.certifications.verificationLabels.contract}
               name="contractId"
               id="contractId"
               options={contractOptions}
-              placeholder="Selecciona de la lista"
+              placeholder={
+                labels.certifications.placeholders?.contract ?? "Seleccione"
+              }
               value={formik.values.contractId}
               message={
                 typeof formik.errors.contractId === "string"
@@ -133,8 +142,11 @@ const GeneralInformationFormUI = ({
           )}
 
           <Textarea
-            label="Observaciones"
-            placeholder="Detalles a tener en cuenta."
+            label={labels.certifications.verificationLabels.observations}
+            placeholder={
+              labels.certifications.placeholders?.observations ??
+              "Detalles a tener en cuenta."
+            }
             name="observationEmployee"
             id="observationEmployee"
             value={formik.values.observationEmployee}
@@ -165,7 +177,7 @@ const GeneralInformationFormUI = ({
               variant="outlined"
               onClick={handlePreviousStep}
             >
-              Anterior
+              {labels.certifications.assistedControls.goBackText}
             </Button>
             <Button
               type="submit"
@@ -174,7 +186,7 @@ const GeneralInformationFormUI = ({
                 handleNextStep();
               }}
             >
-              Siguiente
+              {labels.certifications.assistedControls.goNextText}
             </Button>
           </Stack>
         )}

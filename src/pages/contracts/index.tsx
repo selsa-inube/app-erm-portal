@@ -10,6 +10,8 @@ import { ContractsNavConfig } from "./config/nav.config";
 import { ContractsUI } from "./interface";
 import { ModalType } from "./types";
 
+import { labels } from "@i18n/labels";
+
 interface ContractsProps {
   hasPendingRequest?: boolean;
 }
@@ -19,21 +21,16 @@ function Contracts(props: ContractsProps) {
 
   const { staffUseCasesData } = useAppContext();
   const selectedEmployee = useRedirectIfNoEmployee();
-
   if (!selectedEmployee) return null;
 
   const hasTerminatePrivilege =
     staffUseCasesData?.listOfUseCases?.includes("TerminateContract") ?? false;
-
   const hasRenewPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("RenewContract") ?? false;
-
   const hasModifyPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("ModifyContract") ?? false;
-
   const hasAddEmployeeLinkPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("AddEmployeeLink") ?? false;
-
   const hasDetailsPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("CheckContractDetails") ??
     false;
@@ -42,9 +39,7 @@ function Contracts(props: ContractsProps) {
   const contracts = employee?.employmentContracts ?? [];
 
   const contractCards = useMemo(() => {
-    if (!contracts || contracts.length === 0) {
-      return [];
-    }
+    if (!contracts || contracts.length === 0) return [];
     return transformEmploymentContractsToContractCards(
       contracts,
       selectedEmployee,
@@ -69,13 +64,18 @@ function Contracts(props: ContractsProps) {
     modify: false,
     detail: false,
   });
+
   const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
 
   const [infoModal, setInfoModal] = useState<{
     open: boolean;
     title: string;
     description: string;
-  }>({ open: false, title: "Información", description: "" });
+  }>({
+    open: false,
+    title: labels.contracts.modals.infoTitleDescription,
+    description: "",
+  });
 
   const assertNever = (value: string): never => {
     throw new Error(`Unhandled action type: ${value}`);
@@ -83,86 +83,76 @@ function Contracts(props: ContractsProps) {
 
   const openModal = (modal: ModalType) =>
     setModals((prev) => ({ ...prev, [modal]: true }));
-
   const closeModal = (modal: ModalType) =>
     setModals((prev) => ({ ...prev, [modal]: false }));
 
-  const handleTerminate = () => {
-    openModal("terminate");
-  };
-
-  const handleRenew = () => {
-    openModal("renew");
-  };
-
-  const handleModify = () => {
-    openModal("modify");
-  };
-
-  const handleAddVinculation = () => {
+  const handleTerminate = () => openModal("terminate");
+  const handleRenew = () => openModal("renew");
+  const handleModify = () => openModal("modify");
+  const handleAddVinculation = () =>
     window.open("/employees/new-employee", "_blank");
-  };
 
   const handleDetailsClick = (contract: ContractCardProps) => {
     if (!hasDetailsPrivilege) {
-      openInfoModal("No tiene privilegios para ver los detalles del contrato.");
+      openInfoModal(labels.contracts.modals.noDetailsPrivilege);
       return;
     }
-
     setSelectedContract(contract);
     openModal("detail");
   };
 
   const terminationOptions = contractCards
-    .filter((contract) => contract.isContractValid)
-    .map((contract, index) => ({
-      id: index.toString(),
-      label: `${contract.contractNumber} - ${contract.company}`,
-      value: index.toString(),
+    .filter((c) => c.isContractValid)
+    .map((c, i) => ({
+      id: i.toString(),
+      label: `${c.contractNumber} - ${c.company}`,
+      value: i.toString(),
     }));
 
   const renewOptions = contractCards
-    .filter((contract) => contract.endDate !== "Indefinido")
-    .map((contract, index) => ({
-      id: index.toString(),
-      label: `${contract.contractNumber} - ${contract.company}`,
-      value: index.toString(),
+    .filter((c) => c.endDate !== "Indefinido")
+    .map((c, i) => ({
+      id: i.toString(),
+      label: `${c.contractNumber} - ${c.company}`,
+      value: i.toString(),
     }));
 
-  const modifyOptions = contractCards.map((contract, index) => ({
-    id: index.toString(),
-    label: `${contract.contractNumber} - ${contract.company}`,
-    value: index.toString(),
+  const modifyOptions = contractCards.map((c, i) => ({
+    id: i.toString(),
+    label: `${c.contractNumber} - ${c.company}`,
+    value: i.toString(),
   }));
 
-  const handleSubmit = (action: ModalType) => () => {
-    closeModal(action);
-  };
+  const handleSubmit = (action: ModalType) => () => closeModal(action);
 
   const openInfoModal = (description: string) => {
-    setInfoModal({ open: true, title: "Información", description });
+    setInfoModal({
+      open: true,
+      title: labels.contracts.modals.infoTitleDescription,
+      description,
+    });
   };
 
   const getActionDescription = (action: string) => {
     switch (action) {
       case "terminate":
         return !hasTerminatePrivilege
-          ? "No tiene privilegios para terminar contratos."
-          : "No hay contrato vigente para terminar.";
+          ? labels.contracts.modals.noDetailsPrivilege
+          : labels.contracts.modals.noTerminateContract;
       case "renew":
-        return !hasRenewPrivilege
-          ? "No tiene privilegios para renovar contratos."
-          : !hasFixedEndDate
-            ? "No hay contrato a término fijo."
-            : "No hay contrato vigente para renovar.";
+        if (!hasRenewPrivilege)
+          return labels.contracts.modals.noDetailsPrivilege;
+        if (!hasFixedEndDate)
+          return labels.contracts.modals.noFixedTermContract;
+        return labels.contracts.modals.noRenewContract;
       case "modify":
         return !hasModifyPrivilege
-          ? "No tiene privilegios para modificar contratos."
-          : "No hay contrato vigente para modificar.";
+          ? labels.contracts.modals.noDetailsPrivilege
+          : labels.contracts.modals.noModifyContract;
       case "add":
         return !hasAddEmployeeLinkPrivilege
-          ? "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción."
-          : "No se puede agregar vinculación.";
+          ? labels.contracts.infoModal.addVinculationDisabled
+          : labels.contracts.modals.addVinculationBlocked;
       default:
         return assertNever(action);
     }

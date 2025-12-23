@@ -1,3 +1,5 @@
+import { labels } from "@i18n/labels";
+
 import { IHolidaysTable } from "./types";
 
 export const columns = [
@@ -21,21 +23,33 @@ export const headers: {
   style?: React.CSSProperties;
 }[] = [
   {
-    label: "Tipo de solicitud de vacaciones",
+    label: labels.holidays.requestsTable.headers.description,
     key: "description",
     style: { width: "auto" },
   },
-  { label: "Fecha de solicitud", key: "date", style: { width: "auto" } },
-  { label: "Cantidad de días hábiles", key: "days", style: { width: "auto" } },
-  { label: "Estado de la solicitud", key: "status", style: { width: "auto" } },
   {
-    label: "Ver detalles de la solicitud",
+    label: labels.holidays.requestsTable.headers.date,
+    key: "date",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.requestsTable.headers.days,
+    key: "days",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.requestsTable.headers.status,
+    key: "status",
+    style: { width: "auto" },
+  },
+  {
+    label: labels.holidays.requestsTable.headers.details,
     key: "details",
     action: true,
     style: { width: "60px" },
   },
   {
-    label: "Eliminar solicitud",
+    label: labels.holidays.requestsTable.headers.delete,
     key: "delete",
     action: true,
     style: { width: "60px" },
@@ -43,4 +57,5 @@ export const headers: {
 ];
 
 export const pageLength = 10;
-export const caption = "Solicitudes de vacaciones en trámite";
+
+export const caption = labels.holidays.requestsTable.caption;

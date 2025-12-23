@@ -1,50 +1,47 @@
+import { ReactNode } from "react";
+
 import * as MdIcons from "react-icons/md";
 import { IconType } from "react-icons";
 import { MdLogout } from "react-icons/md";
 import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
-import { ReactNode } from "react";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
+import { labels } from "@i18n/labels";
 
 const baseNavLinks = [
   {
     id: "vacacionesPortalErm",
-    label: "Vacaciones",
+    label: labels.config.nav.holidays.label,
     path: "/holidays",
-    description:
-      "Son los días de descanso remunerado que le corresponden al empleado por cada año trabajado.",
+    description: labels.config.nav.holidays.description,
     order: 1,
   },
   {
     id: "certificacionPortalErm",
-    label: "Certificaciones",
+    label: labels.config.nav.certifications.label,
     path: "/certifications",
-    description:
-      "Son documentos que acreditan la formación o experiencia laboral de un empleado.",
+    description: labels.config.nav.certifications.description,
     order: 2,
   },
   {
     id: "contratoPortalErm",
-    label: "Contratos",
+    label: labels.config.nav.contracts.label,
     path: "/contracts",
-    description:
-      "Son acuerdos legales entre el empleador y el empleado que establecen los términos de trabajo.",
+    description: labels.config.nav.contracts.description,
     order: 3,
   },
   {
     id: "cargoPortalErm",
-    label: "Cargos",
+    label: labels.config.nav.charges.label,
     path: "/charges",
-    description:
-      "Se refiere a las posiciones o roles que ocupan los empleados dentro de la estructura organizacional de la empresa.",
+    description: labels.config.nav.charges.description,
     order: 4,
   },
   {
     id: "solTramitePortalErm",
-    label: "Solicitudes en trámite",
+    label: labels.config.nav.requests.label,
     path: "/requests",
-    description:
-      "Son trámites o gestiones que están en proceso de ser aprobadas o completadas.",
+    description: labels.config.nav.requests.description,
     order: 5,
   },
 ];
@@ -54,7 +51,7 @@ const noop = () => undefined;
 const actions = [
   {
     id: "logout",
-    label: "Cerrar sesión",
+    label: labels.config.nav.logout.label,
     icon: <MdLogout />,
     action: () => {
       window.location.href = "/logout";
@@ -97,7 +94,7 @@ const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
 
   const nav = {
     reactPortalId: "portals",
-    title: "MENU",
+    title: labels.config.nav.title,
     sections: {
       administrate: {
         name: "",
@@ -122,7 +119,7 @@ const useNavConfig = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
 const useConfigHeader = (optionForCustomerPortal: IOptionWithSubOptions[]) => {
   const nav = {
     reactPortalId: "portal",
-    title: "MENU",
+    title: labels.config.nav.title,
     sections: [
       {
         isOpen: true,
@@ -145,7 +142,7 @@ const userMenu = [
     links: [
       {
         id: "logout",
-        title: "Cerrar sesión",
+        title: labels.config.nav.logout.label,
         path: "/logout",
         iconBefore: <MdLogout />,
       },

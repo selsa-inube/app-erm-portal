@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -54,13 +55,16 @@ function HolidaysOptions() {
   const hasEnjoymentPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("RequestToEnjoyVacationDays") ??
     false;
+
   const hasPaymentPrivilege =
     staffUseCasesData?.listOfUseCases?.includes(
       "RequestPaymentForVacationDays",
     ) ?? false;
+
   const hasViewDetailsPrivilege =
     staffUseCasesData?.listOfUseCases?.includes("VacationDetailsInProcess") ??
     false;
+
   const hasDeletePrivilege =
     staffUseCasesData?.listOfUseCases?.includes("DiscardVacationInProcess") ??
     false;
@@ -109,8 +113,7 @@ function HolidaysOptions() {
   };
 
   useEffect(() => {
-    const combined: IHolidaysTable[] = [...enjoyedData, ...paidData];
-    setTableData(combined);
+    setTableData([...enjoyedData, ...paidData]);
   }, [enjoyedData, paidData]);
 
   const isLoading = isLoadingEnjoyed ?? isLoadingPaid;
@@ -120,6 +123,7 @@ function HolidaysOptions() {
       const timer = setTimeout(() => {
         navigate(location.pathname, { replace: true });
       }, 5000);
+
       return () => clearTimeout(timer);
     }
   }, [location.state?.showFlag]);
@@ -148,12 +152,13 @@ function HolidaysOptions() {
         handleDeleteRequest={handleDeleteRequest}
         isSelfRequest={isSelfRequest}
       />
+
       {validationModal.show && (
         <InfoModal
-          title="Información"
-          titleDescription="¿Por qué no se puede descartar?"
+          title={labels.holidays.infoModal.title}
+          titleDescription={labels.holidays.infoModal.disabledReasonTitle}
           description={validationModal.message}
-          buttonText="Entendido"
+          buttonText={labels.holidays.infoModal.confirmButton}
           onCloseModal={closeValidationModal}
         />
       )}

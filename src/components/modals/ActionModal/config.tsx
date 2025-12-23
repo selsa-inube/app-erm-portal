@@ -1,6 +1,7 @@
 import CheckIcon from "@assets/images/CheckIcon.svg";
 import CloseIcon from "@assets/images/CloseIcon.svg";
 import HelpIcon from "@assets/images/HelpIcon.svg";
+import { labels } from "@i18n/labels";
 
 import { IAction } from "./type";
 
@@ -14,36 +15,36 @@ export const Actions = (
       icon: (
         <img
           src={CheckIcon}
-          alt="Si cumple"
+          alt={labels.modal.actions.yes}
           style={{ width: 16, height: 16 }}
         />
       ),
       appearance: "success",
-      label: "Si cumple",
+      label: labels.modal.actions.yes,
       onClick: onClickCheck,
     },
     {
       icon: (
         <img
           src={CloseIcon}
-          alt="No cumple"
+          alt={labels.modal.actions.no}
           style={{ width: 16, height: 16 }}
         />
       ),
       appearance: "danger",
-      label: "No cumple",
+      label: labels.modal.actions.no,
       onClick: onClickClose,
     },
     {
       icon: (
         <img
           src={HelpIcon}
-          alt="Sin evaluar"
+          alt={labels.modal.actions.pending}
           style={{ width: 16, height: 16 }}
         />
       ),
       appearance: "warning",
-      label: "Sin evaluar",
+      label: labels.modal.actions.pending,
       onClick: onClickHelp,
     },
   ];

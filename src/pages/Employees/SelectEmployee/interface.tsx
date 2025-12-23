@@ -7,6 +7,7 @@ import { Logger } from "@utils/logger";
 import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
+import { labels } from "@i18n/labels";
 
 export interface UseSelectEmployeeReturn {
   employees: Employee[];
@@ -30,6 +31,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   const { employees, loading, error, refetch } = useAllEmployees();
   const { setSelectedEmployee, selectedEmployee } = useAppContext();
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +41,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     if (storedEmployee) {
       setSelectedEmployee(JSON.parse(storedEmployee));
     }
-  }, []);
+  }, [setSelectedEmployee]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -76,7 +78,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
       return [
         {
           employeeId: "no-results",
-          names: "No hay resultados para esta búsqueda.",
+          names: labels.employee.selection.noResults,
           surnames: "",
           identificationDocumentNumber: "",
         },
@@ -88,10 +90,10 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
 
   const validationSchema: Yup.ObjectSchema<{ keyword: string }> = Yup.object({
     keyword: Yup.string()
-      .required("Para continuar, primero debes seleccionar un empleado.")
+      .required(labels.employee.validation.required)
       .test(
         "is-valid-employee",
-        "Debes seleccionar un empleado de la lista.",
+        labels.employee.validation.invalidSelection,
         function (value) {
           return employees.some(
             (emp) =>
@@ -138,10 +140,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         );
         navigate("/");
       } else {
-        Logger.error(
-          "Empleado no encontrado al intentar confirmar selección",
-          new Error("Empleado no encontrado"),
-        );
+        Logger.error(labels.employee.errors.employeeNotFound);
       }
 
       setIsSubmitting(false);

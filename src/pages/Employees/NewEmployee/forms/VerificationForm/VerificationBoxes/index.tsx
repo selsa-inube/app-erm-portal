@@ -4,6 +4,7 @@ import { BoxAttribute } from "@components/cards/BoxAttribute";
 import { spacing } from "@design/tokens/spacing";
 import { AlertCardProps } from "@components/data/AlertCard";
 import { formatDate } from "@utils/date";
+import { labels } from "@i18n/labels";
 
 import {
   getNormativeFrameworkLabel,
@@ -18,6 +19,7 @@ import {
   getWorkingShiftLabel,
   getZonalSegmentationLabel,
 } from "./config/config";
+
 import { IFormsUpdateData } from "../../../types";
 import { IPersonalDataEntry } from "../../PersonalDataForm/types";
 import { IContractualPositionData } from "../../ContractualPositionDataForm/types";
@@ -34,19 +36,23 @@ const renderPersonalInfoVerification = (
     gap={spacing.s100}
     width="100%"
   >
-    <BoxAttribute label="Nombres" value={values.names} direction="column" />
     <BoxAttribute
-      label="Apellidos"
+      label={labels.employee.personalDataForm.fields.names}
+      value={values.names}
+      direction="column"
+    />
+    <BoxAttribute
+      label={labels.employee.personalDataForm.fields.lastNames}
       value={values.lastNames}
       direction="column"
     />
     <BoxAttribute
-      label="Número de identificación"
+      label={labels.employee.personalDataForm.fields.identificationNumber}
       value={values.identificationNumber}
       direction="column"
     />
     <BoxAttribute
-      label="Hoja de vida"
+      label={labels.employee.personalDataForm.fields.resume}
       value={values.attachedFile?.name}
       direction="column"
     />
@@ -64,52 +70,52 @@ const renderContractualPositionVerification = (
     width="100%"
   >
     <BoxAttribute
-      label="Marco normativo"
+      label={labels.employee.contractualPositionForm.fields.normativeFramework}
       value={getNormativeFrameworkLabel(values.normativeFramework)}
       direction="column"
     />
     <BoxAttribute
-      label="Tipo de contrato"
+      label={labels.employee.contractualPositionForm.fields.contractType}
       value={getContractTypeLabel(values.contractType)}
       direction="column"
     />
     <BoxAttribute
-      label="Fecha de inicio"
+      label={labels.employee.contractualPositionForm.fields.startDate}
       value={formatDate(values.startDate)}
       direction="column"
     />
     <BoxAttribute
-      label="Fecha de finalización"
+      label={labels.employee.contractualPositionForm.fields.endDate}
       value={formatDate(values.endDate)}
       direction="column"
     />
     <BoxAttribute
-      label="Empresa contratante"
+      label={labels.employee.contractualPositionForm.fields.company}
       value={getCompanyLabel(values.company)}
       direction="column"
     />
     <BoxAttribute
-      label="Jornada laboral"
+      label={labels.employee.contractualPositionForm.fields.workingShift}
       value={getWorkingShiftLabel(values.workingShift)}
       direction="column"
     />
     <BoxAttribute
-      label="Equipo de trabajo"
+      label={labels.employee.contractualPositionForm.fields.team}
       value={getTeamLabel(values.team)}
       direction="column"
     />
     <BoxAttribute
-      label="Cargo"
+      label={labels.employee.contractualPositionForm.fields.position}
       value={getPositionLabel(values.position)}
       direction="column"
     />
     <BoxAttribute
-      label="Perfil salarial"
+      label={labels.employee.contractualPositionForm.fields.salaryProfile}
       value={getSalaryProfileLabel(values.salaryProfile)}
       direction="column"
     />
     <BoxAttribute
-      label="Sitio de trabajo"
+      label={labels.employee.contractualPositionForm.fields.jobMode}
       value={getJobModeLabel(values.jobMode)}
       direction="column"
     />
@@ -127,17 +133,19 @@ const renderLegalAccountingLocationVerification = (
     width="100%"
   >
     <BoxAttribute
-      label="Proyecto"
+      label={labels.employee.legalAccountingLocationForm.fields.project}
       value={getProyectLabel(values.proyect)}
       direction="column"
     />
     <BoxAttribute
-      label="Segmentación zonal"
+      label={
+        labels.employee.legalAccountingLocationForm.fields.zonalSegmentation
+      }
       value={getZonalSegmentationLabel(values.zonalSegmentation)}
       direction="column"
     />
     <BoxAttribute
-      label="Centro de costos"
+      label={labels.employee.legalAccountingLocationForm.fields.costCenter}
       value={getCostCenterLabel(values.costCenter)}
       direction="column"
     />
@@ -204,21 +212,25 @@ function VerificationBoxes({
           updatedData.personalInformation.values,
           isTablet,
         )}
+
       {stepKey === 2 &&
         renderContractualPositionVerification(
           updatedData.contractualPositionData.values,
           isTablet,
         )}
+
       {stepKey === 3 &&
         renderLegalAccountingLocationVerification(
           updatedData.legalAccountingLocation.values,
           isTablet,
         )}
+
       {stepKey === 4 &&
         renderAssignmentsVerification(
           updatedData.assignmentForm.values,
           isTablet,
         )}
+
       {stepKey === 5 &&
         renderUnmetRequirementsVerification(
           updatedData.unmetRequirements.values,

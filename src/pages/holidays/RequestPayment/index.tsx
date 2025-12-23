@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { IUnifiedHumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
@@ -157,8 +158,8 @@ function RequestPayment() {
     navigate("/holidays", {
       state: {
         showFlag: true,
-        flagTitle: "Solicitud enviada",
-        flagMessage: "La solicitud de pago fue enviada exitosamente.",
+        flagTitle: labels.holidays.flags.paymentSuccess.title,
+        flagMessage: labels.holidays.flags.paymentSuccess.message,
         isSuccess: true,
       },
     });
@@ -168,23 +169,23 @@ function RequestPayment() {
 
   const breadcrumbs = {
     id: 3,
-    label: "Solicitar pago",
+    label: labels.holidays.breadcrumbs.requestPayment,
     crumbs: [
       {
         path: "/",
-        label: "Inicio",
+        label: labels.holidays.breadcrumbs.home,
         id: "/",
         isActive: false,
       },
       {
         path: "/holidays",
-        label: isTablet ? "..." : "Vacaciones",
+        label: isTablet ? "..." : labels.holidays.breadcrumbs.holidays,
         id: "/holidays",
         isActive: false,
       },
       {
         path: "/holidays/request-payment",
-        label: "Solicitar pago",
+        label: labels.holidays.breadcrumbs.requestPayment,
         id: "/holidays/request-payment",
         isActive: true,
       },
@@ -212,7 +213,7 @@ function RequestPayment() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de pago?"
+          descriptionText={labels.holidays.sendPaymentModal.description}
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

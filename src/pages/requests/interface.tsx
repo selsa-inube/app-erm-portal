@@ -7,6 +7,7 @@ import {
   MdClear,
 } from "react-icons/md";
 
+import { labels } from "@i18n/labels";
 import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { BoardSection } from "@components/layout/BoardSection";
@@ -83,7 +84,7 @@ function RequestsUI(props: RequestsUIProps) {
     if (type in ERequestType) {
       return ERequestType[type as keyof typeof ERequestType];
     }
-    return "Tipo desconocido";
+    return labels.requests.types.unknown;
   }
 
   const handleRemove = (filterIdToRemove: string) => {
@@ -217,7 +218,7 @@ function RequestsUI(props: RequestsUIProps) {
           >
             <Input
               id="seeker"
-              placeholder="Palabra clave"
+              placeholder={labels.requests.search.placeholder}
               iconAfter={<MdSearch size={20} />}
               size="compact"
               fullwidth={isTablet}
@@ -256,7 +257,10 @@ function RequestsUI(props: RequestsUIProps) {
                         size="24px"
                       />
                       <Text size="medium">
-                        Filtrar ({selectedFilters.length})
+                        {labels.requests.filters.filterWithCount.replace(
+                          "{count}",
+                          selectedFilters.length.toString(),
+                        )}
                       </Text>
                       <Stack
                         margin={`${spacing.s0} ${spacing.s0} ${spacing.s0} ${spacing.s300}`}
@@ -304,7 +308,7 @@ function RequestsUI(props: RequestsUIProps) {
                 disabled={selectedFilters.length === 0}
                 onClick={() => setSelectedFilters([])}
               >
-                Quitar
+                {labels.requests.filters.remove}
               </Button>
               <Button
                 appearance="primary"
@@ -314,7 +318,7 @@ function RequestsUI(props: RequestsUIProps) {
                 variant="outlined"
                 onClick={openFilterModal}
               >
-                Filtrar
+                {labels.requests.filters.filter}
               </Button>
             </StyledRequestsContainer>
           )}
@@ -405,10 +409,7 @@ function RequestsUI(props: RequestsUIProps) {
                     },
                   )
                 ) : (
-                  <Text>
-                    No hay solicitudes que coincidan con los filtros
-                    seleccionados.
-                  </Text>
+                  <Text>{labels.requests.board.emptyState}</Text>
                 )}
               </BoardSection>
             );

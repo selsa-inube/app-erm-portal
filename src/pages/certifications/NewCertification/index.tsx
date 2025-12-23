@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
@@ -162,18 +163,23 @@ function NewCertification() {
   const isTablet = useMediaQuery("(max-width: 1100px)");
 
   const breadcrumbs = {
-    label: "Agregar solicitud",
+    label: labels.certifications.titles.addRequestPage,
     crumbs: [
-      { path: "/", label: "Inicio", id: "/", isActive: false },
+      {
+        path: "/",
+        label: labels.certifications.titles.home,
+        id: "/",
+        isActive: false,
+      },
       {
         path: "/certifications",
-        label: isTablet ? "..." : "Certificaciones",
+        label: isTablet ? "..." : labels.certifications.titles.certifications,
         id: "/certifications",
         isActive: false,
       },
       {
         path: "/certifications/new-certification",
-        label: "Agregar solicitud",
+        label: labels.certifications.titles.addRequestPage,
         id: "/certifications/new-certification",
         isActive: true,
       },
@@ -201,7 +207,9 @@ function NewCertification() {
 
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
+          descriptionText={
+            labels.certifications.sendRequestModal.descriptionText
+          }
           onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={closeSendModal}
           onSecondaryButtonClick={closeSendModal}

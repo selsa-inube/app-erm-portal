@@ -15,13 +15,14 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import { labels } from "@i18n/labels";
 import { Logger } from "@utils/logger";
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
-import { SelectedFilters } from "@components/cards/SelectedFilters/index.tsx";
+import { SelectedFilters } from "@components/cards/SelectedFilters";
 
-import { StyledModal, StyledContainerClose } from "./styles.ts";
-import { FormValues } from "./types.ts";
+import { StyledModal, StyledContainerClose } from "./styles";
+import { FormValues } from "./types";
 
 export interface SelectedFilter extends IOption {
   count: number;
@@ -92,9 +93,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
   );
 
   if (!portalNode) {
-    throw new Error(
-      "The portal node is not defined. Ensure the specific node exists in the DOM.",
-    );
+    throw new Error(labels.modal.requestDetail.errorPortalNode);
   }
 
   return createPortal(
@@ -102,11 +101,11 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
       <StyledModal $smallScreen={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="headline" size="small">
-            Filtrar
+            {labels.modal.filterRequest.title}
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
-              <Text>Cerrar</Text>
+              <Text>{labels.modal.filterRequest.close}</Text>
               <Icon
                 icon={<MdClear />}
                 size="24px"
@@ -156,8 +155,8 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 />
               </Stack>
               <Checkpicker
-                label="Tipo"
-                placeholder="Selecciona una opción"
+                label={labels.modal.filterRequest.typeLabel}
+                placeholder={labels.modal.filterRequest.placeholderOption}
                 name="assignment"
                 id="assignment"
                 values={formik.values.assignment}
@@ -186,8 +185,8 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 />
               </Stack>
               <Checkpicker
-                label="Estado"
-                placeholder="Selecciona una opción"
+                label={labels.modal.filterRequest.statusLabel}
+                placeholder={labels.modal.filterRequest.placeholderOption}
                 name="status"
                 id="status"
                 values={formik.values.status}
@@ -209,10 +208,12 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 appearance="gray"
                 variant="outlined"
               >
-                {isMobile ? "Quitar" : "Cancelar"}
+                {isMobile
+                  ? labels.modal.filterRequest.clearMobile
+                  : labels.modal.filterRequest.cancelDesktop}
               </Button>
               <Button onClick={handleSubmit} loading={loading}>
-                Filtrar
+                {labels.modal.filterRequest.submit}
               </Button>
             </Stack>
           </Stack>

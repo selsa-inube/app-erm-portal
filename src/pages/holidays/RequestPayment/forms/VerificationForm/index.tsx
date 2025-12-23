@@ -1,6 +1,7 @@
 import { MdOutlineArrowBack } from "react-icons/md";
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
+import { labels } from "@i18n/labels";
 import { Accordion } from "@components/data/Accordion";
 import { spacing } from "@design/tokens/spacing";
 
@@ -44,7 +45,7 @@ function VerificationForm(props: VerificationFormProps) {
                 variant="none"
                 appearance="dark"
               >
-                Regresar a este paso
+                {labels.holidays.verification.backToStep}
               </Button>
             </Stack>
           </Accordion>
@@ -60,10 +61,10 @@ function VerificationForm(props: VerificationFormProps) {
           variant="outlined"
           appearance="gray"
         >
-          Anterior
+          {labels.holidays.assisted.previous}
         </Button>
         <Button onClick={handleSubmit} appearance="primary">
-          Enviar
+          {labels.holidays.assisted.submit}
         </Button>
       </Stack>
     </Stack>
