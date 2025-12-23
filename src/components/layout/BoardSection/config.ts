@@ -1,4 +1,6 @@
+import { labels } from "@i18n/labels";
+
 export const configOption = {
-  textNodata: "No hay solicitudes en trámite.",
-  noMatches: "No hay resultados que coincidan con los filtros aplicados.",
+  textNodata: labels.layout.states.noData,
+  noMatches: labels.layout.states.noMatches,
 };

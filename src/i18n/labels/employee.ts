@@ -89,6 +89,23 @@ export const employee = {
     actions: {
       next: "Siguiente",
     },
+
+    resumeModal: {
+      title: "Adjuntar hoja de vida",
+      close: "Cerrar",
+      drag: "Arrastra un documento",
+      or: "o",
+      browse: "Busca un documento",
+      maxWeight: "Peso máximo por archivo: 2.5MB",
+      attachedDocuments: "Documentos adjuntos",
+      cancel: "Cancelar",
+      attach: "Adjuntar",
+
+      errors: {
+        onlyPdf: "Solo se permiten archivos PDF.",
+        maxSize: "El archivo supera el tamaño máximo permitido de 2.5MB.",
+      },
+    },
   },
 
   assignmentsForm: {
@@ -112,8 +129,59 @@ export const employee = {
       salaryProfile: "Perfil salarial",
       jobMode: "Sitio de trabajo",
     },
+
     placeholders: {
       select: "Selecciona de la lista",
+    },
+
+    options: {
+      normativeFramework: {
+        cst: "Código Sustantivo del Trabajo",
+        cc: "Código de Comercio",
+        ne: "Normatividad Especial",
+      },
+
+      contractType: {
+        indefinite_term: "Término Indefinido",
+        fixed_term: "Término Fijo",
+        project_based: "Obra o Labor",
+      },
+
+      company: {
+        company_a: "Empresa A S.A.S",
+        company_b: "Empresa B Ltda",
+        company_c: "Empresa C S.A.",
+      },
+
+      workingShift: {
+        full_time: "Tiempo Completo",
+        part_time: "Medio Tiempo",
+        hourly: "Por Horas",
+      },
+
+      team: {
+        development: "Desarrollo",
+        marketing: "Marketing",
+        human_resources: "Recursos Humanos",
+      },
+
+      position: {
+        senior_developer: "Desarrollador Senior",
+        junior_analyst: "Analista Junior",
+        project_manager: "Gerente de Proyecto",
+      },
+
+      salaryProfile: {
+        profile_a: "Perfil A - Alto",
+        profile_b: "Perfil B - Medio",
+        profile_c: "Perfil C - Básico",
+      },
+
+      jobMode: {
+        on_site: "Presencial",
+        remote: "Remoto",
+        hybrid: "Híbrido",
+      },
     },
   },
 

@@ -11,6 +11,7 @@ import { data } from "./data";
 import { validations } from "./validations";
 import { types } from "./types";
 import { config } from "./config";
+import { login } from "./login";
 
 export const labels = {
   employee,
@@ -26,6 +27,7 @@ export const labels = {
   validations,
   types,
   config,
+  login,
 };
 
 export type Labels = typeof labels;

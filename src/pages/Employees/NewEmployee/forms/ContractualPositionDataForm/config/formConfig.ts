@@ -1,4 +1,5 @@
 import { IOption } from "@inubekit/inubekit";
+import { labels } from "@src/i18n/labels";
 
 const contractualPositionDataRequiredFields = {
   normativeFramework: true,
@@ -14,51 +15,163 @@ const contractualPositionDataRequiredFields = {
 };
 
 const normativeFrameworkOptions: IOption[] = [
-  { id: "1", label: "Código Sustantivo del Trabajo", value: "cst" },
-  { id: "2", label: "Código de Comercio", value: "cc" },
-  { id: "3", label: "Normatividad Especial", value: "ne" },
+  {
+    id: "1",
+    label:
+      labels.employee.contractualPositionForm.options.normativeFramework.cst,
+    value: "cst",
+  },
+  {
+    id: "2",
+    label:
+      labels.employee.contractualPositionForm.options.normativeFramework.cc,
+    value: "cc",
+  },
+  {
+    id: "3",
+    label:
+      labels.employee.contractualPositionForm.options.normativeFramework.ne,
+    value: "ne",
+  },
 ];
 
 const contractTypeOptions: IOption[] = [
-  { id: "1", label: "Término Indefinido", value: "indefinite_term" },
-  { id: "2", label: "Término Fijo", value: "fixed_term" },
-  { id: "3", label: "Obra o Labor", value: "project_based" },
+  {
+    id: "1",
+    label:
+      labels.employee.contractualPositionForm.options.contractType
+        .indefinite_term,
+    value: "indefinite_term",
+  },
+  {
+    id: "2",
+    label:
+      labels.employee.contractualPositionForm.options.contractType.fixed_term,
+    value: "fixed_term",
+  },
+  {
+    id: "3",
+    label:
+      labels.employee.contractualPositionForm.options.contractType
+        .project_based,
+    value: "project_based",
+  },
 ];
 
 const companyOptions: IOption[] = [
-  { id: "1", label: "Empresa A S.A.S", value: "company_a" },
-  { id: "2", label: "Empresa B Ltda", value: "company_b" },
-  { id: "3", label: "Empresa C S.A.", value: "company_c" },
+  {
+    id: "1",
+    label: labels.employee.contractualPositionForm.options.company.company_a,
+    value: "company_a",
+  },
+  {
+    id: "2",
+    label: labels.employee.contractualPositionForm.options.company.company_b,
+    value: "company_b",
+  },
+  {
+    id: "3",
+    label: labels.employee.contractualPositionForm.options.company.company_c,
+    value: "company_c",
+  },
 ];
 
 const workingShiftOptions: IOption[] = [
-  { id: "1", label: "Tiempo Completo", value: "full_time" },
-  { id: "2", label: "Medio Tiempo", value: "part_time" },
-  { id: "3", label: "Por Horas", value: "hourly" },
+  {
+    id: "1",
+    label:
+      labels.employee.contractualPositionForm.options.workingShift.full_time,
+    value: "full_time",
+  },
+  {
+    id: "2",
+    label:
+      labels.employee.contractualPositionForm.options.workingShift.part_time,
+    value: "part_time",
+  },
+  {
+    id: "3",
+    label: labels.employee.contractualPositionForm.options.workingShift.hourly,
+    value: "hourly",
+  },
 ];
 
 const teamOptions: IOption[] = [
-  { id: "1", label: "Desarrollo", value: "development" },
-  { id: "2", label: "Marketing", value: "marketing" },
-  { id: "3", label: "Recursos Humanos", value: "human_resources" },
+  {
+    id: "1",
+    label: labels.employee.contractualPositionForm.options.team.development,
+    value: "development",
+  },
+  {
+    id: "2",
+    label: labels.employee.contractualPositionForm.options.team.marketing,
+    value: "marketing",
+  },
+  {
+    id: "3",
+    label: labels.employee.contractualPositionForm.options.team.human_resources,
+    value: "human_resources",
+  },
 ];
 
 const positionOptions: IOption[] = [
-  { id: "1", label: "Desarrollador Senior", value: "senior_developer" },
-  { id: "2", label: "Analista Junior", value: "junior_analyst" },
-  { id: "3", label: "Gerente de Proyecto", value: "project_manager" },
+  {
+    id: "1",
+    label:
+      labels.employee.contractualPositionForm.options.position.senior_developer,
+    value: "senior_developer",
+  },
+  {
+    id: "2",
+    label:
+      labels.employee.contractualPositionForm.options.position.junior_analyst,
+    value: "junior_analyst",
+  },
+  {
+    id: "3",
+    label:
+      labels.employee.contractualPositionForm.options.position.project_manager,
+    value: "project_manager",
+  },
 ];
 
 const salaryProfileOptions: IOption[] = [
-  { id: "1", label: "Perfil A - Alto", value: "profile_a" },
-  { id: "2", label: "Perfil B - Medio", value: "profile_b" },
-  { id: "3", label: "Perfil C - Básico", value: "profile_c" },
+  {
+    id: "1",
+    label:
+      labels.employee.contractualPositionForm.options.salaryProfile.profile_a,
+    value: "profile_a",
+  },
+  {
+    id: "2",
+    label:
+      labels.employee.contractualPositionForm.options.salaryProfile.profile_b,
+    value: "profile_b",
+  },
+  {
+    id: "3",
+    label:
+      labels.employee.contractualPositionForm.options.salaryProfile.profile_c,
+    value: "profile_c",
+  },
 ];
 
 const jobModeOptions: IOption[] = [
-  { id: "1", label: "Presencial", value: "on_site" },
-  { id: "2", label: "Remoto", value: "remote" },
-  { id: "3", label: "Híbrido", value: "hybrid" },
+  {
+    id: "1",
+    label: labels.employee.contractualPositionForm.options.jobMode.on_site,
+    value: "on_site",
+  },
+  {
+    id: "2",
+    label: labels.employee.contractualPositionForm.options.jobMode.remote,
+    value: "remote",
+  },
+  {
+    id: "3",
+    label: labels.employee.contractualPositionForm.options.jobMode.hybrid,
+    value: "hybrid",
+  },
 ];
 
 export {

@@ -32,4 +32,9 @@ export const layout = {
     defaultWhatWentWrong: ["No se proporcionó información sobre el error."],
     defaultHowToFix: ["Intenta nuevamente más tarde."],
   },
+
+  states: {
+    noData: "No hay solicitudes en trámite.",
+    noMatches: "No hay resultados que coincidan con los filtros aplicados.",
+  },
 };
