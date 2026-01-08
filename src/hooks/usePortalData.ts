@@ -23,6 +23,10 @@ export const usePortalData = (codeParame: string) => {
     const fetchPortalData = async () => {
       setIsFetching(true);
 
+      if (!codeParame) {
+        return;
+      }
+
       try {
         const staffPortalData = await staffPortalByBusinessManager(codeParame);
 
