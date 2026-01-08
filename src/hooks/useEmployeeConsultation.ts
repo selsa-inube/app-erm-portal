@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 import { Logger } from "@utils/logger";
 import { getAllEmployees } from "@services/employeeConsultation";
@@ -28,8 +28,10 @@ export const useAllEmployees = (
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
+  const hasFetchedRef = useRef(false);
+
   const fetchEmployees = useCallback(
-    async (fetchPage = page, fetchPerPage = perPage) => {
+    async (fetchPage: number, fetchPerPage: number) => {
       setLoading(true);
       setError(null);
 
@@ -63,18 +65,24 @@ export const useAllEmployees = (
         setLoading(false);
       }
     },
-    [page, perPage, getHeaders, showErrorModal],
+    [getHeaders, showErrorModal],
   );
 
   useEffect(() => {
-    fetchEmployees();
-  }, [page, perPage, fetchEmployees]);
+    if (!hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      fetchEmployees(page, perPage);
+    }
+  }, []);
 
-  const refetch = (newPage = page, newPerPage = perPage) => {
-    setPage(newPage);
-    setPerPage(newPerPage);
-    fetchEmployees(newPage, newPerPage);
-  };
+  const refetch = useCallback(
+    (newPage = page, newPerPage = perPage) => {
+      setPage(newPage);
+      setPerPage(newPerPage);
+      fetchEmployees(newPage, newPerPage);
+    },
+    [page, perPage, fetchEmployees],
+  );
 
   return { employees, loading, error, refetch };
 };
