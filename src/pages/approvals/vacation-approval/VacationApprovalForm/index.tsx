@@ -3,11 +3,11 @@ import * as Yup from "yup";
 import { useState } from "react";
 
 import { Logger } from "@utils/logger";
-import { usePatchHumanResourceRequest } from "@hooks/usePatchHumanResourceRequest";
 import { useAppContext } from "@context/AppContext";
 
 import { VacationApprovalFormUI } from "./interface";
 import { ApprovalOptions, IFormValues } from "./types";
+import { useApprovalHumanResourceRequestAPI } from "@src/hooks/useApprovalHumanResourceRequestAPI";
 
 interface VacationApprovalFormProps {
   vacationType?: string;
@@ -19,6 +19,7 @@ interface VacationApprovalFormProps {
   daysRequested?: number;
   periodFrom?: string;
   periodTo?: string;
+  taskManagingId?: string;
 }
 
 function VacationApprovalForm(props: VacationApprovalFormProps) {
@@ -32,12 +33,13 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     daysRequested,
     periodFrom,
     periodTo,
+    taskManagingId,
   } = props;
 
   const [showModal, setShowModal] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
 
-  const { updateRequest, reset, isLoading } = usePatchHumanResourceRequest();
+  const { submitApproval, isLoading } = useApprovalHumanResourceRequestAPI();
   const { staffUser } = useAppContext();
 
   const validationSchema = Yup.object({
@@ -66,24 +68,13 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const currentDate = new Date().toISOString();
-
-        const requestBody = {
-          humanResourceRequestId: requestId,
-          modifyJustification: values.observation || "Sin observaciones",
-          humanResourceRequestDate: currentDate,
-          humanResourceRequestTraceabilities: [
-            {
-              actionExecuted: values.approval,
-              description: values.observation || "Sin observaciones",
-              executionDate: currentDate,
-              transactionOperation: "Insert",
-              userWhoExecutedAction: staffUser.staffId,
-            },
-          ],
-        };
-
-        await updateRequest(requestBody);
+        await submitApproval({
+          humanResourceRequestId: requestId ?? "",
+          taskManagingId: taskManagingId ?? "",
+          actionExecuted: values.approval,
+          description: values.observation ?? "Sin observaciones",
+          userWhoExecutedAction: staffUser.staffId,
+        });
 
         const approved = values.approval === ApprovalOptions.APPROVE;
         setIsApproved(approved);
@@ -104,7 +95,6 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
 
   const handleCloseModal = (): void => {
     setShowModal(false);
-    reset();
   };
 
   return (
