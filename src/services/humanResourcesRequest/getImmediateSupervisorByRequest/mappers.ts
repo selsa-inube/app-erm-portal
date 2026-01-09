@@ -15,6 +15,9 @@ export interface ImmediateSupervisorByRequest {
   leadEmployeeSurname: string;
   periodFrom: string;
   periodTo: string;
+  taskCode: string;
+  taskManagingId: string;
+  taskName: string;
 }
 
 const mapImmediateSupervisorByRequestApiToEntity = (
@@ -40,6 +43,9 @@ const mapImmediateSupervisorByRequestApiToEntity = (
   leadEmployeeSurname: String(item.leadEmployeeSurname ?? ""),
   periodFrom: String(item.periodFrom ?? ""),
   periodTo: String(item.periodTo ?? ""),
+  taskCode: String(item.taskCode ?? ""),
+  taskManagingId: String(item.taskManagingId ?? ""),
+  taskName: String(item.taskName ?? ""),
 });
 
 export { mapImmediateSupervisorByRequestApiToEntity };

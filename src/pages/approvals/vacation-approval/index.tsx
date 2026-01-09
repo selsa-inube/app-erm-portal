@@ -43,6 +43,7 @@ function VacationApproval() {
               daysRequested={supervisorData?.daysRequested}
               periodFrom={supervisorData?.periodFrom}
               periodTo={supervisorData?.periodTo}
+              taskManagingId={supervisorData?.taskManagingId}
             />
           </StyledVacationsApproval>
           <StyledFooter>
