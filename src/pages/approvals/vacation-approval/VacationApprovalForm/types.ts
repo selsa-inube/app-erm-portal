@@ -1,5 +1,5 @@
 const ApprovalOptions = {
-  APPROVE: "approve_the_Request",
+  APPROVE: "approve_the_request",
   REJECT: "reject_the_request_as_unfeasible",
 } as const;
 
