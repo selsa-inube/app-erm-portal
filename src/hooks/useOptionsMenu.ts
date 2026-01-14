@@ -25,19 +25,12 @@ export function useOptionsMenu(
 
   useEffect(() => {
     const fetchoptionData = async () => {
-      setIsFetching(true);
-
       if (!provisionedPortal || !selectedClient) {
-        setHasError(ERROR_CODE_NO_OPTIONS);
         setIsFetching(false);
-
-        const errorConfig = modalErrorConfig[ERROR_CODE_NO_OPTIONS];
-        showErrorModal({
-          descriptionText: errorConfig.descriptionText,
-          solutionText: errorConfig.solutionText,
-        });
         return;
       }
+
+      setIsFetching(true);
 
       try {
         const staffoptionData = await getOptionForCustomerPortal(
