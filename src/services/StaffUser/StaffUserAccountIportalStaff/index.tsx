@@ -10,6 +10,7 @@ import { mapStaffUserAccountApiToEntity } from "./mappers";
 
 const staffUserAccountById = async (
   userAccountId: string,
+  headers: Record<string, string>,
 ): Promise<IStaffUserAccount> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -28,6 +29,7 @@ const staffUserAccountById = async (
         {
           method: "GET",
           headers: {
+            ...headers,
             "Content-type": "application/json; charset=UTF-8",
             "X-Action": "SearchAllStaff",
           },

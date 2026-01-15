@@ -5,12 +5,12 @@ import {
 } from "@config/environment";
 import { IOptionWithSubOptions } from "@ptypes/staffPortalBusiness.types";
 import { Logger } from "@utils/logger";
-
 import { mapOptionForCustomerPortalApiToEntities } from "./mappers";
 
 const getOptionForCustomerPortal = async (
   staffPortalPublicCode: string,
   businessUnit: string,
+  headers?: Record<string, string>,
 ): Promise<IOptionWithSubOptions[]> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -21,7 +21,6 @@ const getOptionForCustomerPortal = async (
         staffPortalPublicCode,
         businessUnit,
       });
-
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
@@ -30,7 +29,7 @@ const getOptionForCustomerPortal = async (
         {
           method: "GET",
           headers: {
-            "Content-Type": "application/json; charset=UTF-8",
+            ...headers,
             "X-Action": "SearchOptionsStaffPortalByBusinessUnit",
           },
           signal: controller.signal,
@@ -39,9 +38,7 @@ const getOptionForCustomerPortal = async (
 
       clearTimeout(timeoutId);
 
-      if (res.status === 204) {
-        return [];
-      }
+      if (res.status === 204) return [];
 
       const data = await res.json();
 
@@ -59,16 +56,10 @@ const getOptionForCustomerPortal = async (
         Logger.error(
           "Error al obtener las opciones del portal del cliente",
           error instanceof Error ? error : new Error("Error desconocido"),
-          {
-            staffPortalPublicCode,
-            businessUnit,
-          },
+          { staffPortalPublicCode, businessUnit },
         );
 
-        if (error instanceof Error) {
-          throw error;
-        }
-
+        if (error instanceof Error) throw error;
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );

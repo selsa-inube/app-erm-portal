@@ -5,11 +5,11 @@ import {
 } from "@config/environment";
 
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
-
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagerByCode = async (
   businessManagerCode: string,
+  headers?: Record<string, string>,
 ): Promise<IBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
@@ -22,8 +22,8 @@ const getBusinessManagerByCode = async (
       const options: RequestInit = {
         method: "GET",
         headers: {
+          ...headers,
           "X-Action": "SearchBusinessManagerByPortalStaff",
-          "Content-type": "application/json; charset=UTF-8",
         },
         signal: controller.signal,
       };
@@ -42,9 +42,9 @@ const getBusinessManagerByCode = async (
       const data = await res.json();
 
       if (!res.ok) {
-        const errorMessage =
-          data?.message ?? "Error al obtener los datos del operador";
-        throw new Error(errorMessage);
+        throw new Error(
+          data?.message ?? "Error al obtener los datos del operador",
+        );
       }
 
       const businessManager =
@@ -53,14 +53,12 @@ const getBusinessManagerByCode = async (
       return mapBusinessManagerApiToEntity(businessManager);
     } catch (error) {
       if (attempt === maxRetries) {
-        if (error instanceof Error) {
-          throw error;
-        }
-        throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
-        );
+        throw error instanceof Error
+          ? error
+          : new Error(
+              "Todos los intentos fallaron. No se pudieron obtener los datos del operador.",
+            );
       }
-      continue;
     }
   }
 
