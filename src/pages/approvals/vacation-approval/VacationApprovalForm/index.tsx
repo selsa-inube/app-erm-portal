@@ -3,11 +3,12 @@ import * as Yup from "yup";
 import { useState } from "react";
 
 import { Logger } from "@utils/logger";
+import { useSignOut } from "@hooks/useSignOut";
 import { useAppContext } from "@context/AppContext";
+import { useApprovalHumanResourceRequestAPI } from "@src/hooks/useApprovalHumanResourceRequestAPI";
 
 import { VacationApprovalFormUI } from "./interface";
 import { ApprovalOptions, IFormValues } from "./types";
-import { useApprovalHumanResourceRequestAPI } from "@src/hooks/useApprovalHumanResourceRequestAPI";
 
 interface VacationApprovalFormProps {
   vacationType?: string;
@@ -41,6 +42,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
 
   const { submitApproval, isLoading } = useApprovalHumanResourceRequestAPI();
   const { staffUser } = useAppContext();
+  const { signOut } = useSignOut();
 
   const validationSchema = Yup.object({
     approval: Yup.string().required(
@@ -67,12 +69,15 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     },
     validationSchema,
     onSubmit: async (values) => {
+      console.log("Submitting form with values:", values);
       try {
         await submitApproval({
           humanResourceRequestId: requestId ?? "",
           taskManagingId: taskManagingId ?? "",
           actionExecuted: values.approval,
-          description: values.observation ?? "Sin observaciones",
+          description: values.observation
+            ? values.observation
+            : "Aprobación de solicitud de vacaciones por jefe inmediato",
           userWhoExecutedAction: staffUser.staffId,
         });
 
@@ -95,6 +100,7 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
 
   const handleCloseModal = (): void => {
     setShowModal(false);
+    signOut();
   };
 
   return (

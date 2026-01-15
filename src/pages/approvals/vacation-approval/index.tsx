@@ -4,12 +4,15 @@ import { Text } from "@inubekit/inubekit";
 import { useImmediateSupervisorByRequest } from "@hooks/useImmediateSupervisorByRequest";
 import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 import { ErrorPage } from "@components/layout/ErrorPage";
+import { useSignOut } from "@hooks/useSignOut";
 
 import { StyledVacationsApproval, StyledFooter } from "./styles";
 import { VacationApprovalForm } from "./VacationApprovalForm";
 
 function VacationApproval() {
   const { requestId } = useParams();
+
+  const { signOut } = useSignOut();
 
   const {
     data: supervisorData,
@@ -24,6 +27,16 @@ function VacationApproval() {
       flagDuration: 8000,
     },
   });
+
+  if (
+    !supervisorLoading &&
+    !error &&
+    supervisorData &&
+    supervisorData.taskCode !== "approve_request"
+  ) {
+    signOut("/error?code=403");
+    return null;
+  }
 
   return (
     <>
