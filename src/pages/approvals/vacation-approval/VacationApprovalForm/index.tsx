@@ -69,12 +69,15 @@ function VacationApprovalForm(props: VacationApprovalFormProps) {
     },
     validationSchema,
     onSubmit: async (values) => {
+      console.log("Submitting form with values:", values);
       try {
         await submitApproval({
           humanResourceRequestId: requestId ?? "",
           taskManagingId: taskManagingId ?? "",
           actionExecuted: values.approval,
-          description: values.observation ?? "Sin observaciones",
+          description: values.observation
+            ? values.observation
+            : "Aprobación de solicitud de vacaciones por jefe inmediato",
           userWhoExecutedAction: staffUser.staffId,
         });
 
