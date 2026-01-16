@@ -6,6 +6,7 @@ import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessU
 import { useHeaders } from "@hooks/useHeaders";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 const ERROR_CODE_EMPTY_DATA = 1006;
 const ERROR_CODE_FETCH_FAILED = 1008;
@@ -13,6 +14,7 @@ const ERROR_CODE_FETCH_FAILED = 1008;
 export const useBusinessUnits = (
   userAccount: string | undefined,
   portalPublicCode: string | undefined,
+  preLogin = false,
 ) => {
   const [businessUnitsData, setBusinessUnitsData] = useState<IBusinessUnit[]>(
     [],
@@ -23,6 +25,7 @@ export const useBusinessUnits = (
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
   );
+
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
@@ -44,7 +47,9 @@ export const useBusinessUnits = (
       setIsFetching(true);
 
       try {
-        const headers = await getHeaders();
+        const headers: Record<string, string> = preLogin
+          ? getPreAuthHeaders()
+          : await getHeaders(true);
 
         const fetchedBusinessUnits = await getBusinessUnitsForOfficer(
           userAccount,
@@ -70,12 +75,9 @@ export const useBusinessUnits = (
         Logger.error(
           "Error al obtener las unidades de negocio",
           err instanceof Error ? err : new Error(String(err)),
-          {
-            useCase: "useBusinessUnits",
-            userAccount,
-            portalPublicCode,
-          },
+          { useCase: "useBusinessUnits", userAccount, portalPublicCode },
         );
+
         if (isMounted) {
           setHasError(true);
           setCodeError(ERROR_CODE_FETCH_FAILED);
@@ -94,7 +96,7 @@ export const useBusinessUnits = (
     return () => {
       isMounted = false;
     };
-  }, [userAccount, portalPublicCode]);
+  }, [userAccount, portalPublicCode, preLogin, getHeaders]);
 
   useEffect(() => {
     if (!isFetching && hasError) {

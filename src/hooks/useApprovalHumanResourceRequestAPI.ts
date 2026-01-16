@@ -20,6 +20,7 @@ interface ISubmitApprovalParams {
 export function useApprovalHumanResourceRequestAPI() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
   const { getHeaders } = useHeaders();
   const { showErrorModal } = useErrorModal();
 
@@ -34,7 +35,7 @@ export function useApprovalHumanResourceRequestAPI() {
     setError(null);
 
     try {
-      const headers = await getHeaders();
+      const headers = await getHeaders(true);
 
       const requestBody: IApprovalRequestBody = {
         actionExecuted,
@@ -50,11 +51,9 @@ export function useApprovalHumanResourceRequestAPI() {
       );
 
       if (response?.humanResourceRequestId) {
-        setIsLoading(false);
         return { success: true, response };
       }
 
-      setIsLoading(false);
       return { success: false };
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
@@ -71,8 +70,9 @@ export function useApprovalHumanResourceRequestAPI() {
         solutionText: errorConfig.solutionText,
       });
 
-      setIsLoading(false);
       return { success: false };
+    } finally {
+      setIsLoading(false);
     }
   };
 

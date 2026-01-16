@@ -5,23 +5,39 @@ import { staffUserAccountById } from "@services/StaffUser/StaffUserAccountIporta
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { useHeaders } from "@hooks/useHeaders";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 const ERROR_CODE_FETCH_USER_ACCOUNT_FAILED = 1018;
 
 interface UseStaffUserAccountProps {
   userAccountId: string;
   onUserAccountLoaded?: (userAccount: IStaffUserAccount) => void;
+  preAuth?: boolean;
 }
 
 export const useStaffUserAccount = ({
   userAccountId,
   onUserAccountLoaded,
+  preAuth = false,
 }: UseStaffUserAccountProps) => {
   const [userAccount, setUserAccount] = useState<IStaffUserAccount>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState<number | null>(null);
 
   const { showErrorModal } = useErrorModal();
+
+  let getHeadersFn: () => Promise<Record<string, string>>;
+  if (preAuth) {
+    getHeadersFn = () => Promise.resolve(getPreAuthHeaders());
+  } else {
+    try {
+      const { getHeaders } = useHeaders();
+      getHeadersFn = getHeaders;
+    } catch {
+      getHeadersFn = () => Promise.resolve(getPreAuthHeaders());
+    }
+  }
 
   useEffect(() => {
     const fetchUserAccount = async () => {
@@ -36,11 +52,10 @@ export const useStaffUserAccount = ({
       setHasError(null);
 
       try {
-        const data = await staffUserAccountById(userAccountId);
+        const headers = await getHeadersFn();
+        const data = await staffUserAccountById(userAccountId, headers);
         setUserAccount(data);
-        if (onUserAccountLoaded) {
-          onUserAccountLoaded(data);
-        }
+        if (onUserAccountLoaded) onUserAccountLoaded(data);
       } catch (error) {
         Logger.error(
           "Error al obtener la cuenta de usuario del staff",
@@ -60,8 +75,8 @@ export const useStaffUserAccount = ({
       }
     };
 
-    fetchUserAccount();
-  }, [userAccountId, onUserAccountLoaded, showErrorModal]);
+    void fetchUserAccount();
+  }, [userAccountId, onUserAccountLoaded, showErrorModal, getHeadersFn]);
 
   return { userAccount, loading, hasError };
 };

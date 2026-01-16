@@ -6,6 +6,7 @@ import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types
 import { getBusinessManagerByCode } from "@services/businessManagers/getBusinessManagerByCode";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 interface UseBusinessManagersReturn {
   businessManagersData: IBusinessManager;
@@ -30,9 +31,12 @@ export const useBusinessManagers = (
       if (!portalPublicCode?.publicCode) return;
 
       setIsFetching(true);
+
       try {
+        const headers = getPreAuthHeaders();
         const fetchedBusinessManagers = await getBusinessManagerByCode(
           portalPublicCode.publicCode,
+          headers,
         );
 
         if (
@@ -44,7 +48,7 @@ export const useBusinessManagers = (
 
           const errorConfig = modalErrorConfig[1002];
           showErrorModal({
-            descriptionText: `${errorConfig.descriptionText}: ${codeError}`,
+            descriptionText: `${errorConfig.descriptionText}: 1002`,
             solutionText: errorConfig.solutionText,
           });
           return;
@@ -56,10 +60,9 @@ export const useBusinessManagers = (
         Logger.error(
           "Error al obtener los datos del gestor de negocios",
           err as Error,
-          {
-            useCase: "getBusinessManagerData",
-          },
+          { useCase: "getBusinessManagerData" },
         );
+
         setHasError(true);
         setCodeError(1007);
 

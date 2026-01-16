@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-
 import { Logger } from "@utils/logger";
 import { encrypt } from "@utils/encrypt";
 import { staffPortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { useErrorModal } from "@context/ErrorModalContext/ErrorModalContext";
 import { modalErrorConfig } from "@config/modalErrorConfig";
+import { getPreAuthHeaders } from "@utils/preAuthHeaders";
 
 const ERROR_CODE_NO_PORTAL_DATA = 1001;
 const ERROR_CODE_FETCH_PORTAL_FAILED = 1016;
@@ -21,18 +21,19 @@ export const usePortalData = (codeParame: string) => {
 
   useEffect(() => {
     const fetchPortalData = async () => {
+      if (!codeParame) return;
       setIsFetching(true);
 
-      if (!codeParame) {
-        return;
-      }
-
       try {
-        const staffPortalData = await staffPortalByBusinessManager(codeParame);
+        const headers = getPreAuthHeaders();
+
+        const staffPortalData = await staffPortalByBusinessManager(
+          codeParame,
+          headers,
+        );
 
         if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
           setHasError(ERROR_CODE_NO_PORTAL_DATA);
-
           const errorConfig = modalErrorConfig[ERROR_CODE_NO_PORTAL_DATA];
           showErrorModal({
             descriptionText: errorConfig.descriptionText,
@@ -43,6 +44,7 @@ export const usePortalData = (codeParame: string) => {
 
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
+
         setHasError(null);
         setPortalData(staffPortalData);
       } catch (error) {
@@ -52,7 +54,6 @@ export const usePortalData = (codeParame: string) => {
         );
 
         setHasError(ERROR_CODE_FETCH_PORTAL_FAILED);
-
         const errorConfig = modalErrorConfig[ERROR_CODE_FETCH_PORTAL_FAILED];
         showErrorModal({
           descriptionText: `${errorConfig.descriptionText}: ${String(error)}`,
