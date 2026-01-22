@@ -5,21 +5,18 @@ import {
 } from "@config/environment";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { Logger } from "@utils/logger";
-
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (
   codeParame: string,
+  headers?: Record<string, string>,
 ): Promise<IStaffPortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const queryParams = new URLSearchParams({
-        publicCode: codeParame,
-      });
-
+      const queryParams = new URLSearchParams({ publicCode: codeParame });
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
@@ -28,7 +25,7 @@ const staffPortalByBusinessManager = async (
         {
           method: "GET",
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
+            ...headers,
             "X-Action": "SearchAllStaffPortalsByBusinessManager",
           },
           signal: controller.signal,
@@ -37,9 +34,7 @@ const staffPortalByBusinessManager = async (
 
       clearTimeout(timeoutId);
 
-      if (res.status === 204) {
-        return {} as IStaffPortalByBusinessManager;
-      }
+      if (res.status === 204) return {} as IStaffPortalByBusinessManager;
 
       const data = await res.json();
 
@@ -49,25 +44,20 @@ const staffPortalByBusinessManager = async (
         throw new Error(errorMessage);
       }
 
-      const normalizedEmployeePortal = Array.isArray(data)
+      const normalizedData = Array.isArray(data)
         ? mapStaffPortalByBusinessManagerApiToEntities(data)
         : [];
 
-      return normalizedEmployeePortal[0];
+      return normalizedData[0];
     } catch (error) {
       if (attempt === maxRetries) {
         Logger.error(
           "Error al obtener el staff portal por business manager",
           error instanceof Error ? error : new Error("Error desconocido"),
-          {
-            publicCode: codeParame,
-          },
+          { publicCode: codeParame },
         );
 
-        if (error instanceof Error) {
-          throw error;
-        }
-
+        if (error instanceof Error) throw error;
         throw new Error(
           "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
         );
