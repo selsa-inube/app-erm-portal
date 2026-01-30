@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { labels } from "@i18n/labels";
-import { useHumanResourceRequests } from "@hooks/useHumanResourceRequests";
+import { usePendingVacationRequests } from "@hooks/usePendingVacationReques";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useDeleteValidation } from "@hooks/useDeleteValidation";
@@ -31,24 +31,12 @@ function HolidaysOptions() {
       staffUser.identificationDocumentNumber;
 
   const {
-    data: enjoyedData,
-    isLoading: isLoadingEnjoyed,
-    rawData: rawEnjoyedData,
-  } = useHumanResourceRequests<IHolidaysTable>(
-    formatHolidaysData,
-    ERequestType.vacations_enjoyed,
-  );
+    data: tableData,
+    rawData,
+    isLoading: isLoadingRequests,
+  } = usePendingVacationRequests<IHolidaysTable>(formatHolidaysData);
 
-  const {
-    data: paidData,
-    isLoading: isLoadingPaid,
-    rawData: rawPaidData,
-  } = useHumanResourceRequests<IHolidaysTable>(
-    formatHolidaysData,
-    ERequestType.paid_vacations,
-  );
-
-  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+  const [localTableData, setLocalTableData] = useState<IHolidaysTable[]>([]);
 
   const hasActiveContract = true;
 
@@ -70,18 +58,17 @@ function HolidaysOptions() {
     false;
 
   const { handleDelete } = useDeleteRequest((filterFn) => {
-    setTableData((prev) => prev.filter(filterFn));
+    setLocalTableData((prev) => prev.filter(filterFn));
   });
 
   const { validateDelete, validationModal, closeValidationModal } =
     useDeleteValidation();
 
   const handleDeleteRequest = (requestId: string, justification?: string) => {
-    const request = tableData.find((item) => item.requestId === requestId);
+    const request = localTableData.find((item) => item.requestId === requestId);
     const requestNumber = request?.requestNumber ?? "";
 
-    const allRawData = [...(rawEnjoyedData ?? []), ...(rawPaidData ?? [])];
-    const originalRequest = allRawData.find(
+    const originalRequest = rawData.find(
       (req) => req.humanResourceRequestId === requestId,
     );
 
@@ -90,16 +77,12 @@ function HolidaysOptions() {
       const parsedData = parseDataSafely(
         originalRequest.humanResourceRequestData,
       );
+
       requestData = {
         requestType: originalRequest.humanResourceRequestType as ERequestType,
         disbursementDate: getValueFromData(
           parsedData,
           "disbursementDate",
-          null,
-        ) as string | null,
-        startDateEnment: getValueFromData(
-          parsedData,
-          "startDateEnment",
           null,
         ) as string | null,
       };
@@ -113,10 +96,8 @@ function HolidaysOptions() {
   };
 
   useEffect(() => {
-    setTableData([...enjoyedData, ...paidData]);
-  }, [enjoyedData, paidData]);
-
-  const isLoading = isLoadingEnjoyed ?? isLoadingPaid;
+    setLocalTableData(tableData);
+  }, [tableData]);
 
   useEffect(() => {
     if (location.state?.showFlag) {
@@ -142,7 +123,7 @@ function HolidaysOptions() {
         appRoute={breadcrumbs.crumbs}
         navigatePage={breadcrumbs.url}
         tableData={tableData}
-        isLoading={isLoading}
+        isLoading={isLoadingRequests}
         hasActiveContract={hasActiveContract}
         isMobile={isMobile}
         hasEnjoymentPrivilege={hasEnjoymentPrivilege}
