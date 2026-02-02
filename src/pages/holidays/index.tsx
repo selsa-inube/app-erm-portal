@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { labels } from "@i18n/labels";
-import { usePendingVacationRequests } from "@hooks/usePendingVacationReques";
+import { usePendingVacationRequest } from "@hooks/usePendingVacationReques";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useDeleteValidation } from "@hooks/useDeleteValidation";
@@ -34,7 +34,7 @@ function HolidaysOptions() {
     data: tableData,
     rawData,
     isLoading: isLoadingRequests,
-  } = usePendingVacationRequests<IHolidaysTable>(formatHolidaysData);
+  } = usePendingVacationRequest<IHolidaysTable>(formatHolidaysData);
 
   const [localTableData, setLocalTableData] = useState<IHolidaysTable[]>([]);
 

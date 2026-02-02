@@ -10,7 +10,7 @@ import { Logger } from "@utils/logger";
 
 const ERROR_CODE_GET_PENDING_VACATIONS_FAILED = 1013;
 
-export const usePendingVacationRequests = <T>(
+export const usePendingVacationRequest = <T>(
   formatData: (data: HumanResourceRequest[]) => T[],
   employeeId?: string,
 ) => {
