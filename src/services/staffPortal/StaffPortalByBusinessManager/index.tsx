@@ -8,7 +8,6 @@ import { Logger } from "@utils/logger";
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (
-  codeParame: string,
   headers?: Record<string, string>,
 ): Promise<IStaffPortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
@@ -16,7 +15,10 @@ const staffPortalByBusinessManager = async (
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const queryParams = new URLSearchParams({ publicCode: codeParame });
+      const queryParams = new URLSearchParams({
+        publicCode: environment.APPLICATION_NAME,
+      });
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
@@ -39,9 +41,9 @@ const staffPortalByBusinessManager = async (
       const data = await res.json();
 
       if (!res.ok) {
-        const errorMessage =
-          data?.message ?? "Error al obtener los datos del portal";
-        throw new Error(errorMessage);
+        throw new Error(
+          data?.message ?? "Error al obtener los datos del portal",
+        );
       }
 
       const normalizedData = Array.isArray(data)
@@ -54,13 +56,9 @@ const staffPortalByBusinessManager = async (
         Logger.error(
           "Error al obtener el staff portal por business manager",
           error instanceof Error ? error : new Error("Error desconocido"),
-          { publicCode: codeParame },
+          { publicCode: environment.APPLICATION_NAME },
         );
-
-        if (error instanceof Error) throw error;
-        throw new Error(
-          "Todos los intentos fallaron. No se pudieron obtener los datos del portal.",
-        );
+        throw error;
       }
     }
   }
