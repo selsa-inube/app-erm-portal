@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { labels } from "@i18n/labels";
-import { usePendingVacationRequest } from "@hooks/usePendingVacationReques";
+import { usePendingVacationRequest } from "@src/hooks/usePendingVacationRequest";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useDeleteValidation } from "@hooks/useDeleteValidation";
