@@ -95,9 +95,8 @@ const StyledMenuButton = styled.button`
 
 const StyledMenuIconContainer = styled.div<IMenuIconContainer>`
   position: relative;
-  top: -50px;
+  top: -42px;
   right: 16px;
-  z-index: 1;
   width: 0px;
 `;
 
