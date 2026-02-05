@@ -4,16 +4,22 @@ import { IAuthProvider } from "@inube/iauth-react";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { usePortalAuth } from "@hooks/usePortalAuth";
+import { LoadingAppUI } from "@pages/login/outlets/LoadingApp/interface";
 
 interface AuthWrapperProps {
   children: ReactNode;
 }
 
 export function AuthWrapper({ children }: AuthWrapperProps) {
-  const { portalCode, authConfig, hasAuthError, errorCode } = usePortalAuth();
+  const { portalCode, authConfig, hasAuthError, errorCode, isLoading } =
+    usePortalAuth();
 
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
+  }
+
+  if (isLoading) {
+    return <LoadingAppUI />;
   }
 
   if (hasAuthError || !authConfig) {
@@ -25,6 +31,7 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   const callbackUrl = isHolidaysConfirmation
     ? window.location.href
     : environment.REDIRECT_URI;
+
   return (
     <IAuthProvider
       originatorId={environment.ORIGINATOR_ID}
