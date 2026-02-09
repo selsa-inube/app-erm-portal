@@ -209,7 +209,6 @@ function RequestsUI(props: RequestsUIProps) {
       <SearchContainer $isTablet={isTablet}>
         <Stack gap={spacing.s150} direction="column" width="100%">
           <Stack
-            gap={spacing.s150}
             padding={
               isTablet
                 ? `${spacing.s0} ${spacing.s0} ${spacing.s150} ${spacing.s0}`

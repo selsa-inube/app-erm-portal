@@ -18,6 +18,7 @@ export function usePortalAuth() {
   const portalCode = portalParam ?? decryptedPortal;
 
   const [authConfig, setAuthConfig] = useState<AuthConfig | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (portalParam && portalParam !== decryptedPortal) {
@@ -44,6 +45,9 @@ export function usePortalAuth() {
         clientId: businessManagersData.clientId,
         clientSecret: businessManagersData.clientSecret,
       });
+      setIsLoading(false);
+    } else if (hasPortalError || hasManagersError) {
+      setIsLoading(false);
     }
   }, [businessManagersData, hasPortalError, hasManagersError]);
 
@@ -59,5 +63,6 @@ export function usePortalAuth() {
     hasPortalError,
     hasManagersError,
     businessManagersData,
+    isLoading,
   };
 }
